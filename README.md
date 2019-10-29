@@ -8,7 +8,7 @@ Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Oc
 - look at site address, for ex. for this address http://powietrze.gios.gov.pl/pjp/current/station_details/chart/291 `station_id` is 291
 
 ## How to use package
-```
+```python
 import asyncio
 
 from aiohttp import ClientSession
