@@ -62,16 +62,12 @@ class Gios:
             self.station_name = None
             self.data = {}
             return
-        try:
-            for sensor in self._station_data:
-                data[sensor["param"]["paramCode"]] = {
-                    ATTR_ID: sensor[ATTR_ID],
-                    ATTR_NAME: sensor["param"]["paramName"],
-                }
-        except (IndexError, TypeError):
-            _LOGGER.error("Invalid sensor data from GIOS API.")
-            self.data = {}
-            return
+
+        for sensor in self._station_data:
+            data[sensor["param"]["paramCode"]] = {
+                ATTR_ID: sensor[ATTR_ID],
+                ATTR_NAME: sensor["param"]["paramName"],
+            }
 
         try:
             for sensor in data:

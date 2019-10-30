@@ -16,19 +16,20 @@ TEST_STATION_NAME = "Test Name"
 TEST_LATITUDE = "99.99"
 TEST_LONGITUDE = "88.88"
 TEST_AQI_VALUE = "good"
-TEST_PM10_VALUE = 11.11
+TEST_PM10_FIRST_VALUE = 11.11
+TEST_PM10_SECOND_VALUE = 12.12
 
 
 @pytest.mark.asyncio
-async def test_valid_data():
-    """Test with valid data."""
+async def test_valid_data_first_value():
+    """Test with valid data and valid first sensor's value."""
     with open("tests/data/stations.json") as file:
         stations = json.load(file)
 
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor.json") as file:
+    with open("tests/data/sensor_valid_first.json") as file:
         sensor = json.load(file)
 
     with open("tests/data/indexes.json") as file:
@@ -48,12 +49,45 @@ async def test_valid_data():
         assert gios.longitude == TEST_LONGITUDE
         assert gios.available == True
         assert len(gios.data) == 2
-        assert gios.data["PM10"]["value"] == TEST_PM10_VALUE
+        assert gios.data["PM10"]["value"] == TEST_PM10_FIRST_VALUE
         assert gios.data["AQI"]["value"] == TEST_AQI_VALUE
 
 
 @pytest.mark.asyncio
-async def test_invalid_indexes_data():
+async def test_valid_data_second_value():
+    """Test with valid data and valid second sensor's value."""
+    with open("tests/data/stations.json") as file:
+        stations = json.load(file)
+
+    with open("tests/data/station.json") as file:
+        station = json.load(file)
+
+    with open("tests/data/sensor_valid_second.json") as file:
+        sensor = json.load(file)
+
+    with open("tests/data/indexes.json") as file:
+        indexes = json.load(file)
+
+    with patch("pygios.Gios._get_stations", return_value=stations), patch(
+        "pygios.Gios._get_station", return_value=station
+    ), patch("pygios.Gios._get_sensor", return_value=sensor), patch(
+        "pygios.Gios._get_indexes", return_value=indexes
+    ):
+        async with ClientSession() as websession:
+            gios = pygios.Gios(TEST_STATION_ID, websession)
+            await gios.update()
+
+        assert gios.station_name == TEST_STATION_NAME
+        assert gios.latitude == TEST_LATITUDE
+        assert gios.longitude == TEST_LONGITUDE
+        assert gios.available == True
+        assert len(gios.data) == 2
+        assert gios.data["PM10"]["value"] == TEST_PM10_SECOND_VALUE
+        assert gios.data["AQI"]["value"] == TEST_AQI_VALUE
+
+
+@pytest.mark.asyncio
+async def test_no_indexes_data():
     """Test with valid data."""
     with open("tests/data/stations.json") as file:
         stations = json.load(file)
@@ -61,7 +95,7 @@ async def test_invalid_indexes_data():
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor.json") as file:
+    with open("tests/data/sensor_valid_first.json") as file:
         sensor = json.load(file)
 
     indexes = {}
@@ -83,8 +117,8 @@ async def test_invalid_indexes_data():
 
 
 @pytest.mark.asyncio
-async def test_invalid_sensor_data():
-    """Test with valid data."""
+async def test_no_sensor_data():
+    """Test with no sensor data."""
     with open("tests/data/stations.json") as file:
         stations = json.load(file)
 
@@ -93,14 +127,10 @@ async def test_invalid_sensor_data():
 
     sensor = {}
 
-    with open("tests/data/indexes.json") as file:
-        indexes = json.load(file)
-
     with patch("pygios.Gios._get_stations", return_value=stations), patch(
         "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor), patch(
-        "pygios.Gios._get_indexes", return_value=indexes
-    ):
+    ), patch("pygios.Gios._get_sensor", return_value=sensor):
+
         async with ClientSession() as websession:
             gios = pygios.Gios(TEST_STATION_ID, websession)
             await gios.update()
@@ -113,23 +143,42 @@ async def test_invalid_sensor_data():
 
 
 @pytest.mark.asyncio
-async def test_invalid_station_data():
-    """Test with valid data."""
+async def test_invalid_sensor_data():
+    """Test with invalid sensor data."""
+    with open("tests/data/stations.json") as file:
+        stations = json.load(file)
+
+    with open("tests/data/station.json") as file:
+        station = json.load(file)
+
+    with open("tests/data/sensor_invalid.json") as file:
+        sensor = json.load(file)
+
+    with patch("pygios.Gios._get_stations", return_value=stations), patch(
+        "pygios.Gios._get_station", return_value=station
+    ), patch("pygios.Gios._get_sensor", return_value=sensor):
+
+        async with ClientSession() as websession:
+            gios = pygios.Gios(TEST_STATION_ID, websession)
+            await gios.update()
+
+        assert gios.station_name == TEST_STATION_NAME
+        assert gios.latitude == TEST_LATITUDE
+        assert gios.longitude == TEST_LONGITUDE
+        assert gios.available == False
+        assert gios.data == {}
+
+
+@pytest.mark.asyncio
+async def test_no_station_data():
+    """Test with no station data."""
     with open("tests/data/stations.json") as file:
         stations = json.load(file)
 
     station = {}
 
-    with open("tests/data/sensor.json") as file:
-        sensor = json.load(file)
-
-    with open("tests/data/indexes.json") as file:
-        indexes = json.load(file)
-
     with patch("pygios.Gios._get_stations", return_value=stations), patch(
         "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor), patch(
-        "pygios.Gios._get_indexes", return_value=indexes
     ):
         async with ClientSession() as websession:
             gios = pygios.Gios(TEST_STATION_ID, websession)
@@ -140,50 +189,31 @@ async def test_invalid_station_data():
 
 
 @pytest.mark.asyncio
-async def test_invalid_stations_data():
-    """Test with valid data."""
+async def test_no_stations_data():
+    """Test with no stations data."""
     stations = {}
 
-    with open("tests/data/station.json") as file:
-        station = json.load(file)
+    with patch("pygios.Gios._get_stations", return_value=stations):
 
-    with open("tests/data/sensor.json") as file:
-        sensor = json.load(file)
-
-    with open("tests/data/indexes.json") as file:
-        indexes = json.load(file)
-
-    with patch("pygios.Gios._get_stations", return_value=stations), patch(
-        "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor), patch(
-        "pygios.Gios._get_indexes", return_value=indexes
-    ):
         async with ClientSession() as websession:
             gios = pygios.Gios(TEST_STATION_ID, websession)
             await gios.update()
 
         assert gios.available == False
         assert gios.data == {}
+
 
 @pytest.mark.asyncio
 async def test_invalid_station_id():
-    """Test with valid data."""
+    """Test with invalid station_id."""
     with open("tests/data/stations.json") as file:
         stations = json.load(file)
 
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor.json") as file:
-        sensor = json.load(file)
-
-    with open("tests/data/indexes.json") as file:
-        indexes = json.load(file)
-
     with patch("pygios.Gios._get_stations", return_value=stations), patch(
         "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor), patch(
-        "pygios.Gios._get_indexes", return_value=indexes
     ), pytest.raises(pygios.NoStationError) as exception:
 
         async with ClientSession() as websession:
