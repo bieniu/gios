@@ -82,7 +82,7 @@ class Gios:
                     data[sensor][ATTR_VALUE] = sensor_data["values"][1][ATTR_VALUE]
                 else:
                     raise ValueError
-        except (ValueError, IndexError, TypeError):
+        except (IndexError, KeyError, TypeError, ValueError):
             _LOGGER.error("Invalid sensor data from GIOS API.")
             self.data = {}
             return
@@ -99,7 +99,7 @@ class Gios:
             data[ATTR_AQI][ATTR_VALUE] = indexes["stIndexLevel"][
                 "indexLevelName"
             ].lower()
-        except (IndexError, TypeError):
+        except (IndexError, KeyError, TypeError):
             _LOGGER.error("Invalid index data from GIOS API")
             self.data = {}
             return
