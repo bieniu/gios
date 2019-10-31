@@ -18,7 +18,7 @@ HTTP_OK = 200
 URL_INDEXES = "http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{}"
 URL_SENSOR = "http://api.gios.gov.pl/pjp-api/rest/data/getData/{}"
 URL_STATION = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/{}"
-URL_STATIONS = "http://api.gios.gov.pl/pjp-api/rest/station/findAll1"
+URL_STATIONS = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
 
 
 class Gios:
