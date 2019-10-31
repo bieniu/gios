@@ -1,4 +1,4 @@
-# pygios
+# gios
 Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Ochrony Środowiska)](http://www.gios.gov.pl/pl/stan-srodowiska/monitoring-jakosci-powietrza)
 
 ## How to find station_id
@@ -12,7 +12,7 @@ Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Oc
 import asyncio
 
 from aiohttp import ClientSession
-from pygios import Gios, ApiError, NoStationError
+from gios import Gios, ApiError, NoStationError
 
 GIOS_STATION_ID = 11794
 
