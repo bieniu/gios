@@ -193,7 +193,7 @@ async def test_no_stations_data():
     """Test with no stations data."""
     stations = {}
 
-    with patch("pygios.Gios._get_stations", return_value=stations):
+    with patch("pygios.Gios._async_get", return_value=stations):
 
         async with ClientSession() as websession:
             gios = pygios.Gios(VALID_STATION_ID, websession)
