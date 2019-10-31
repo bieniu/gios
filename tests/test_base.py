@@ -5,7 +5,7 @@ import pytest
 from aiohttp import ClientSession
 from asynctest import patch
 
-import pygios
+from gios import ApiError, Gios, NoStationError
 
 INVALID_STATION_ID = 0
 
@@ -35,13 +35,13 @@ async def test_valid_data_first_value():
     with open("tests/data/indexes.json") as file:
         indexes = json.load(file)
 
-    with patch("pygios.Gios._get_stations", return_value=stations), patch(
-        "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor), patch(
-        "pygios.Gios._get_indexes", return_value=indexes
+    with patch("gios.Gios._get_stations", return_value=stations), patch(
+        "gios.Gios._get_station", return_value=station
+    ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
+        "gios.Gios._get_indexes", return_value=indexes
     ):
         async with ClientSession() as websession:
-            gios = pygios.Gios(VALID_STATION_ID, websession)
+            gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
         assert gios.station_name == VALID_STATION_NAME
@@ -68,13 +68,13 @@ async def test_valid_data_second_value():
     with open("tests/data/indexes.json") as file:
         indexes = json.load(file)
 
-    with patch("pygios.Gios._get_stations", return_value=stations), patch(
-        "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor), patch(
-        "pygios.Gios._get_indexes", return_value=indexes
+    with patch("gios.Gios._get_stations", return_value=stations), patch(
+        "gios.Gios._get_station", return_value=station
+    ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
+        "gios.Gios._get_indexes", return_value=indexes
     ):
         async with ClientSession() as websession:
-            gios = pygios.Gios(VALID_STATION_ID, websession)
+            gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
         assert gios.station_name == VALID_STATION_NAME
@@ -100,13 +100,13 @@ async def test_no_indexes_data():
 
     indexes = {}
 
-    with patch("pygios.Gios._get_stations", return_value=stations), patch(
-        "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor), patch(
-        "pygios.Gios._get_indexes", return_value=indexes
+    with patch("gios.Gios._get_stations", return_value=stations), patch(
+        "gios.Gios._get_station", return_value=station
+    ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
+        "gios.Gios._get_indexes", return_value=indexes
     ):
         async with ClientSession() as websession:
-            gios = pygios.Gios(VALID_STATION_ID, websession)
+            gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
         assert gios.station_name == VALID_STATION_NAME
@@ -127,12 +127,12 @@ async def test_no_sensor_data():
 
     sensor = {}
 
-    with patch("pygios.Gios._get_stations", return_value=stations), patch(
-        "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor):
+    with patch("gios.Gios._get_stations", return_value=stations), patch(
+        "gios.Gios._get_station", return_value=station
+    ), patch("gios.Gios._get_sensor", return_value=sensor):
 
         async with ClientSession() as websession:
-            gios = pygios.Gios(VALID_STATION_ID, websession)
+            gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
         assert gios.station_name == VALID_STATION_NAME
@@ -154,12 +154,12 @@ async def test_invalid_sensor_data():
     with open("tests/data/sensor_invalid.json") as file:
         sensor = json.load(file)
 
-    with patch("pygios.Gios._get_stations", return_value=stations), patch(
-        "pygios.Gios._get_station", return_value=station
-    ), patch("pygios.Gios._get_sensor", return_value=sensor):
+    with patch("gios.Gios._get_stations", return_value=stations), patch(
+        "gios.Gios._get_station", return_value=station
+    ), patch("gios.Gios._get_sensor", return_value=sensor):
 
         async with ClientSession() as websession:
-            gios = pygios.Gios(VALID_STATION_ID, websession)
+            gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
         assert gios.station_name == VALID_STATION_NAME
@@ -177,11 +177,11 @@ async def test_no_station_data():
 
     station = {}
 
-    with patch("pygios.Gios._get_stations", return_value=stations), patch(
-        "pygios.Gios._get_station", return_value=station
+    with patch("gios.Gios._get_stations", return_value=stations), patch(
+        "gios.Gios._get_station", return_value=station
     ):
         async with ClientSession() as websession:
-            gios = pygios.Gios(VALID_STATION_ID, websession)
+            gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
         assert gios.available == False
@@ -193,10 +193,10 @@ async def test_no_stations_data():
     """Test with no stations data."""
     stations = {}
 
-    with patch("pygios.Gios._async_get", return_value=stations):
+    with patch("gios.Gios._async_get", return_value=stations):
 
         async with ClientSession() as websession:
-            gios = pygios.Gios(VALID_STATION_ID, websession)
+            gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
         assert gios.available == False
@@ -209,12 +209,12 @@ async def test_invalid_station_id():
     with open("tests/data/stations.json") as file:
         stations = json.load(file)
 
-    with patch("pygios.Gios._get_stations", return_value=stations), pytest.raises(
-        pygios.NoStationError
+    with patch("gios.Gios._get_stations", return_value=stations), pytest.raises(
+        NoStationError
     ):
 
         async with ClientSession() as websession:
-            gios = pygios.Gios(INVALID_STATION_ID, websession)
+            gios = Gios(INVALID_STATION_ID, websession)
             await gios.update()
 
 
@@ -222,9 +222,9 @@ async def test_invalid_station_id():
 async def test_api_error():
     """Test GIOS API error."""
     with patch(
-        "pygios.Gios._async_get", side_effect=pygios.ApiError(404)
-    ), pytest.raises(pygios.ApiError):
+        "gios.Gios._async_get", side_effect=ApiError(404)
+    ), pytest.raises(ApiError):
 
         async with ClientSession() as websession:
-            gios = pygios.Gios(VALID_STATION_ID, websession)
+            gios = Gios(VALID_STATION_ID, websession)
             await gios.update()

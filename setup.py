@@ -3,15 +3,15 @@ from setuptools import find_namespace_packages, setup
 
 
 setup(
-    name="pygios",
+    name="gios",
     version="0.0.1",
     author="Maciej Bieniek",
     author_email="maciej.bieniek@gmail.com",
     description="Python wrapper for getting air quality data from GIOŚ servers.",
     include_package_data=True,
-    url="https://github.com/bieniu/pygios",
+    url="https://github.com/bieniu/gios",
     license="Apache 2",
-    packages=["pygios"],
+    packages=["gios"],
     python_requires=">=3.7.0",
     install_requires=["aiohttp"],
     classifiers=[
