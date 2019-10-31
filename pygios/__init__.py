@@ -18,7 +18,7 @@ HTTP_OK = 200
 URL_INDEXES = "http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{}"
 URL_SENSOR = "http://api.gios.gov.pl/pjp-api/rest/data/getData/{}"
 URL_STATION = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/{}"
-URL_STATIONS = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
+URL_STATIONS = "http://api.gios.gov.pl/pjp-api/rest/station/findAll1"
 
 
 class Gios:
@@ -62,16 +62,12 @@ class Gios:
             self.station_name = None
             self.data = {}
             return
-        try:
-            for sensor in self._station_data:
-                data[sensor["param"]["paramCode"]] = {
-                    ATTR_ID: sensor[ATTR_ID],
-                    ATTR_NAME: sensor["param"]["paramName"],
-                }
-        except (IndexError, TypeError):
-            _LOGGER.error("Invalid sensor data from GIOS API.")
-            self.data = {}
-            return
+
+        for sensor in self._station_data:
+            data[sensor["param"]["paramCode"]] = {
+                ATTR_ID: sensor[ATTR_ID],
+                ATTR_NAME: sensor["param"]["paramName"],
+            }
 
         try:
             for sensor in data:
@@ -82,7 +78,7 @@ class Gios:
                     data[sensor][ATTR_VALUE] = sensor_data["values"][1][ATTR_VALUE]
                 else:
                     raise ValueError
-        except (ValueError, IndexError, TypeError):
+        except (IndexError, KeyError, TypeError, ValueError):
             _LOGGER.error("Invalid sensor data from GIOS API.")
             self.data = {}
             return
@@ -99,7 +95,7 @@ class Gios:
             data[ATTR_AQI][ATTR_VALUE] = indexes["stIndexLevel"][
                 "indexLevelName"
             ].lower()
-        except (IndexError, TypeError):
+        except (IndexError, KeyError, TypeError):
             _LOGGER.error("Invalid index data from GIOS API")
             self.data = {}
             return

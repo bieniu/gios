@@ -1,0 +1,16 @@
+[{
+	"id": 552,
+	"stationName": "Test Name",
+	"gegrLat": "99.99",
+	"gegrLon": "88.88",
+	"city": {
+		"id": 1006,
+		"name": "Test City",
+		"commune": {
+			"communeName": "Test Comune",
+			"districtName": "Test District",
+			"provinceName": "Test Province"
+		}
+	},
+	"addressStreet": "Foo"
+}]

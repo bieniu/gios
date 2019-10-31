@@ -1,0 +1,15 @@
+{
+	"id": 552,
+	"stCalcDate": "2019-10-29 09:36:18",
+	"stIndexLevel": {
+		"id": 1,
+		"indexLevelName": "Good"
+	},
+	"stSourceDataDate": "2019-10-29 09:00:00",
+	"pm10CalcDate": "2019-10-29 09:36:18",
+	"pm10IndexLevel": {
+		"id": 0,
+		"indexLevelName": "Very good"
+	},
+	"pm10SourceDataDate": "2019-10-29 09:00:00"
+}
