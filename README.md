@@ -1,4 +1,5 @@
 [![GitHub Release][releases-shield]][releases]
+![PyPI - Downloads](https://img.shields.io/pypi/dm/gios)
 [![Buy me a coffee][buy-me-a-coffee]](https://www.buymeacoffee.com/QnLdxeaqO)
 
 # gios
