@@ -52,4 +52,4 @@ loop.close()
 ```
 [releases]: https://github.com/bieniu/gios/releases
 [releases-shield]: https://img.shields.io/github/release/bieniu/gios.svg?style=popout
-[buy-me-a-coffee]: https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37
+[buy-me-a-coffee]: https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=6f4e37&logo=buy%20me%20a%20coffee&logoColor=white
