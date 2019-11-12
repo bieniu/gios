@@ -1,3 +1,6 @@
+[![GitHub Release][releases-shield]][releases]
+[![Buy me a coffee][buy-me-a-coffee]](https://www.buymeacoffee.com/QnLdxeaqO)
+
 # gios
 Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Ochrony Środowiska)](http://www.gios.gov.pl/pl/stan-srodowiska/monitoring-jakosci-powietrza)
 
@@ -45,3 +48,6 @@ loop.run_until_complete(main())
 loop.close()
 
 ```
+[releases]: https://github.com/bieniu/gios/releases
+[releases-shield]: https://img.shields.io/github/release/bieniu/gios.svg?style=popout
+[buy-me-a-coffee]: https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37
