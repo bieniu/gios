@@ -1,6 +1,6 @@
 [![GitHub Release][releases-shield]][releases]
-[![PyPI][pypi-releases-shield]](https://pypi.org/project/gios/)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/gios)
+[![PyPI][pypi-releases-shield]][pypi-releases]
+[![PyPI - Downloads][pypi-downloads]][pypi-releases]
 [![Buy me a coffee][buy-me-a-coffee]](https://www.buymeacoffee.com/QnLdxeaqO)
 
 # gios
@@ -52,5 +52,7 @@ loop.close()
 ```
 [releases]: https://github.com/bieniu/gios/releases
 [releases-shield]: https://img.shields.io/github/release/bieniu/gios.svg?style=popout
+[pypi-releases]: https://pypi.org/project/gios/
 [pypi-releases-shield]: https://img.shields.io/pypi/v/gios
+[pypi-downloads]: https://img.shields.io/pypi/dm/gios
 [buy-me-a-coffee]: https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=6f4e37&logo=buy%20me%20a%20coffee&logoColor=white
