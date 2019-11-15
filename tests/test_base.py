@@ -1,10 +1,10 @@
-import asyncio
+"""Tests for gios package."""
 import json
 
-import pytest
 from aiohttp import ClientSession
-from asynctest import patch
 
+import pytest
+from asynctest import patch
 from gios import ApiError, Gios, NoStationError
 
 INVALID_STATION_ID = 0
