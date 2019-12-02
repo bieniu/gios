@@ -72,6 +72,9 @@ class Gios:
         try:
             for sensor in data:
                 sensor_data = await self._get_sensor(data[sensor][ATTR_ID])
+                # The GIOS server sends a null values for sensors several minutes before
+                # adding new data from measuring station. If the newest value is null
+                # we take the earlier value.
                 if sensor_data["values"][0][ATTR_VALUE]:
                     data[sensor][ATTR_VALUE] = sensor_data["values"][0][ATTR_VALUE]
                 elif sensor_data["values"][1][ATTR_VALUE]:
