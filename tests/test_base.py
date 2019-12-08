@@ -2,10 +2,9 @@
 import json
 
 from aiohttp import ClientSession
-
-import pytest
 from asynctest import patch
 from gios import ApiError, Gios, NoStationError
+import pytest
 
 INVALID_STATION_ID = 0
 
@@ -221,9 +220,9 @@ async def test_invalid_station_id():
 @pytest.mark.asyncio
 async def test_api_error():
     """Test GIOS API error."""
-    with patch(
-        "gios.Gios._async_get", side_effect=ApiError(404)
-    ), pytest.raises(ApiError):
+    with patch("gios.Gios._async_get", side_effect=ApiError(404)), pytest.raises(
+        ApiError
+    ):
 
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
