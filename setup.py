@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="gios",
-    version="0.0.3",
+    version="0.0.4",
     author="Maciej Bieniek",
     author_email="maciej.bieniek@gmail.com",
     description="Python wrapper for getting air quality data from GIOŚ servers.",
