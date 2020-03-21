@@ -38,6 +38,7 @@ class Gios:
     async def update(self):  # pylint: disable=too-many-branches
         """Update GIOS data."""
         data = {}
+        invalid_sensors = []
 
         if not self.station_name:
             stations = await self._get_stations()
@@ -68,23 +69,29 @@ class Gios:
                 ATTR_ID: sensor[ATTR_ID],
                 ATTR_NAME: sensor["param"]["paramName"],
             }
-
         try:
             for sensor in data:
                 sensor_data = await self._get_sensor(data[sensor][ATTR_ID])
                 # The GIOS server sends a null values for sensors several minutes before
                 # adding new data from measuring station. If the newest value is null
                 # we take the earlier value.
-                if sensor_data["values"][0][ATTR_VALUE]:
-                    data[sensor][ATTR_VALUE] = sensor_data["values"][0][ATTR_VALUE]
-                elif sensor_data["values"][1][ATTR_VALUE]:
-                    data[sensor][ATTR_VALUE] = sensor_data["values"][1][ATTR_VALUE]
+                if len(sensor_data["values"]) > 0:
+                    if sensor_data["values"][0][ATTR_VALUE]:
+                        data[sensor][ATTR_VALUE] = sensor_data["values"][0][ATTR_VALUE]
+                    elif sensor_data.get("values")[1][ATTR_VALUE]:
+                        data[sensor][ATTR_VALUE] = sensor_data["values"][1][ATTR_VALUE]
+                    else:
+                        raise ValueError
                 else:
-                    raise ValueError
+                    invalid_sensors.append(sensor)
         except (IndexError, KeyError, TypeError, ValueError):
             _LOGGER.error("Invalid sensor data from GIOS API.")
             self.data = {}
             return
+
+        if invalid_sensors:
+            for sensor in invalid_sensors:
+                data.pop(sensor)
 
         indexes = await self._get_indexes()
         try:
