@@ -142,7 +142,7 @@ async def test_no_sensor_data():
 
 
 @pytest.mark.asyncio
-async def test_invalid_sensor_data():
+async def test_invalid_sensor_data_1():
     """Test with invalid sensor data."""
     with open("tests/data/stations.json") as file:
         stations = json.load(file)
@@ -150,7 +150,33 @@ async def test_invalid_sensor_data():
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor_invalid.json") as file:
+    with open("tests/data/sensor_invalid_1.json") as file:
+        sensor = json.load(file)
+
+    with patch("gios.Gios._get_stations", return_value=stations), patch(
+        "gios.Gios._get_station", return_value=station
+    ), patch("gios.Gios._get_sensor", return_value=sensor):
+
+        async with ClientSession() as websession:
+            gios = Gios(VALID_STATION_ID, websession)
+            await gios.update()
+
+        assert gios.station_name == VALID_STATION_NAME
+        assert gios.latitude == VALID_LATITUDE
+        assert gios.longitude == VALID_LONGITUDE
+        assert gios.available == False
+        assert gios.data == {}
+
+@pytest.mark.asyncio
+async def test_invalid_sensor_data_2():
+    """Test with invalid sensor data."""
+    with open("tests/data/stations.json") as file:
+        stations = json.load(file)
+
+    with open("tests/data/station.json") as file:
+        station = json.load(file)
+
+    with open("tests/data/sensor_invalid_2.json") as file:
         sensor = json.load(file)
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(

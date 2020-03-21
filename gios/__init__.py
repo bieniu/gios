@@ -75,7 +75,7 @@ class Gios:
                 # The GIOS server sends a null values for sensors several minutes before
                 # adding new data from measuring station. If the newest value is null
                 # we take the earlier value.
-                if len(sensor_data["values"]) > 0:
+                if len(sensor_data["values"]) > 0 or len(data) == 1:
                     if sensor_data["values"][0][ATTR_VALUE]:
                         data[sensor][ATTR_VALUE] = sensor_data["values"][0][ATTR_VALUE]
                     elif sensor_data.get("values")[1][ATTR_VALUE]:
