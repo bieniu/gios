@@ -57,10 +57,7 @@ class Gios:
             self._station_data = await self._get_station()
 
         if not self._station_data:
-            _LOGGER.error("Invalid measuring station data from GIOS API.")
-            self.station_name = None
-            self.data = {}
-            return
+            raise ApiError("Invalid measuring station data from GIOS API.")
 
         for sensor in self._station_data:
             data[sensor["param"]["paramCode"]] = {
@@ -79,13 +76,11 @@ class Gios:
                     elif sensor_data.get("values")[1][ATTR_VALUE]:
                         data[sensor][ATTR_VALUE] = sensor_data["values"][1][ATTR_VALUE]
                     else:
-                        raise ValueError
+                        raise ApiError("Invalid sensor data from GIOS API.")
                 else:
                     invalid_sensors.append(sensor)
-        except (IndexError, KeyError, TypeError, ValueError):
-            _LOGGER.error("Invalid sensor data from GIOS API.")
-            self.data = {}
-            return
+        except (IndexError, KeyError, TypeError):
+            raise ApiError("Invalid sensor data from GIOS API.")
 
         if invalid_sensors:
             for sensor in invalid_sensors:
@@ -104,9 +99,7 @@ class Gios:
                 "indexLevelName"
             ].lower()
         except (IndexError, KeyError, TypeError):
-            _LOGGER.error("Invalid index data from GIOS API")
-            self.data = {}
-            return
+            raise ApiError("Invalid index data from GIOS API")
 
         # For compatibility with Home Assistant UpdateDataCoordinator
         data["station_id"] = self.station_id
