@@ -47,7 +47,9 @@ async def test_valid_data_first_value():
         assert gios.latitude == VALID_LATITUDE
         assert gios.longitude == VALID_LONGITUDE
         assert gios.available == True
-        assert len(gios.data) == 2
+        assert len(gios.data) == 4
+        assert gios.data["station_id"] == VALID_STATION_ID
+        assert gios.data["station_name"] == VALID_STATION_NAME
         assert gios.data["PM10"]["value"] == VALID_PM10_FIRST_VALUE
         assert gios.data["AQI"]["value"] == VALID_AQI_VALUE
 
@@ -80,7 +82,9 @@ async def test_valid_data_second_value():
         assert gios.latitude == VALID_LATITUDE
         assert gios.longitude == VALID_LONGITUDE
         assert gios.available == True
-        assert len(gios.data) == 2
+        assert len(gios.data) == 4
+        assert gios.data["station_id"] == VALID_STATION_ID
+        assert gios.data["station_name"] == VALID_STATION_NAME
         assert gios.data["PM10"]["value"] == VALID_PM10_SECOND_VALUE
         assert gios.data["AQI"]["value"] == VALID_AQI_VALUE
 

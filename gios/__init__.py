@@ -109,6 +109,11 @@ class Gios:
             _LOGGER.error("Invalid index data from GIOS API")
             self.data = {}
             return
+
+        # For compatibility with Home Assistant UpdateDataCoordinator
+        data["station_id"] = self.station_id
+        data["station_name"] = self.station_name
+
         self.data = data
 
     async def _get_stations(self):
