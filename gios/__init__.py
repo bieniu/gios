@@ -41,8 +41,7 @@ class Gios:
         if not self.station_name:
             stations = await self._get_stations()
             if not stations:
-                _LOGGER.error("Invalid measuring stations list from GIOS API.")
-                return
+                raise ApiError("Invalid measuring stations list from GIOS API")
 
             for station in stations:
                 if station[ATTR_ID] == self.station_id:
@@ -51,13 +50,13 @@ class Gios:
                     self.station_name = station["stationName"]
             if not self.station_name:
                 raise NoStationError(
-                    f"{self.station_id} is not a valid measuring station ID."
+                    f"{self.station_id} is not a valid measuring station ID"
                 )
 
             self._station_data = await self._get_station()
 
         if not self._station_data:
-            raise ApiError("Invalid measuring station data from GIOS API.")
+            raise ApiError("Invalid measuring station data from GIOS API")
 
         for sensor in self._station_data:
             data[sensor["param"]["paramCode"]] = {
@@ -76,11 +75,11 @@ class Gios:
                     elif sensor_data.get("values")[1][ATTR_VALUE]:
                         data[sensor][ATTR_VALUE] = sensor_data["values"][1][ATTR_VALUE]
                     else:
-                        raise ApiError("Invalid sensor data from GIOS API.")
+                        raise ApiError("Invalid sensor data from GIOS API")
                 else:
                     invalid_sensors.append(sensor)
         except (IndexError, KeyError, TypeError):
-            raise ApiError("Invalid sensor data from GIOS API.")
+            raise ApiError("Invalid sensor data from GIOS API")
 
         if invalid_sensors:
             for sensor in invalid_sensors:
@@ -140,11 +139,6 @@ class Gios:
             data = await resp.json()
         _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
         return data
-
-    @property
-    def available(self):
-        """Return True is data is available."""
-        return bool(self.data)
 
 
 class ApiError(Exception):

@@ -8,8 +8,6 @@ import pytest
 
 INVALID_STATION_ID = 0
 
-NO_MEASURING_STATION = f"{INVALID_STATION_ID} is not a valid measuring station ID."
-
 VALID_STATION_ID = 552
 VALID_STATION_NAME = "Test Name"
 VALID_LATITUDE = "99.99"
@@ -39,6 +37,7 @@ async def test_valid_data_first_value():
     ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
         "gios.Gios._get_indexes", return_value=indexes
     ):
+
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
@@ -46,7 +45,6 @@ async def test_valid_data_first_value():
         assert gios.station_name == VALID_STATION_NAME
         assert gios.latitude == VALID_LATITUDE
         assert gios.longitude == VALID_LONGITUDE
-        assert gios.available == True
         assert len(gios.data) == 4
         assert gios.data["station_id"] == VALID_STATION_ID
         assert gios.data["station_name"] == VALID_STATION_NAME
@@ -74,6 +72,7 @@ async def test_valid_data_second_value():
     ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
         "gios.Gios._get_indexes", return_value=indexes
     ):
+
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
@@ -81,7 +80,6 @@ async def test_valid_data_second_value():
         assert gios.station_name == VALID_STATION_NAME
         assert gios.latitude == VALID_LATITUDE
         assert gios.longitude == VALID_LONGITUDE
-        assert gios.available == True
         assert len(gios.data) == 4
         assert gios.data["station_id"] == VALID_STATION_ID
         assert gios.data["station_name"] == VALID_STATION_NAME
@@ -107,16 +105,15 @@ async def test_no_indexes_data():
         "gios.Gios._get_station", return_value=station
     ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
         "gios.Gios._get_indexes", return_value=indexes
-    ):
+    ), pytest.raises(
+        ApiError
+    ) as error:
+
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
-        assert gios.station_name == VALID_STATION_NAME
-        assert gios.latitude == VALID_LATITUDE
-        assert gios.longitude == VALID_LONGITUDE
-        assert gios.available == False
-        assert gios.data == {}
+    assert str(error.value) == "Invalid index data from GIOS API"
 
 
 @pytest.mark.asyncio
@@ -132,17 +129,15 @@ async def test_no_sensor_data():
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor):
+    ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
+        ApiError
+    ) as error:
 
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
-        assert gios.station_name == VALID_STATION_NAME
-        assert gios.latitude == VALID_LATITUDE
-        assert gios.longitude == VALID_LONGITUDE
-        assert gios.available == False
-        assert gios.data == {}
+    assert str(error.value) == "Invalid sensor data from GIOS API"
 
 
 @pytest.mark.asyncio
@@ -159,17 +154,16 @@ async def test_invalid_sensor_data_1():
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor):
+    ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
+        ApiError
+    ) as error:
 
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
-        assert gios.station_name == VALID_STATION_NAME
-        assert gios.latitude == VALID_LATITUDE
-        assert gios.longitude == VALID_LONGITUDE
-        assert gios.available == False
-        assert gios.data == {}
+    assert str(error.value) == "Invalid sensor data from GIOS API"
+
 
 @pytest.mark.asyncio
 async def test_invalid_sensor_data_2():
@@ -185,17 +179,15 @@ async def test_invalid_sensor_data_2():
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor):
+    ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
+        ApiError
+    ) as error:
 
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
-        assert gios.station_name == VALID_STATION_NAME
-        assert gios.latitude == VALID_LATITUDE
-        assert gios.longitude == VALID_LONGITUDE
-        assert gios.available == False
-        assert gios.data == {}
+    assert str(error.value) == "Invalid sensor data from GIOS API"
 
 
 @pytest.mark.asyncio
@@ -208,13 +200,12 @@ async def test_no_station_data():
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ):
+    ), pytest.raises(ApiError) as error:
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
-        assert gios.available == False
-        assert gios.data == {}
+    assert str(error.value) == "Invalid measuring station data from GIOS API"
 
 
 @pytest.mark.asyncio
@@ -222,14 +213,15 @@ async def test_no_stations_data():
     """Test with no stations data."""
     stations = {}
 
-    with patch("gios.Gios._async_get", return_value=stations):
+    with patch("gios.Gios._async_get", return_value=stations), pytest.raises(
+        ApiError
+    ) as error:
 
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
 
-        assert gios.available == False
-        assert gios.data == {}
+    assert str(error.value) == "Invalid measuring stations list from GIOS API"
 
 
 @pytest.mark.asyncio
@@ -240,11 +232,13 @@ async def test_invalid_station_id():
 
     with patch("gios.Gios._get_stations", return_value=stations), pytest.raises(
         NoStationError
-    ):
+    ) as error:
 
         async with ClientSession() as websession:
             gios = Gios(INVALID_STATION_ID, websession)
             await gios.update()
+
+    assert str(error.value) == "0 is not a valid measuring station ID"
 
 
 @pytest.mark.asyncio
@@ -252,8 +246,9 @@ async def test_api_error():
     """Test GIOS API error."""
     with patch("gios.Gios._async_get", side_effect=ApiError(404)), pytest.raises(
         ApiError
-    ):
+    ) as error:
 
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
+    assert str(error.value) == "404"
