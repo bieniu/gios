@@ -3,8 +3,6 @@ Python wrapper for getting air quality data from GIOS.
 """
 import logging
 
-from aiohttp import ClientError
-
 _LOGGER = logging.getLogger(__name__)
 
 ATTR_AQI = "AQI"
@@ -142,15 +140,11 @@ class Gios:
     async def _async_get(self, url):
         """Retreive data from GIOS API."""
         data = None
-        try:
-            async with self.session.get(url) as resp:
-                if resp.status != HTTP_OK:
-                    _LOGGER.warning("Invalid response from GIOS API: %s", resp.status)
-                    raise ApiError(resp.status)
-                data = await resp.json()
-        except ClientError as error:
-            _LOGGER.error("Invalid response from from GIOS API: %s", error)
-            return
+        async with self.session.get(url) as resp:
+            if resp.status != HTTP_OK:
+                _LOGGER.warning("Invalid response from GIOS API: %s", resp.status)
+                raise ApiError(resp.status)
+            data = await resp.json()
         _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
         return data
 
