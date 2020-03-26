@@ -1,6 +1,6 @@
-name: Python package
+name: Push
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
