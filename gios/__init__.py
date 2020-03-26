@@ -56,7 +56,7 @@ class Gios:
             self._station_data = await self._get_station()
 
         if not self._station_data:
-            raise ApiError("Invalid measuring station data from GIOS API")
+            raise InvalidSensorsData("Invalid measuring station data from GIOS API")
 
         for sensor in self._station_data:
             data[sensor["param"]["paramCode"]] = {
@@ -75,11 +75,11 @@ class Gios:
                     elif sensor_data.get("values")[1][ATTR_VALUE]:
                         data[sensor][ATTR_VALUE] = sensor_data["values"][1][ATTR_VALUE]
                     else:
-                        raise ApiError("Invalid sensor data from GIOS API")
+                        raise InvalidSensorsData("Invalid sensor data from GIOS API")
                 else:
                     invalid_sensors.append(sensor)
         except (IndexError, KeyError, TypeError):
-            raise ApiError("Invalid sensor data from GIOS API")
+            raise InvalidSensorsData("Invalid sensor data from GIOS API")
 
         if invalid_sensors:
             for sensor in invalid_sensors:
@@ -98,7 +98,7 @@ class Gios:
                 "indexLevelName"
             ].lower()
         except (IndexError, KeyError, TypeError):
-            raise ApiError("Invalid index data from GIOS API")
+            raise InvalidSensorsData("Invalid index data from GIOS API")
 
         # For compatibility with Home Assistant UpdateDataCoordinator
         data["station_id"] = self.station_id
@@ -147,6 +147,15 @@ class ApiError(Exception):
     def __init__(self, status):
         """Initialize."""
         super(ApiError, self).__init__(status)
+        self.status = status
+
+
+class InvalidSensorsData(Exception):
+    """Raised when sensors data is invalid."""
+
+    def __init__(self, status):
+        """Initialize."""
+        super(InvalidSensorsData, self).__init__(status)
         self.status = status
 
 

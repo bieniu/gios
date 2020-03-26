@@ -17,7 +17,7 @@ Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Oc
 import asyncio
 
 from aiohttp import ClientError, ClientSession
-from gios import ApiError, Gios, NoStationError
+from gios import ApiError, InvalidSensorsData, Gios, NoStationError
 
 GIOS_STATION_ID = 117
 
@@ -27,7 +27,7 @@ async def main():
         async with ClientSession() as websession:
             gios = Gios(GIOS_STATION_ID, websession)
             await gios.update()
-    except (ApiError, NoStationError, ClientError) as error:
+    except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
         print(f"{error}")
         return
 
