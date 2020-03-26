@@ -3,7 +3,7 @@ import json
 
 from aiohttp import ClientSession
 from asynctest import patch
-from gios import ApiError, Gios, NoStationError
+from gios import ApiError, Gios, InvalidSensorsData, NoStationError
 import pytest
 
 INVALID_STATION_ID = 0
@@ -106,7 +106,7 @@ async def test_no_indexes_data():
     ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
         "gios.Gios._get_indexes", return_value=indexes
     ), pytest.raises(
-        ApiError
+        InvalidSensorsData
     ) as error:
 
         async with ClientSession() as websession:
@@ -130,7 +130,7 @@ async def test_no_sensor_data():
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
     ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
-        ApiError
+        InvalidSensorsData
     ) as error:
 
         async with ClientSession() as websession:
@@ -155,7 +155,7 @@ async def test_invalid_sensor_data_1():
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
     ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
-        ApiError
+        InvalidSensorsData
     ) as error:
 
         async with ClientSession() as websession:
@@ -180,7 +180,7 @@ async def test_invalid_sensor_data_2():
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
     ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
-        ApiError
+        InvalidSensorsData
     ) as error:
 
         async with ClientSession() as websession:
@@ -200,7 +200,7 @@ async def test_no_station_data():
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), pytest.raises(ApiError) as error:
+    ), pytest.raises(InvalidSensorsData) as error:
         async with ClientSession() as websession:
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
