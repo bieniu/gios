@@ -30,6 +30,7 @@ class Gios:
         self.longitude = None
         self.station_name = None
         self._station_data = {}
+        self._available = False
 
         self.session = session
 
@@ -41,6 +42,7 @@ class Gios:
         if not self.station_name:
             stations = await self._get_stations()
             if not stations:
+                self._available = False
                 raise ApiError("Invalid measuring stations list from GIOS API")
 
             for station in stations:
@@ -49,6 +51,7 @@ class Gios:
                     self.longitude = station["gegrLon"]
                     self.station_name = station["stationName"]
             if not self.station_name:
+                self._available = False
                 raise NoStationError(
                     f"{self.station_id} is not a valid measuring station ID"
                 )
@@ -56,6 +59,7 @@ class Gios:
             self._station_data = await self._get_station()
 
         if not self._station_data:
+            self._available = False
             raise InvalidSensorsData("Invalid measuring station data from GIOS API")
 
         for sensor in self._station_data:
@@ -75,10 +79,12 @@ class Gios:
                     elif sensor_data.get("values")[1][ATTR_VALUE]:
                         data[sensor][ATTR_VALUE] = sensor_data["values"][1][ATTR_VALUE]
                     else:
+                        self._available = False
                         raise InvalidSensorsData("Invalid sensor data from GIOS API")
                 else:
                     invalid_sensors.append(sensor)
         except (IndexError, KeyError, TypeError):
+            self._available = False
             raise InvalidSensorsData("Invalid sensor data from GIOS API")
 
         if invalid_sensors:
@@ -98,12 +104,9 @@ class Gios:
                 "indexLevelName"
             ].lower()
         except (IndexError, KeyError, TypeError):
+            self._available = False
             raise InvalidSensorsData("Invalid index data from GIOS API")
-
-        # For compatibility with Home Assistant UpdateDataCoordinator
-        data["station_id"] = self.station_id
-        data["station_name"] = self.station_name
-
+        self._available = True
         self.data = data
 
     async def _get_stations(self):
@@ -135,10 +138,16 @@ class Gios:
         async with self.session.get(url) as resp:
             if resp.status != HTTP_OK:
                 _LOGGER.warning("Invalid response from GIOS API: %s", resp.status)
+                self._available = False
                 raise ApiError(resp.status)
             data = await resp.json()
         _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
         return data
+
+    @property
+    def available(self):
+        """Return True is data is available."""
+        return bool(self.data)
 
 
 class ApiError(Exception):
