@@ -2,6 +2,7 @@
 [![PyPI][pypi-releases-shield]][pypi-releases]
 [![PyPI - Downloads][pypi-downloads]][pypi-statistics]
 [![Buy me a coffee][buy-me-a-coffee-shield]][buy-me-a-coffee]
+[![PayPal_Me][paypal-me-shield]][paypal-me]
 
 # gios
 Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Ochrony Środowiska)](http://www.gios.gov.pl/pl/stan-srodowiska/monitoring-jakosci-powietrza)
@@ -56,3 +57,5 @@ loop.close()
 [pypi-downloads]: https://img.shields.io/pypi/dm/gios
 [buy-me-a-coffee-shield]: https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=6f4e37&logo=buy%20me%20a%20coffee&logoColor=white
 [buy-me-a-coffee]: https://www.buymeacoffee.com/QnLdxeaqO
+[paypal-me-shield]: https://img.shields.io/static/v1.svg?label=%20&message=PayPal.Me&logo=paypal
+[paypal-me]: https://www.paypal.me/bieniu79
