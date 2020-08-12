@@ -52,9 +52,9 @@ loop.close()
 [releases]: https://github.com/bieniu/gios/releases
 [releases-shield]: https://img.shields.io/github/release/bieniu/gios.svg?style=popout
 [pypi-releases]: https://pypi.org/project/gios/
-[pypi-statistics]: https://pypistats.org/packages/gios
+[pypi-statistics]: https://pepy.tech/project/gios/month
 [pypi-releases-shield]: https://img.shields.io/pypi/v/gios
-[pypi-downloads]: https://img.shields.io/pypi/dm/gios
+[pypi-downloads]: https://pepy.tech/badge/gios/month
 [buy-me-a-coffee-shield]: https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=6f4e37&logo=buy%20me%20a%20coffee&logoColor=white
 [buy-me-a-coffee]: https://www.buymeacoffee.com/QnLdxeaqO
 [paypal-me-shield]: https://img.shields.io/static/v1.svg?label=%20&message=PayPal.Me&logo=paypal
