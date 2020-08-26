@@ -37,6 +37,7 @@ class Gios:
     async def update(self):
         """Update GIOS data."""
         data = {}
+        invalid_sensors = []
 
         if not self.station_name:
             stations = await self._get_stations()
@@ -67,9 +68,31 @@ class Gios:
                 ATTR_NAME: sensor["param"]["paramName"],
             }
 
-        data = await self._get_all_sensors(data)
+        sensors = await self._get_all_sensors(data)
+
+        # The GIOS server sends a null values for sensors several minutes before
+        # adding new data from measuring station. If the newest value is null
+        # we take the earlier value.
+        for sensor in data:
+            try:
+                if sensors[sensor]["values"][0][ATTR_VALUE]:
+                    data[sensor][ATTR_VALUE] = sensors[sensor]["values"][0][ATTR_VALUE]
+                elif sensors[sensor].get("values")[1][ATTR_VALUE]:
+                    data[sensor][ATTR_VALUE] = sensors[sensor]["values"][1][ATTR_VALUE]
+                else:
+                    invalid_sensors.append(sensor)
+            except (IndexError, KeyError, TypeError):
+                invalid_sensors.append(sensor)
+
+        if invalid_sensors:
+            for sensor in invalid_sensors:
+                data.pop(sensor)
+
+        if not data:
+            raise InvalidSensorsData("Invalid sensor data from GIOS API")
 
         indexes = await self._get_indexes()
+
         try:
             for sensor in data:
                 index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
@@ -100,36 +123,11 @@ class Gios:
 
     async def _get_all_sensors(self, sensors):
         """Retreive all sensors data."""
-        invalid_sensors = []
-        try:
-            for sensor in sensors:
-                sensor_data = await self._get_sensor(sensors[sensor][ATTR_ID])
-                # The GIOS server sends a null values for sensors several minutes before
-                # adding new data from measuring station. If the newest value is null
-                # we take the earlier value.
-                if len(sensor_data["values"]) > 0 or len(sensors) == 1:
-                    if sensor_data["values"][0][ATTR_VALUE]:
-                        sensors[sensor][ATTR_VALUE] = sensor_data["values"][0][
-                            ATTR_VALUE
-                        ]
-                    elif sensor_data.get("values")[1][ATTR_VALUE]:
-                        sensors[sensor][ATTR_VALUE] = sensor_data["values"][1][
-                            ATTR_VALUE
-                        ]
-                    else:
-                        self._available = False
-                        raise InvalidSensorsData("Invalid sensor data from GIOS API")
-                else:
-                    invalid_sensors.append(sensor)
-        except (IndexError, KeyError, TypeError):
-            self._available = False
-            raise InvalidSensorsData("Invalid sensor data from GIOS API")
-
-        if invalid_sensors:
-            for sensor in invalid_sensors:
-                sensors.pop(sensor)
-
-        return sensors
+        data = {}
+        for sensor in sensors:
+            sensor_data = await self._get_sensor(sensors[sensor][ATTR_ID])
+            data[sensor] = sensor_data
+        return data
 
     async def _get_sensor(self, sensor):
         """Retreive sensor data."""

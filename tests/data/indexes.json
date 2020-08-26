@@ -1,15 +1,29 @@
 {
-	"id": 552,
-	"stCalcDate": "2019-10-29 09:36:18",
-	"stIndexLevel": {
-		"id": 1,
-		"indexLevelName": "Good"
-	},
-	"stSourceDataDate": "2019-10-29 09:00:00",
-	"pm10CalcDate": "2019-10-29 09:36:18",
-	"pm10IndexLevel": {
-		"id": 0,
-		"indexLevelName": "Very good"
-	},
-	"pm10SourceDataDate": "2019-10-29 09:00:00"
+  "id": 117,
+  "stCalcDate": "2020-07-31 15:10:17",
+  "stIndexLevel": { "id": 1, "indexLevelName": "Good" },
+  "stSourceDataDate": "2020-07-31 14:00:00",
+  "so2CalcDate": "2020-07-31 15:10:17",
+  "so2IndexLevel": { "id": 0, "indexLevelName": "Very Good" },
+  "so2SourceDataDate": "2020-07-31 14:00:00",
+  "no2CalcDate": 1596201017000,
+  "no2IndexLevel": { "id": 0, "indexLevelName": "Very Good" },
+  "no2SourceDataDate": "2020-07-31 14:00:00",
+  "coCalcDate": "2020-07-31 15:10:17",
+  "coIndexLevel": { "id": 0, "indexLevelName": "Very Good" },
+  "coSourceDataDate": "2020-07-31 14:00:00",
+  "pm10CalcDate": "2020-07-31 15:10:17",
+  "pm10IndexLevel": { "id": 0, "indexLevelName": "Very Good" },
+  "pm10SourceDataDate": "2020-07-31 14:00:00",
+  "pm25CalcDate": "2020-07-31 15:10:17",
+  "pm25IndexLevel": { "id": 0, "indexLevelName": "Very Good" },
+  "pm25SourceDataDate": "2020-07-31 14:00:00",
+  "o3CalcDate": "2020-07-31 15:10:17",
+  "o3IndexLevel": { "id": 1, "indexLevelName": "Good" },
+  "o3SourceDataDate": "2020-07-31 14:00:00",
+  "c6h6CalcDate": "2020-07-31 15:10:17",
+  "c6h6IndexLevel": { "id": 0, "indexLevelName": "Very Good" },
+  "c6h6SourceDataDate": "2020-07-31 14:00:00",
+  "stIndexStatus": true,
+  "stIndexCrParam": "OZON"
 }

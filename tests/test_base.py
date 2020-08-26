@@ -12,9 +12,6 @@ VALID_STATION_ID = 552
 VALID_STATION_NAME = "Test Name"
 VALID_LATITUDE = "99.99"
 VALID_LONGITUDE = "88.88"
-VALID_AQI_VALUE = "good"
-VALID_PM10_FIRST_VALUE = 11.11
-VALID_PM10_SECOND_VALUE = 12.12
 
 
 @pytest.mark.asyncio
@@ -26,15 +23,15 @@ async def test_valid_data_first_value():
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor_valid_first.json") as file:
-        sensor = json.load(file)
+    with open("tests/data/sensors_valid_first_values.json") as file:
+        sensors = json.load(file)
 
     with open("tests/data/indexes.json") as file:
         indexes = json.load(file)
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
+    ), patch("gios.Gios._get_all_sensors", return_value=sensors), patch(
         "gios.Gios._get_indexes", return_value=indexes
     ):
 
@@ -46,10 +43,23 @@ async def test_valid_data_first_value():
         assert gios.station_id == VALID_STATION_ID
         assert gios.latitude == VALID_LATITUDE
         assert gios.longitude == VALID_LONGITUDE
-        assert len(gios.data) == 2
+        assert len(gios.data) == 8
         assert gios.available == True
-        assert gios.data["PM10"]["value"] == VALID_PM10_FIRST_VALUE
-        assert gios.data["AQI"]["value"] == VALID_AQI_VALUE
+        assert gios.data["SO2"]["value"] == 4.35478
+        assert gios.data["SO2"]["index"] == "very good"
+        assert gios.data["C6H6"]["value"] == 0.23789
+        assert gios.data["C6H6"]["index"] == "very good"
+        assert gios.data["CO"]["value"] == 251.874
+        assert gios.data["CO"]["index"] == "very good"
+        assert gios.data["NO2"]["value"] == 7.13411
+        assert gios.data["NO2"]["index"] == "very good"
+        assert gios.data["O3"]["value"] == 95.7768
+        assert gios.data["O3"]["index"] == "good"
+        assert gios.data["PM2.5"]["value"] == 4.11795
+        assert gios.data["PM2.5"]["index"] == "very good"
+        assert gios.data["PM10"]["value"] == 16.8344
+        assert gios.data["PM10"]["index"] == "very good"
+        assert gios.data["AQI"]["value"] == "good"
 
 
 @pytest.mark.asyncio
@@ -61,15 +71,15 @@ async def test_valid_data_second_value():
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor_valid_second.json") as file:
-        sensor = json.load(file)
+    with open("tests/data/sensors_valid_second_values.json") as file:
+        sensors = json.load(file)
 
     with open("tests/data/indexes.json") as file:
         indexes = json.load(file)
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
+    ), patch("gios.Gios._get_all_sensors", return_value=sensors), patch(
         "gios.Gios._get_indexes", return_value=indexes
     ):
 
@@ -81,10 +91,23 @@ async def test_valid_data_second_value():
         assert gios.station_id == VALID_STATION_ID
         assert gios.latitude == VALID_LATITUDE
         assert gios.longitude == VALID_LONGITUDE
-        assert len(gios.data) == 2
+        assert len(gios.data) == 8
         assert gios.available == True
-        assert gios.data["PM10"]["value"] == VALID_PM10_SECOND_VALUE
-        assert gios.data["AQI"]["value"] == VALID_AQI_VALUE
+        assert gios.data["SO2"]["value"] == 4.25478
+        assert gios.data["SO2"]["index"] == "very good"
+        assert gios.data["C6H6"]["value"] == 0.22789
+        assert gios.data["C6H6"]["index"] == "very good"
+        assert gios.data["CO"]["value"] == 250.874
+        assert gios.data["CO"]["index"] == "very good"
+        assert gios.data["NO2"]["value"] == 7.33411
+        assert gios.data["NO2"]["index"] == "very good"
+        assert gios.data["O3"]["value"] == 93.7768
+        assert gios.data["O3"]["index"] == "good"
+        assert gios.data["PM2.5"]["value"] == 4.21464
+        assert gios.data["PM2.5"]["index"] == "very good"
+        assert gios.data["PM10"]["value"] == 17.8344
+        assert gios.data["PM10"]["index"] == "very good"
+        assert gios.data["AQI"]["value"] == "good"
 
 
 @pytest.mark.asyncio
@@ -96,14 +119,14 @@ async def test_no_indexes_data():
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor_valid_first.json") as file:
-        sensor = json.load(file)
+    with open("tests/data/sensors_valid_first_values.json") as file:
+        sensors = json.load(file)
 
     indexes = {}
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor), patch(
+    ), patch("gios.Gios._get_all_sensors", return_value=sensors), patch(
         "gios.Gios._get_indexes", return_value=indexes
     ), pytest.raises(
         InvalidSensorsData
@@ -126,11 +149,11 @@ async def test_no_sensor_data():
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    sensor = {}
+    sensors = {}
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
+    ), patch("gios.Gios._get_all_sensors", return_value=sensors), pytest.raises(
         InvalidSensorsData
     ) as error:
 
@@ -151,12 +174,12 @@ async def test_invalid_sensor_data_1():
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor_invalid_1.json") as file:
-        sensor = json.load(file)
+    with open("tests/data/sensors_invalid_1.json") as file:
+        sensors = json.load(file)
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
+    ), patch("gios.Gios._get_all_sensors", return_value=sensors), pytest.raises(
         InvalidSensorsData
     ) as error:
 
@@ -177,12 +200,37 @@ async def test_invalid_sensor_data_2():
     with open("tests/data/station.json") as file:
         station = json.load(file)
 
-    with open("tests/data/sensor_invalid_2.json") as file:
-        sensor = json.load(file)
+    with open("tests/data/sensors_invalid_2.json") as file:
+        sensors = json.load(file)
 
     with patch("gios.Gios._get_stations", return_value=stations), patch(
         "gios.Gios._get_station", return_value=station
-    ), patch("gios.Gios._get_sensor", return_value=sensor), pytest.raises(
+    ), patch("gios.Gios._get_all_sensors", return_value=sensors), pytest.raises(
+        InvalidSensorsData
+    ) as error:
+
+        async with ClientSession() as websession:
+            gios = Gios(VALID_STATION_ID, websession)
+            await gios.update()
+
+    assert str(error.value) == "Invalid sensor data from GIOS API"
+    assert gios.available == False
+
+@pytest.mark.asyncio
+async def test_invalid_sensor_data_3():
+    """Test with invalid sensor data."""
+    with open("tests/data/stations.json") as file:
+        stations = json.load(file)
+
+    with open("tests/data/station.json") as file:
+        station = json.load(file)
+
+    with open("tests/data/sensors_invalid_3.json") as file:
+        sensors = json.load(file)
+
+    with patch("gios.Gios._get_stations", return_value=stations), patch(
+        "gios.Gios._get_station", return_value=station
+    ), patch("gios.Gios._get_all_sensors", return_value=sensors), pytest.raises(
         InvalidSensorsData
     ) as error:
 
