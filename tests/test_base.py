@@ -1,8 +1,8 @@
 """Tests for gios package."""
 import json
+from unittest.mock import patch
 
 from aiohttp import ClientSession
-from asynctest import patch
 from gios import ApiError, Gios, InvalidSensorsData, NoStationError
 import pytest
 
@@ -44,7 +44,7 @@ async def test_valid_data_first_value():
         assert gios.latitude == VALID_LATITUDE
         assert gios.longitude == VALID_LONGITUDE
         assert len(gios.data) == 8
-        assert gios.available == True
+        assert gios.available is True
         assert gios.data["SO2"]["value"] == 4.35478
         assert gios.data["SO2"]["index"] == "very good"
         assert gios.data["C6H6"]["value"] == 0.23789
@@ -92,7 +92,7 @@ async def test_valid_data_second_value():
         assert gios.latitude == VALID_LATITUDE
         assert gios.longitude == VALID_LONGITUDE
         assert len(gios.data) == 8
-        assert gios.available == True
+        assert gios.available is True
         assert gios.data["SO2"]["value"] == 4.25478
         assert gios.data["SO2"]["index"] == "very good"
         assert gios.data["C6H6"]["value"] == 0.22789
@@ -137,7 +137,7 @@ async def test_no_indexes_data():
             await gios.update()
 
     assert str(error.value) == "Invalid index data from GIOS API"
-    assert gios.available == False
+    assert gios.available is False
 
 
 @pytest.mark.asyncio
@@ -162,7 +162,7 @@ async def test_no_sensor_data():
             await gios.update()
 
     assert str(error.value) == "Invalid sensor data from GIOS API"
-    assert gios.available == False
+    assert gios.available is False
 
 
 @pytest.mark.asyncio
@@ -188,7 +188,7 @@ async def test_invalid_sensor_data_1():
             await gios.update()
 
     assert str(error.value) == "Invalid sensor data from GIOS API"
-    assert gios.available == False
+    assert gios.available is False
 
 
 @pytest.mark.asyncio
@@ -214,7 +214,8 @@ async def test_invalid_sensor_data_2():
             await gios.update()
 
     assert str(error.value) == "Invalid sensor data from GIOS API"
-    assert gios.available == False
+    assert gios.available is False
+
 
 @pytest.mark.asyncio
 async def test_invalid_sensor_data_3():
@@ -239,7 +240,7 @@ async def test_invalid_sensor_data_3():
             await gios.update()
 
     assert str(error.value) == "Invalid sensor data from GIOS API"
-    assert gios.available == False
+    assert gios.available is False
 
 
 @pytest.mark.asyncio
@@ -274,7 +275,7 @@ async def test_no_stations_data():
             await gios.update()
 
     assert str(error.value) == "Invalid measuring stations list from GIOS API"
-    assert gios.available == False
+    assert gios.available is False
 
 
 @pytest.mark.asyncio
@@ -292,7 +293,7 @@ async def test_invalid_station_id():
             await gios.update()
 
     assert str(error.value) == "0 is not a valid measuring station ID"
-    assert gios.available == False
+    assert gios.available is False
 
 
 @pytest.mark.asyncio
@@ -306,4 +307,4 @@ async def test_api_error():
             gios = Gios(VALID_STATION_ID, websession)
             await gios.update()
     assert str(error.value) == "404"
-    assert gios.available == False
+    assert gios.available is False
