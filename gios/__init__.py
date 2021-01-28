@@ -19,7 +19,7 @@ URL_STATION = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/{}"
 URL_STATIONS = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
 
 
-class Gios:
+class Gios:  # pylint:disable=too-many-instance-attributes
     """Main class to perform GIOS API requests"""
 
     def __init__(self, station_id, session):
@@ -34,7 +34,7 @@ class Gios:
 
         self.session = session
 
-    async def update(self):
+    async def update(self):  # pylint:disable=too-many-branches
         """Update GIOS data."""
         data = {}
         invalid_sensors = []
@@ -104,9 +104,9 @@ class Gios:
             data[ATTR_AQI][ATTR_VALUE] = indexes["stIndexLevel"][
                 "indexLevelName"
             ].lower()
-        except (IndexError, KeyError, TypeError):
+        except (IndexError, KeyError, TypeError) as err:
             self._available = False
-            raise InvalidSensorsData("Invalid index data from GIOS API")
+            raise InvalidSensorsData("Invalid index data from GIOS API") from err
         self._available = True
         self.data = data
 
@@ -164,7 +164,7 @@ class ApiError(Exception):
 
     def __init__(self, status):
         """Initialize."""
-        super(ApiError, self).__init__(status)
+        super().__init__(status)
         self.status = status
 
 
@@ -173,7 +173,7 @@ class InvalidSensorsData(Exception):
 
     def __init__(self, status):
         """Initialize."""
-        super(InvalidSensorsData, self).__init__(status)
+        super().__init__(status)
         self.status = status
 
 
@@ -182,5 +182,5 @@ class NoStationError(Exception):
 
     def __init__(self, status):
         """Initialize."""
-        super(NoStationError, self).__init__(status)
+        super().__init__(status)
         self.status = status
