@@ -24,19 +24,19 @@ jobs:
     - name: Check with isort
       run: |
         pip install isort
-        isort gios/*.py --check-only
+        isort gios tests --check-only
     - name: Check with Black Code Formatter
       run: |
         pip install black
-        black gios --check
+        black gios tests --check
     - name: Lint with flake8
       run: |
         pip install flake8
-        flake8 gios
+        flake8 gios tests
     - name: Lint with pylint
       run: |
         pip install pylint
-        pylint gios
+        pylint gios tests
     - name: Test with pytest
       run: |
         pip install pytest
