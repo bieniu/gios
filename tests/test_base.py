@@ -2,9 +2,10 @@
 import json
 from unittest.mock import patch
 
-from aiohttp import ClientSession
-from gios import ApiError, Gios, InvalidSensorsData, NoStationError
 import pytest
+from aiohttp import ClientSession
+
+from gios import ApiError, Gios, InvalidSensorsData, NoStationError
 
 INVALID_STATION_ID = 0
 
