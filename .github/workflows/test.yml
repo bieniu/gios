@@ -35,7 +35,7 @@ jobs:
         flake8 gios tests
     - name: Lint with pylint
       run: |
-        pip install pylint
+        pip install pylint pytest
         pylint gios tests
     - name: Test with pytest
       run: |
