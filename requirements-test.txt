@@ -1,4 +1,4 @@
-aioresponse
+aioresponses
 pytest-cov
 pytest-asyncio
 pytest-error-for-skips
