@@ -2,6 +2,7 @@ aioresponses
 black
 flake8
 isort
+mypy
 pylint
 pytest
 pytest-asyncio

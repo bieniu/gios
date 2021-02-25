@@ -2,41 +2,45 @@
 Python wrapper for getting air quality data from GIOS.
 """
 import logging
+from typing import Optional, Union
+
+from aiohttp import ClientSession
+
+from .const import (
+    ATTR_AQI,
+    ATTR_ID,
+    ATTR_INDEX,
+    ATTR_INDEX_LEVEL,
+    ATTR_NAME,
+    ATTR_VALUE,
+    HTTP_OK,
+    URL_INDEXES,
+    URL_SENSOR,
+    URL_STATION,
+    URL_STATIONS,
+)
 
 _LOGGER = logging.getLogger(__name__)
-
-ATTR_AQI = "AQI"
-ATTR_ID = "id"
-ATTR_INDEX = "index"
-ATTR_INDEX_LEVEL = "{}IndexLevel"
-ATTR_NAME = "name"
-ATTR_VALUE = "value"
-
-HTTP_OK = 200
-URL_INDEXES = "http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{}"
-URL_SENSOR = "http://api.gios.gov.pl/pjp-api/rest/data/getData/{}"
-URL_STATION = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/{}"
-URL_STATIONS = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
 
 
 class Gios:  # pylint:disable=(too-few-public-methods
     """Main class to perform GIOS API requests"""
 
-    def __init__(self, station_id, session):
+    def __init__(self, station_id: str, session: ClientSession):
         """Initialize."""
-        self.data = {}
+        self.data: dict = {}
         self.station_id = station_id
-        self.latitude = None
-        self.longitude = None
-        self.station_name = None
-        self._station_data = {}
+        self.latitude: Optional[str] = None
+        self.longitude: Optional[str] = None
+        self.station_name: Optional[str] = None
+        self._station_data: dict = {}
 
         self.session = session
 
     async def update(self):  # pylint:disable=too-many-branches
         """Update GIOS data."""
-        data = {}
-        invalid_sensors = []
+        data: dict = {}
+        invalid_sensors: list = []
 
         if not self.station_name:
             stations = await self._get_stations()
@@ -104,40 +108,36 @@ class Gios:  # pylint:disable=(too-few-public-methods
             raise InvalidSensorsData("Invalid index data from GIOS API") from err
         self.data = data
 
-    async def _get_stations(self):
+    async def _get_stations(self) -> dict:
         """Retreive list of measuring stations."""
-        stations = await self._async_get(URL_STATIONS)
-        return stations
+        return await self._async_get(URL_STATIONS)
 
-    async def _get_station(self):
+    async def _get_station(self) -> dict:
         """Retreive measuring station data."""
         url = URL_STATION.format(self.station_id)
-        station = await self._async_get(url)
-        return station
+        return await self._async_get(url)
 
-    async def _get_all_sensors(self, sensors):
+    async def _get_all_sensors(self, sensors: dict) -> dict:
         """Retreive all sensors data."""
-        data = {}
+        data: dict = {}
         for sensor in sensors:
             sensor_data = await self._get_sensor(sensors[sensor][ATTR_ID])
             data[sensor] = sensor_data
         return data
 
-    async def _get_sensor(self, sensor):
+    async def _get_sensor(self, sensor: int) -> dict:
         """Retreive sensor data."""
         url = URL_SENSOR.format(sensor)
-        sensor = await self._async_get(url)
-        return sensor
+        return await self._async_get(url)
 
-    async def _get_indexes(self):
+    async def _get_indexes(self) -> dict:
         """Retreive indexes data."""
         url = URL_INDEXES.format(self.station_id)
-        indexes = await self._async_get(url)
-        return indexes
+        return await self._async_get(url)
 
-    async def _async_get(self, url):
+    async def _async_get(self, url: str) -> dict:
         """Retreive data from GIOS API."""
-        data = None
+        data: dict = {}
         async with self.session.get(url) as resp:
             _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
             if resp.status != HTTP_OK:
@@ -150,7 +150,7 @@ class Gios:  # pylint:disable=(too-few-public-methods
 class ApiError(Exception):
     """Raised when GIOS API request ended in error."""
 
-    def __init__(self, status):
+    def __init__(self, status: Union[int, str]):
         """Initialize."""
         super().__init__(status)
         self.status = status
@@ -159,7 +159,7 @@ class ApiError(Exception):
 class InvalidSensorsData(Exception):
     """Raised when sensors data is invalid."""
 
-    def __init__(self, status):
+    def __init__(self, status: str):
         """Initialize."""
         super().__init__(status)
         self.status = status
@@ -168,7 +168,7 @@ class InvalidSensorsData(Exception):
 class NoStationError(Exception):
     """Raised when no measuring station error."""
 
-    def __init__(self, status):
+    def __init__(self, status: str):
         """Initialize."""
         super().__init__(status)
         self.status = status
