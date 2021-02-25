@@ -30,7 +30,6 @@ class Gios:  # pylint:disable=too-many-instance-attributes
         self.longitude = None
         self.station_name = None
         self._station_data = {}
-        self._available = False
 
         self.session = session
 
@@ -42,7 +41,6 @@ class Gios:  # pylint:disable=too-many-instance-attributes
         if not self.station_name:
             stations = await self._get_stations()
             if not stations:
-                self._available = False
                 raise ApiError("Invalid measuring stations list from GIOS API")
 
             for station in stations:
@@ -51,7 +49,6 @@ class Gios:  # pylint:disable=too-many-instance-attributes
                     self.longitude = station["gegrLon"]
                     self.station_name = station["stationName"]
             if not self.station_name:
-                self._available = False
                 raise NoStationError(
                     f"{self.station_id} is not a valid measuring station ID"
                 )
@@ -59,7 +56,6 @@ class Gios:  # pylint:disable=too-many-instance-attributes
             self._station_data = await self._get_station()
 
         if not self._station_data:
-            self._available = False
             raise InvalidSensorsData("Invalid measuring station data from GIOS API")
 
         for sensor in self._station_data:
@@ -105,9 +101,7 @@ class Gios:  # pylint:disable=too-many-instance-attributes
                 "indexLevelName"
             ].lower()
         except (IndexError, KeyError, TypeError) as err:
-            self._available = False
             raise InvalidSensorsData("Invalid index data from GIOS API") from err
-        self._available = True
         self.data = data
 
     async def _get_stations(self):
@@ -148,15 +142,9 @@ class Gios:  # pylint:disable=too-many-instance-attributes
             _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
             if resp.status != HTTP_OK:
                 _LOGGER.warning("Invalid response from GIOS API: %s", resp.status)
-                self._available = False
                 raise ApiError(resp.status)
             data = await resp.json()
         return data
-
-    @property
-    def available(self):
-        """Return True is data is available."""
-        return bool(self.data)
 
 
 class ApiError(Exception):
