@@ -4,7 +4,7 @@ import logging
 from aiohttp import ClientError, ClientSession
 from gios import ApiError, InvalidSensorsData, Gios, NoStationError
 
-GIOS_STATION_ID = 0 # 117
+GIOS_STATION_ID = 117
 
 logging.basicConfig(level=logging.DEBUG)
 
