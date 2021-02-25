@@ -19,7 +19,7 @@ URL_STATION = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/{}"
 URL_STATIONS = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
 
 
-class Gios:  # pylint:disable=too-many-instance-attributes
+class Gios:  # pylint:disable=(too-few-public-methods
     """Main class to perform GIOS API requests"""
 
     def __init__(self, station_id, session):
