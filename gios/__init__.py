@@ -145,12 +145,12 @@ class Gios:  # pylint:disable=too-many-instance-attributes
         """Retreive data from GIOS API."""
         data = None
         async with self.session.get(url) as resp:
+            _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
             if resp.status != HTTP_OK:
                 _LOGGER.warning("Invalid response from GIOS API: %s", resp.status)
                 self._available = False
                 raise ApiError(resp.status)
             data = await resp.json()
-        _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
         return data
 
     @property

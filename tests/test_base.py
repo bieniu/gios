@@ -112,6 +112,24 @@ async def test_valid_data_first_value():  # pylint:disable=too-many-statements
     assert gios.data["PM10"]["index"] == "very good"
     assert gios.data["AQI"]["value"] == "good"
 
+@pytest.mark.asyncio
+async def test_api_error():
+    """Test GIOS API error."""
+    session = aiohttp.ClientSession()
+
+    with aioresponses() as session_mock:
+        session_mock.get(
+            "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+            status=404,
+        )
+        gios = Gios(VALID_STATION_ID, session)
+        try:
+            await gios.update()
+        except ApiError as error:
+            assert str(error.status)== "404"
+            assert gios.available is False
+
+    await session.close()
 
 @pytest.mark.asyncio
 async def test_valid_data_second_value():
@@ -335,27 +353,24 @@ async def test_invalid_station_id():
     with open("tests/data/stations.json") as file:
         stations = json.load(file)
 
-    with patch("gios.Gios._get_stations", return_value=stations), pytest.raises(
-        NoStationError
-    ) as error:
+    session = aiohttp.ClientSession()
 
-        async with ClientSession() as websession:
-            gios = Gios(INVALID_STATION_ID, websession)
-            await gios.update()
+    with aioresponses() as session_mock:
+        session_mock.get(
+            "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+            payload=stations,
+        )
+        session_mock.get(
+            f"http://api.gios.gov.pl/pjp-api/rest/station/sensors/{INVALID_STATION_ID}",
+            payload=None,
+        )
+    
+    gios = Gios(INVALID_STATION_ID, session)
+    try:
+        await gios.update()
+    except NoStationError as error:
+        assert str(error.status) == "0 is not a valid measuring station ID"
+        assert gios.available is False
+    
+    await session.close()
 
-    assert str(error.value) == "0 is not a valid measuring station ID"
-    assert gios.available is False
-
-
-@pytest.mark.asyncio
-async def test_api_error():
-    """Test GIOS API error."""
-    with patch("gios.Gios._async_get", side_effect=ApiError(404)), pytest.raises(
-        ApiError
-    ) as error:
-
-        async with ClientSession() as websession:
-            gios = Gios(VALID_STATION_ID, websession)
-            await gios.update()
-    assert str(error.value) == "404"
-    assert gios.available is False
