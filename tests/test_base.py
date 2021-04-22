@@ -18,25 +18,25 @@ VALID_LONGITUDE = "88.88"
 @pytest.mark.asyncio
 async def test_valid_data_first_value():  # pylint:disable=too-many-statements
     """Test with valid data and valid first sensor's value."""
-    with open("tests/data/stations.json") as file:
+    with open("tests/fixtures/stations.json") as file:
         stations = json.load(file)
-    with open("tests/data/station.json") as file:
+    with open("tests/fixtures/station.json") as file:
         station = json.load(file)
-    with open("tests/data/sensor_658.json") as file:
+    with open("tests/fixtures/sensor_658.json") as file:
         sensor_658 = json.load(file)
-    with open("tests/data/sensor_660.json") as file:
+    with open("tests/fixtures/sensor_660.json") as file:
         sensor_660 = json.load(file)
-    with open("tests/data/sensor_665.json") as file:
+    with open("tests/fixtures/sensor_665.json") as file:
         sensor_665 = json.load(file)
-    with open("tests/data/sensor_667.json") as file:
+    with open("tests/fixtures/sensor_667.json") as file:
         sensor_667 = json.load(file)
-    with open("tests/data/sensor_670.json") as file:
+    with open("tests/fixtures/sensor_670.json") as file:
         sensor_670 = json.load(file)
-    with open("tests/data/sensor_672.json") as file:
+    with open("tests/fixtures/sensor_672.json") as file:
         sensor_672 = json.load(file)
-    with open("tests/data/sensor_14395.json") as file:
+    with open("tests/fixtures/sensor_14395.json") as file:
         sensor_14395 = json.load(file)
-    with open("tests/data/indexes.json") as file:
+    with open("tests/fixtures/indexes.json") as file:
         indexes = json.load(file)
 
     session = aiohttp.ClientSession()
@@ -132,25 +132,25 @@ async def test_api_error():
 @pytest.mark.asyncio
 async def test_valid_data_second_value():  # pylint:disable=too-many-statements
     """Test with valid data and valid second sensor's value."""
-    with open("tests/data/stations.json") as file:
+    with open("tests/fixtures/stations.json") as file:
         stations = json.load(file)
-    with open("tests/data/station.json") as file:
+    with open("tests/fixtures/station.json") as file:
         station = json.load(file)
-    with open("tests/data/sensor_658.json") as file:
+    with open("tests/fixtures/sensor_658.json") as file:
         sensor_658 = json.load(file)
-    with open("tests/data/sensor_660.json") as file:
+    with open("tests/fixtures/sensor_660.json") as file:
         sensor_660 = json.load(file)
-    with open("tests/data/sensor_665.json") as file:
+    with open("tests/fixtures/sensor_665.json") as file:
         sensor_665 = json.load(file)
-    with open("tests/data/sensor_667.json") as file:
+    with open("tests/fixtures/sensor_667.json") as file:
         sensor_667 = json.load(file)
-    with open("tests/data/sensor_670.json") as file:
+    with open("tests/fixtures/sensor_670.json") as file:
         sensor_670 = json.load(file)
-    with open("tests/data/sensor_672.json") as file:
+    with open("tests/fixtures/sensor_672.json") as file:
         sensor_672 = json.load(file)
-    with open("tests/data/sensor_14395.json") as file:
+    with open("tests/fixtures/sensor_14395.json") as file:
         sensor_14395 = json.load(file)
-    with open("tests/data/indexes.json") as file:
+    with open("tests/fixtures/indexes.json") as file:
         indexes = json.load(file)
 
     sensor_658["values"][0]["value"] = None
@@ -235,23 +235,23 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
 @pytest.mark.asyncio
 async def test_no_indexes_data():
     """Test with valid data."""
-    with open("tests/data/stations.json") as file:
+    with open("tests/fixtures/stations.json") as file:
         stations = json.load(file)
-    with open("tests/data/station.json") as file:
+    with open("tests/fixtures/station.json") as file:
         station = json.load(file)
-    with open("tests/data/sensor_658.json") as file:
+    with open("tests/fixtures/sensor_658.json") as file:
         sensor_658 = json.load(file)
-    with open("tests/data/sensor_660.json") as file:
+    with open("tests/fixtures/sensor_660.json") as file:
         sensor_660 = json.load(file)
-    with open("tests/data/sensor_665.json") as file:
+    with open("tests/fixtures/sensor_665.json") as file:
         sensor_665 = json.load(file)
-    with open("tests/data/sensor_667.json") as file:
+    with open("tests/fixtures/sensor_667.json") as file:
         sensor_667 = json.load(file)
-    with open("tests/data/sensor_670.json") as file:
+    with open("tests/fixtures/sensor_670.json") as file:
         sensor_670 = json.load(file)
-    with open("tests/data/sensor_672.json") as file:
+    with open("tests/fixtures/sensor_672.json") as file:
         sensor_672 = json.load(file)
-    with open("tests/data/sensor_14395.json") as file:
+    with open("tests/fixtures/sensor_14395.json") as file:
         sensor_14395 = json.load(file)
 
     session = aiohttp.ClientSession()
@@ -310,25 +310,25 @@ async def test_no_indexes_data():
 @pytest.mark.asyncio
 async def test_no_sensor_data_1():  # pylint:disable=too-many-statements
     """Test with no sensor data."""
-    with open("tests/data/stations.json") as file:
+    with open("tests/fixtures/stations.json") as file:
         stations = json.load(file)
-    with open("tests/data/station.json") as file:
+    with open("tests/fixtures/station.json") as file:
         station = json.load(file)
-    with open("tests/data/sensor_658.json") as file:
+    with open("tests/fixtures/sensor_658.json") as file:
         sensor_658 = json.load(file)
-    with open("tests/data/sensor_660.json") as file:
+    with open("tests/fixtures/sensor_660.json") as file:
         sensor_660 = json.load(file)
-    with open("tests/data/sensor_665.json") as file:
+    with open("tests/fixtures/sensor_665.json") as file:
         sensor_665 = json.load(file)
-    with open("tests/data/sensor_667.json") as file:
+    with open("tests/fixtures/sensor_667.json") as file:
         sensor_667 = json.load(file)
-    with open("tests/data/sensor_670.json") as file:
+    with open("tests/fixtures/sensor_670.json") as file:
         sensor_670 = json.load(file)
-    with open("tests/data/sensor_672.json") as file:
+    with open("tests/fixtures/sensor_672.json") as file:
         sensor_672 = json.load(file)
-    with open("tests/data/sensor_14395.json") as file:
+    with open("tests/fixtures/sensor_14395.json") as file:
         sensor_14395 = json.load(file)
-    with open("tests/data/indexes.json") as file:
+    with open("tests/fixtures/indexes.json") as file:
         indexes = json.load(file)
 
     sensor_658["values"][0]["value"] = None
@@ -402,9 +402,9 @@ async def test_no_sensor_data_1():  # pylint:disable=too-many-statements
 @pytest.mark.asyncio
 async def test_invalid_sensor_data_2():
     """Test with invalid sensor data."""
-    with open("tests/data/stations.json") as file:
+    with open("tests/fixtures/stations.json") as file:
         stations = json.load(file)
-    with open("tests/data/station.json") as file:
+    with open("tests/fixtures/station.json") as file:
         station = json.load(file)
 
     session = aiohttp.ClientSession()
@@ -459,7 +459,7 @@ async def test_invalid_sensor_data_2():
 @pytest.mark.asyncio
 async def test_no_station_data():
     """Test with no station data."""
-    with open("tests/data/stations.json") as file:
+    with open("tests/fixtures/stations.json") as file:
         stations = json.load(file)
 
     session = aiohttp.ClientSession()
@@ -504,7 +504,7 @@ async def test_no_stations_data():
 @pytest.mark.asyncio
 async def test_invalid_station_id():
     """Test with invalid station_id."""
-    with open("tests/data/stations.json") as file:
+    with open("tests/fixtures/stations.json") as file:
         stations = json.load(file)
 
     session = aiohttp.ClientSession()
