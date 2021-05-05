@@ -12,7 +12,7 @@ async def main():
     try:
         async with ClientSession() as websession:
             gios = Gios(GIOS_STATION_ID, websession)
-            data = await gios.update()
+            data = await gios.async_update()
     except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
         print(f"{error}")
         return

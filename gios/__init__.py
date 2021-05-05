@@ -36,7 +36,7 @@ class Gios:  # pylint:disable=(too-few-public-methods
 
         self.session = session
 
-    async def update(self) -> Dict[str, Any]:  # pylint:disable=too-many-branches
+    async def async_update(self) -> Dict[str, Any]:  # pylint:disable=too-many-branches
         """Update GIOS data."""
         data: Dict[str, Dict[str, Any]] = {}
         invalid_sensors: List[str] = []

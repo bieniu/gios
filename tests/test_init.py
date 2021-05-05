@@ -84,7 +84,7 @@ async def test_valid_data_first_value():  # pylint:disable=too-many-statements
         )
 
         gios = Gios(VALID_STATION_ID, session)
-        data = await gios.update()
+        data = await gios.async_update()
 
     await session.close()
 
@@ -122,7 +122,7 @@ async def test_api_error():
         )
         gios = Gios(VALID_STATION_ID, session)
         try:
-            await gios.update()
+            await gios.async_update()
         except ApiError as error:
             assert str(error.status) == "404"
 
@@ -206,7 +206,7 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
         )
 
         gios = Gios(VALID_STATION_ID, session)
-        data = await gios.update()
+        data = await gios.async_update()
 
     await session.close()
 
@@ -300,7 +300,7 @@ async def test_no_indexes_data():
 
         gios = Gios(VALID_STATION_ID, session)
         try:
-            await gios.update()
+            await gios.async_update()
         except InvalidSensorsData as error:
             assert str(error.status) == "Invalid index data from GIOS API"
 
@@ -392,7 +392,7 @@ async def test_no_sensor_data_1():  # pylint:disable=too-many-statements
 
         gios = Gios(VALID_STATION_ID, session)
         try:
-            await gios.update()
+            await gios.async_update()
         except InvalidSensorsData as error:
             assert str(error.status) == "Invalid sensor data from GIOS API"
 
@@ -449,7 +449,7 @@ async def test_invalid_sensor_data_2():
 
         gios = Gios(VALID_STATION_ID, session)
         try:
-            await gios.update()
+            await gios.async_update()
         except InvalidSensorsData as error:
             assert str(error.status) == "Invalid sensor data from GIOS API"
 
@@ -475,7 +475,7 @@ async def test_no_station_data():
         )
         gios = Gios(VALID_STATION_ID, session)
         try:
-            await gios.update()
+            await gios.async_update()
         except InvalidSensorsData as error:
             assert str(error.status) == "Invalid measuring station data from GIOS API"
 
@@ -494,7 +494,7 @@ async def test_no_stations_data():
         )
         gios = Gios(VALID_STATION_ID, session)
         try:
-            await gios.update()
+            await gios.async_update()
         except ApiError as error:
             assert str(error.status) == "Invalid measuring stations list from GIOS API"
 
@@ -517,7 +517,7 @@ async def test_invalid_station_id():
 
     gios = Gios(INVALID_STATION_ID, session)
     try:
-        await gios.update()
+        await gios.async_update()
     except NoStationError as error:
         assert str(error.status) == "0 is not a valid measuring station ID"
 
