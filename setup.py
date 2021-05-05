@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="gios",
-    version="0.2.1",
+    version="1.0.0",
     author="Maciej Bieniek",
     description="Python wrapper for getting air quality data from GIOŚ servers.",
     long_description=long_description,
