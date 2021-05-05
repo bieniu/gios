@@ -11,8 +11,8 @@ INVALID_STATION_ID = 0
 
 VALID_STATION_ID = 552
 VALID_STATION_NAME = "Test Name"
-VALID_LATITUDE = "99.99"
-VALID_LONGITUDE = "88.88"
+VALID_LATITUDE = 99.99
+VALID_LONGITUDE = 88.88
 
 
 @pytest.mark.asyncio
@@ -84,7 +84,7 @@ async def test_valid_data_first_value():  # pylint:disable=too-many-statements
         )
 
         gios = Gios(VALID_STATION_ID, session)
-        await gios.update()
+        data = await gios.update()
 
     await session.close()
 
@@ -92,22 +92,22 @@ async def test_valid_data_first_value():  # pylint:disable=too-many-statements
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert len(gios.data) == 8
-    assert gios.data["SO2"]["value"] == 11.6502
-    assert gios.data["SO2"]["index"] == "very good"
-    assert gios.data["C6H6"]["value"] == 2.57148
-    assert gios.data["C6H6"]["index"] == "very good"
-    assert gios.data["CO"]["value"] == 786.702
-    assert gios.data["CO"]["index"] == "very good"
-    assert gios.data["NO2"]["value"] == 59.9545
-    assert gios.data["NO2"]["index"] == "very good"
-    assert gios.data["O3"]["value"] == 8.63111
-    assert gios.data["O3"]["index"] == "good"
-    assert gios.data["PM2.5"]["value"] == 59.9428
-    assert gios.data["PM2.5"]["index"] == "very good"
-    assert gios.data["PM10"]["value"] == 123.879
-    assert gios.data["PM10"]["index"] == "very good"
-    assert gios.data["AQI"]["value"] == "good"
+    assert len(data) == 8
+    assert data["so2"]["value"] == 11.6502
+    assert data["so2"]["index"] == "very good"
+    assert data["c6h6"]["value"] == 2.57148
+    assert data["c6h6"]["index"] == "very good"
+    assert data["co"]["value"] == 786.702
+    assert data["co"]["index"] == "very good"
+    assert data["no2"]["value"] == 59.9545
+    assert data["no2"]["index"] == "very good"
+    assert data["o3"]["value"] == 8.63111
+    assert data["o3"]["index"] == "good"
+    assert data["pm2.5"]["value"] == 59.9428
+    assert data["pm2.5"]["index"] == "very good"
+    assert data["pm10"]["value"] == 123.879
+    assert data["pm10"]["index"] == "very good"
+    assert data["aqi"]["value"] == "good"
 
 
 @pytest.mark.asyncio
@@ -206,7 +206,7 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
         )
 
         gios = Gios(VALID_STATION_ID, session)
-        await gios.update()
+        data = await gios.update()
 
     await session.close()
 
@@ -214,22 +214,22 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert len(gios.data) == 8
-    assert gios.data["SO2"]["value"] == 11.501
-    assert gios.data["SO2"]["index"] == "very good"
-    assert gios.data["C6H6"]["value"] == 3.24432
-    assert gios.data["C6H6"]["index"] == "very good"
-    assert gios.data["CO"]["value"] == 1041.74
-    assert gios.data["CO"]["index"] == "very good"
-    assert gios.data["NO2"]["value"] == 52.6198
-    assert gios.data["NO2"]["index"] == "very good"
-    assert gios.data["O3"]["value"] == 4.93778
-    assert gios.data["O3"]["index"] == "good"
-    assert gios.data["PM2.5"]["value"] == 72.0243
-    assert gios.data["PM2.5"]["index"] == "very good"
-    assert gios.data["PM10"]["value"] == 115.559
-    assert gios.data["PM10"]["index"] == "very good"
-    assert gios.data["AQI"]["value"] == "good"
+    assert len(data) == 8
+    assert data["so2"]["value"] == 11.501
+    assert data["so2"]["index"] == "very good"
+    assert data["c6h6"]["value"] == 3.24432
+    assert data["c6h6"]["index"] == "very good"
+    assert data["co"]["value"] == 1041.74
+    assert data["co"]["index"] == "very good"
+    assert data["no2"]["value"] == 52.6198
+    assert data["no2"]["index"] == "very good"
+    assert data["o3"]["value"] == 4.93778
+    assert data["o3"]["index"] == "good"
+    assert data["pm2.5"]["value"] == 72.0243
+    assert data["pm2.5"]["index"] == "very good"
+    assert data["pm10"]["value"] == 115.559
+    assert data["pm10"]["index"] == "very good"
+    assert data["aqi"]["value"] == "good"
 
 
 @pytest.mark.asyncio
