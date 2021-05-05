@@ -12,12 +12,11 @@ async def main():
     try:
         async with ClientSession() as websession:
             gios = Gios(GIOS_STATION_ID, websession)
-            await gios.update()
+            data = await gios.update()
     except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
         print(f"{error}")
         return
 
-    data = gios.data
     latitude = gios.latitude
     longitude = gios.longitude
     station_name = gios.station_name
