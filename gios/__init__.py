@@ -26,7 +26,7 @@ _LOGGER = logging.getLogger(__name__)
 class Gios:  # pylint:disable=(too-few-public-methods
     """Main class to perform GIOS API requests"""
 
-    def __init__(self, station_id: str, session: ClientSession) -> None:
+    def __init__(self, station_id: int, session: ClientSession) -> None:
         """Initialize."""
         self.station_id = station_id
         self.latitude: Optional[float] = None
