@@ -92,19 +92,17 @@ class Gios:  # pylint:disable=(too-few-public-methods
             raise InvalidSensorsData("Invalid sensor data from GIOS API")
 
         indexes = await self._get_indexes()
-        _LOGGER.error(indexes)
 
         with suppress(IndexError, KeyError, TypeError):
+            data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
+            data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
+                "indexLevelName"
+            ].lower()
             for sensor in data:
                 index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
                 data[sensor][ATTR_INDEX] = indexes[index_level][
                     "indexLevelName"
                 ].lower()
-
-            data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
-            data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
-                "indexLevelName"
-            ].lower()
         return data
 
     async def _get_stations(self) -> List[Dict[str, Any]]:

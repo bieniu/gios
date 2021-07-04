@@ -307,7 +307,7 @@ async def test_no_indexes_data():
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert len(data) == 7
+    assert len(data) == 8
     assert data["so2"]["value"] == 11.6502
     assert data["so2"].get("index") is None
     assert data["c6h6"]["value"] == 2.57148
@@ -322,7 +322,7 @@ async def test_no_indexes_data():
     assert data["pm2.5"].get("index") is None
     assert data["pm10"]["value"] == 123.879
     assert data["pm10"].get("index") is None
-    assert data.get("aqi") is None
+    assert data["aqi"].get("value") is None
 
 
 @pytest.mark.asyncio
