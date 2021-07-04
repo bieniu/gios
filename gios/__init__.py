@@ -2,10 +2,10 @@
 Python wrapper for getting air quality data from GIOS.
 """
 import logging
+from contextlib import suppress
 from typing import Any, Dict, List, Optional, cast
 
 from aiohttp import ClientSession
-from contextlib import suppress
 
 from .const import (
     ATTR_AQI,
