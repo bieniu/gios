@@ -299,12 +299,30 @@ async def test_no_indexes_data():
         )
 
         gios = Gios(VALID_STATION_ID, session)
-        try:
-            await gios.async_update()
-        except InvalidSensorsData as error:
-            assert str(error.status) == "Invalid index data from GIOS API"
+        data = await gios.async_update()
 
     await session.close()
+
+    assert gios.station_name == VALID_STATION_NAME
+    assert gios.station_id == VALID_STATION_ID
+    assert gios.latitude == VALID_LATITUDE
+    assert gios.longitude == VALID_LONGITUDE
+    assert len(data) == 7
+    assert data["so2"]["value"] == 11.6502
+    assert data["so2"].get("index") is None
+    assert data["c6h6"]["value"] == 2.57148
+    assert data["c6h6"].get("index") is None
+    assert data["co"]["value"] == 786.702
+    assert data["co"].get("index") is None
+    assert data["no2"]["value"] == 59.9545
+    assert data["no2"].get("index") is None
+    assert data["o3"]["value"] == 8.63111
+    assert data["o3"].get("index") is None
+    assert data["pm2.5"]["value"] == 59.9428
+    assert data["pm2.5"].get("index") is None
+    assert data["pm10"]["value"] == 123.879
+    assert data["pm10"].get("index") is None
+    assert data.get("aqi") is None
 
 
 @pytest.mark.asyncio
@@ -515,10 +533,10 @@ async def test_invalid_station_id():
             payload=stations,
         )
 
-    gios = Gios(INVALID_STATION_ID, session)
-    try:
-        await gios.async_update()
-    except NoStationError as error:
-        assert str(error.status) == "0 is not a valid measuring station ID"
+        gios = Gios(INVALID_STATION_ID, session)
+        try:
+            await gios.async_update()
+        except NoStationError as error:
+            assert str(error.status) == "0 is not a valid measuring station ID"
 
     await session.close()
