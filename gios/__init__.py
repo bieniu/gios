@@ -73,12 +73,12 @@ class Gios:  # pylint:disable=(too-few-public-methods
         # The GIOS server sends a null values for sensors several minutes before
         # adding new data from measuring station. If the newest value is null
         # we take the earlier value.
-        for sensor in data:
+        for sensor, sensor_data in data.items():
             try:
                 if sensors[sensor]["values"][0][ATTR_VALUE]:
-                    data[sensor][ATTR_VALUE] = sensors[sensor]["values"][0][ATTR_VALUE]
+                    sensor_data[ATTR_VALUE] = sensors[sensor]["values"][0][ATTR_VALUE]
                 elif sensors[sensor].get("values")[1][ATTR_VALUE]:
-                    data[sensor][ATTR_VALUE] = sensors[sensor]["values"][1][ATTR_VALUE]
+                    sensor_data[ATTR_VALUE] = sensors[sensor]["values"][1][ATTR_VALUE]
                 else:
                     invalid_sensors.append(sensor)
             except (IndexError, KeyError, TypeError):
@@ -98,9 +98,9 @@ class Gios:  # pylint:disable=(too-few-public-methods
             data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
                 "indexLevelName"
             ].lower()
-            for sensor in data:
+            for sensor, sensor_data in data.items():
                 index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
-                data[sensor][ATTR_INDEX] = indexes[index_level][
+                sensor_data[ATTR_INDEX] = indexes[index_level][
                     "indexLevelName"
                 ].lower()
         return data
