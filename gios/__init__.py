@@ -100,9 +100,7 @@ class Gios:  # pylint:disable=(too-few-public-methods
             ].lower()
             for sensor, sensor_data in data.items():
                 index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
-                sensor_data[ATTR_INDEX] = indexes[index_level][
-                    "indexLevelName"
-                ].lower()
+                sensor_data[ATTR_INDEX] = indexes[index_level]["indexLevelName"].lower()
         return data
 
     async def _get_stations(self) -> List[Dict[str, Any]]:
