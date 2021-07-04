@@ -233,7 +233,7 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
 
 
 @pytest.mark.asyncio
-async def test_no_indexes_data():
+async def test_no_indexes_data():  # pylint: disable=too-many-statements
     """Test with valid data."""
     with open("tests/fixtures/stations.json") as file:
         stations = json.load(file)
