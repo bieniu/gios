@@ -5,6 +5,7 @@ import logging
 from typing import Any, Dict, List, Optional, cast
 
 from aiohttp import ClientSession
+from contextlib import suppress
 
 from .const import (
     ATTR_AQI,
@@ -91,8 +92,9 @@ class Gios:  # pylint:disable=(too-few-public-methods
             raise InvalidSensorsData("Invalid sensor data from GIOS API")
 
         indexes = await self._get_indexes()
+        _LOGGER.error(indexes)
 
-        try:
+        with suppress(IndexError, KeyError, TypeError):
             for sensor in data:
                 index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
                 data[sensor][ATTR_INDEX] = indexes[index_level][
@@ -103,8 +105,6 @@ class Gios:  # pylint:disable=(too-few-public-methods
             data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
                 "indexLevelName"
             ].lower()
-        except (IndexError, KeyError, TypeError) as err:
-            raise InvalidSensorsData("Invalid index data from GIOS API") from err
         return data
 
     async def _get_stations(self) -> List[Dict[str, Any]]:
