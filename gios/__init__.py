@@ -93,14 +93,17 @@ class Gios:  # pylint:disable=(too-few-public-methods
 
         indexes = await self._get_indexes()
 
+        for sensor, sensor_data in data.items():
+            with suppress(IndexError, KeyError, TypeError):
+                index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
+                sensor_data[ATTR_INDEX] = indexes[index_level]["indexLevelName"].lower()
+
         with suppress(IndexError, KeyError, TypeError):
             data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
             data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
                 "indexLevelName"
             ].lower()
-            for sensor, sensor_data in data.items():
-                index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
-                sensor_data[ATTR_INDEX] = indexes[index_level]["indexLevelName"].lower()
+
         return data
 
     async def _get_stations(self) -> List[Dict[str, Any]]:
