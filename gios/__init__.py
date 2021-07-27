@@ -6,6 +6,7 @@ from contextlib import suppress
 from typing import Any, Dict, List, Optional, cast
 
 from aiohttp import ClientSession
+from dacite import from_dict
 
 from .const import (
     ATTR_AQI,
@@ -20,6 +21,7 @@ from .const import (
     URL_STATION,
     URL_STATIONS,
 )
+from .model import GiosSensors
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -37,7 +39,7 @@ class Gios:  # pylint:disable=(too-few-public-methods
 
         self.session = session
 
-    async def async_update(self) -> Dict[str, Any]:  # pylint:disable=too-many-branches
+    async def async_update(self) -> GiosSensors:  # pylint:disable=too-many-branches
         """Update GIOS data."""
         data: Dict[str, Dict[str, Any]] = {}
         invalid_sensors: List[str] = []
@@ -99,12 +101,16 @@ class Gios:  # pylint:disable=(too-few-public-methods
                 sensor_data[ATTR_INDEX] = indexes[index_level]["indexLevelName"].lower()
 
         with suppress(IndexError, KeyError, TypeError):
-            data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
-            data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
-                "indexLevelName"
-            ].lower()
+            if indexes["stIndexLevel"]["indexLevelName"]:
+                data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
+                data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
+                    "indexLevelName"
+                ].lower()
 
-        return data
+        if data.get("pm2.5"):
+            data["pm25"] = data.pop("pm2.5")
+
+        return from_dict(data_class=GiosSensors, data=data)
 
     async def _get_stations(self) -> List[Dict[str, Any]]:
         """Retreive list of measuring stations."""

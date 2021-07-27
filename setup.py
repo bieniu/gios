@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="gios",
-    version="1.0.2",
+    version="2.0.0",
     author="Maciej Bieniek",
     description="Python wrapper for getting air quality data from GIOŚ servers.",
     long_description=long_description,
@@ -16,6 +16,7 @@ setup(
     url="https://github.com/bieniu/gios",
     license="Apache-2.0 License",
     packages=["gios"],
+    package_data={"gios": ["py.typed"]},
     python_requires=">=3.6",
     install_requires=list(val.strip() for val in open("requirements.txt")),
     classifiers=[

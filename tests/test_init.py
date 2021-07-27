@@ -92,22 +92,21 @@ async def test_valid_data_first_value():  # pylint:disable=too-many-statements
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert len(data) == 8
-    assert data["so2"]["value"] == 11.6502
-    assert data["so2"]["index"] == "very good"
-    assert data["c6h6"]["value"] == 2.57148
-    assert data["c6h6"]["index"] == "very good"
-    assert data["co"]["value"] == 786.702
-    assert data["co"]["index"] == "very good"
-    assert data["no2"]["value"] == 59.9545
-    assert data["no2"]["index"] == "very good"
-    assert data["o3"]["value"] == 8.63111
-    assert data["o3"]["index"] == "good"
-    assert data["pm2.5"]["value"] == 59.9428
-    assert data["pm2.5"]["index"] == "very good"
-    assert data["pm10"]["value"] == 123.879
-    assert data["pm10"]["index"] == "very good"
-    assert data["aqi"]["value"] == "good"
+    assert data.so2.value == 11.6502
+    assert data.so2.index == "very good"
+    assert data.c6h6.value == 2.57148
+    assert data.c6h6.index == "very good"
+    assert data.co.value == 786.702
+    assert data.co.index == "very good"
+    assert data.no2.value == 59.9545
+    assert data.no2.index == "very good"
+    assert data.o3.value == 8.63111
+    assert data.o3.index == "good"
+    assert data.pm25.value == 59.9428
+    assert data.pm25.index == "very good"
+    assert data.pm10.value == 123.879
+    assert data.pm10.index == "very good"
+    assert data.aqi.value == "good"
 
 
 @pytest.mark.asyncio
@@ -214,22 +213,21 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert len(data) == 8
-    assert data["so2"]["value"] == 11.501
-    assert data["so2"]["index"] == "very good"
-    assert data["c6h6"]["value"] == 3.24432
-    assert data["c6h6"]["index"] == "very good"
-    assert data["co"]["value"] == 1041.74
-    assert data["co"]["index"] == "very good"
-    assert data["no2"]["value"] == 52.6198
-    assert data["no2"]["index"] == "very good"
-    assert data["o3"]["value"] == 4.93778
-    assert data["o3"]["index"] == "good"
-    assert data["pm2.5"]["value"] == 72.0243
-    assert data["pm2.5"]["index"] == "very good"
-    assert data["pm10"]["value"] == 115.559
-    assert data["pm10"]["index"] == "very good"
-    assert data["aqi"]["value"] == "good"
+    assert data.so2.value == 11.501
+    assert data.so2.index == "very good"
+    assert data.c6h6.value == 3.24432
+    assert data.c6h6.index == "very good"
+    assert data.co.value == 1041.74
+    assert data.co.index == "very good"
+    assert data.no2.value == 52.6198
+    assert data.no2.index == "very good"
+    assert data.o3.value == 4.93778
+    assert data.o3.index == "good"
+    assert data.pm25.value == 72.0243
+    assert data.pm25.index == "very good"
+    assert data.pm10.value == 115.559
+    assert data.pm10.index == "very good"
+    assert data.aqi.value == "good"
 
 
 @pytest.mark.asyncio
@@ -307,22 +305,21 @@ async def test_no_indexes_data():  # pylint: disable=too-many-statements
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert len(data) == 8
-    assert data["so2"]["value"] == 11.6502
-    assert data["so2"].get("index") is None
-    assert data["c6h6"]["value"] == 2.57148
-    assert data["c6h6"].get("index") is None
-    assert data["co"]["value"] == 786.702
-    assert data["co"].get("index") is None
-    assert data["no2"]["value"] == 59.9545
-    assert data["no2"].get("index") is None
-    assert data["o3"]["value"] == 8.63111
-    assert data["o3"].get("index") is None
-    assert data["pm2.5"]["value"] == 59.9428
-    assert data["pm2.5"].get("index") is None
-    assert data["pm10"]["value"] == 123.879
-    assert data["pm10"].get("index") is None
-    assert data["aqi"].get("value") is None
+    assert data.so2.value == 11.6502
+    assert data.so2.index is None
+    assert data.c6h6.value == 2.57148
+    assert data.c6h6.index is None
+    assert data.co.value == 786.702
+    assert data.co.index is None
+    assert data.no2.value == 59.9545
+    assert data.no2.index is None
+    assert data.o3.value == 8.63111
+    assert data.o3.index is None
+    assert data.pm25.value == 59.9428
+    assert data.pm25.index is None
+    assert data.pm10.value == 123.879
+    assert data.pm10.index is None
+    assert data.aqi is None
 
 
 @pytest.mark.asyncio
