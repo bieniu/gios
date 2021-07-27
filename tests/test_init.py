@@ -319,7 +319,7 @@ async def test_no_indexes_data():  # pylint: disable=too-many-statements
     assert data.pm25.index is None
     assert data.pm10.value == 123.879
     assert data.pm10.index is None
-    assert data.aqi.value is None
+    assert data.aqi is None
 
 
 @pytest.mark.asyncio

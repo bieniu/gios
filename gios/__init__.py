@@ -101,10 +101,11 @@ class Gios:  # pylint:disable=(too-few-public-methods
                 sensor_data[ATTR_INDEX] = indexes[index_level]["indexLevelName"].lower()
 
         with suppress(IndexError, KeyError, TypeError):
-            data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
-            data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
-                "indexLevelName"
-            ].lower()
+            if indexes["stIndexLevel"]["indexLevelName"]:
+                data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
+                data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
+                    "indexLevelName"
+                ].lower()
 
         if data.get("pm2.5"):
             data["pm25"] = data.pop("pm2.5")
