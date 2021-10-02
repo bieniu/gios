@@ -133,16 +133,15 @@ class Gios:  # pylint:disable=too-few-public-methods
     async def _get_sensor(self, sensor: int) -> dict[str, Any]:
         """Retreive sensor data."""
         url = URL_SENSOR.format(sensor)
-        return await self._async_get(url)
+        return cast(dict[str, Any], await self._async_get(url))
 
     async def _get_indexes(self) -> dict[str, Any]:
         """Retreive indexes data."""
         url = URL_INDEXES.format(self.station_id)
-        return await self._async_get(url)
+        return cast(dict[str, Any], await self._async_get(url))
 
-    async def _async_get(self, url: str) -> dict[str, Any]:
+    async def _async_get(self, url: str) -> Any:
         """Retreive data from GIOS API."""
-        data: dict[str, Any] = {}
         async with self.session.get(url) as resp:
             _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
             if resp.status != HTTPStatus.OK.value:
