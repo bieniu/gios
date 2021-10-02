@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import logging
 from contextlib import suppress
-from typing import Any, Final, cast
 from http import HTTPStatus
+from typing import Any, Final, cast
 
 from aiohttp import ClientSession
 from dacite import from_dict
