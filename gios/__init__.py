@@ -6,7 +6,7 @@ from __future__ import annotations
 import logging
 from contextlib import suppress
 from http import HTTPStatus
-from typing import Any, Final, cast
+from typing import Any, Dict, Final, List, cast
 
 from aiohttp import ClientSession
 from dacite import from_dict
@@ -115,12 +115,12 @@ class Gios:  # pylint:disable=(too-few-public-methods
 
     async def _get_stations(self) -> list[dict[str, Any]]:
         """Retreive list of measuring stations."""
-        return cast(list[dict[str, Any]], await self._async_get(URL_STATIONS))
+        return cast(List[Dict[str, Any]], await self._async_get(URL_STATIONS))
 
     async def _get_station(self) -> list[dict[str, Any]]:
         """Retreive measuring station data."""
         url = URL_STATION.format(self.station_id)
-        return cast(list[dict[str, Any]], await self._async_get(url))
+        return cast(List[Dict[str, Any]], await self._async_get(url))
 
     async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
         """Retreive all sensors data."""
