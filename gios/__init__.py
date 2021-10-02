@@ -1,9 +1,12 @@
 """
 Python wrapper for getting air quality data from GIOS.
 """
+from __future__ import annotations
+
 import logging
 from contextlib import suppress
-from typing import Any, Dict, List, Optional, cast
+from http import HTTPStatus
+from typing import Any, Final
 
 from aiohttp import ClientSession
 from dacite import from_dict
@@ -15,7 +18,6 @@ from .const import (
     ATTR_INDEX_LEVEL,
     ATTR_NAME,
     ATTR_VALUE,
-    HTTP_OK,
     URL_INDEXES,
     URL_SENSOR,
     URL_STATION,
@@ -23,30 +25,29 @@ from .const import (
 )
 from .model import GiosSensors
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: Final = logging.getLogger(__name__)
 
 
-class Gios:  # pylint:disable=(too-few-public-methods
+class Gios:  # pylint:disable=too-few-public-methods
     """Main class to perform GIOS API requests"""
 
     def __init__(self, station_id: int, session: ClientSession) -> None:
         """Initialize."""
         self.station_id = station_id
-        self.latitude: Optional[float] = None
-        self.longitude: Optional[float] = None
-        self.station_name: Optional[str] = None
-        self._station_data: List[Dict[str, Any]] = []
+        self.latitude: float | None = None
+        self.longitude: float | None = None
+        self.station_name: str | None = None
+        self._station_data: list[dict[str, Any]] = []
 
         self.session = session
 
     async def async_update(self) -> GiosSensors:  # pylint:disable=too-many-branches
         """Update GIOS data."""
-        data: Dict[str, Dict[str, Any]] = {}
-        invalid_sensors: List[str] = []
+        data: dict[str, dict[str, Any]] = {}
+        invalid_sensors: list[str] = []
 
         if not self.station_name:
-            stations = await self._get_stations()
-            if not stations:
+            if not (stations := await self._get_stations()):
                 raise ApiError("Invalid measuring stations list from GIOS API")
 
             for station in stations:
@@ -112,39 +113,38 @@ class Gios:  # pylint:disable=(too-few-public-methods
 
         return from_dict(data_class=GiosSensors, data=data)
 
-    async def _get_stations(self) -> List[Dict[str, Any]]:
+    async def _get_stations(self) -> Any:
         """Retreive list of measuring stations."""
-        return cast(List[Dict[str, Any]], await self._async_get(URL_STATIONS))
+        return await self._async_get(URL_STATIONS)
 
-    async def _get_station(self) -> List[Dict[str, Any]]:
+    async def _get_station(self) -> Any:
         """Retreive measuring station data."""
         url = URL_STATION.format(self.station_id)
-        return cast(List[Dict[str, Any]], await self._async_get(url))
+        return await self._async_get(url)
 
-    async def _get_all_sensors(self, sensors: Dict[str, Any]) -> Dict[str, Any]:
+    async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
         """Retreive all sensors data."""
-        data: Dict[str, Any] = {}
+        data: dict[str, Any] = {}
         for sensor in sensors:
             sensor_data = await self._get_sensor(sensors[sensor][ATTR_ID])
             data[sensor] = sensor_data
         return data
 
-    async def _get_sensor(self, sensor: int) -> Dict[str, Any]:
+    async def _get_sensor(self, sensor: int) -> Any:
         """Retreive sensor data."""
         url = URL_SENSOR.format(sensor)
         return await self._async_get(url)
 
-    async def _get_indexes(self) -> Dict[str, Any]:
+    async def _get_indexes(self) -> Any:
         """Retreive indexes data."""
         url = URL_INDEXES.format(self.station_id)
         return await self._async_get(url)
 
-    async def _async_get(self, url: str) -> Dict[str, Any]:
+    async def _async_get(self, url: str) -> Any:
         """Retreive data from GIOS API."""
-        data: Dict[str, Any] = {}
         async with self.session.get(url) as resp:
             _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
-            if resp.status != HTTP_OK:
+            if resp.status != HTTPStatus.OK.value:
                 _LOGGER.warning("Invalid response from GIOS API: %s", resp.status)
                 raise ApiError(str(resp.status))
             data = await resp.json()
