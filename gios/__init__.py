@@ -113,14 +113,14 @@ class Gios:  # pylint:disable=too-few-public-methods
 
         return from_dict(data_class=GiosSensors, data=data)
 
-    async def _get_stations(self) -> list[dict[str, Any]]:
+    async def _get_stations(self) -> Any:
         """Retreive list of measuring stations."""
-        return cast(list[dict[str, Any]], await self._async_get(URL_STATIONS))
+        return await self._async_get(URL_STATIONS)
 
-    async def _get_station(self) -> list[dict[str, Any]]:
+    async def _get_station(self) -> Any:
         """Retreive measuring station data."""
         url = URL_STATION.format(self.station_id)
-        return cast(list[dict[str, Any]], await self._async_get(url))
+        return await self._async_get(url)
 
     async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
         """Retreive all sensors data."""
@@ -130,15 +130,15 @@ class Gios:  # pylint:disable=too-few-public-methods
             data[sensor] = sensor_data
         return data
 
-    async def _get_sensor(self, sensor: int) -> dict[str, Any]:
+    async def _get_sensor(self, sensor: int) -> Any:
         """Retreive sensor data."""
         url = URL_SENSOR.format(sensor)
-        return cast(dict[str, Any], await self._async_get(url))
+        return await self._async_get(url)
 
-    async def _get_indexes(self) -> dict[str, Any]:
+    async def _get_indexes(self) -> Any:
         """Retreive indexes data."""
         url = URL_INDEXES.format(self.station_id)
-        return cast(dict[str, Any], await self._async_get(url))
+        return await self._async_get(url)
 
     async def _async_get(self, url: str) -> Any:
         """Retreive data from GIOS API."""

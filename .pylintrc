@@ -1,4 +1,3 @@
 
 [MASTER]
 load-plugins=pylint.extensions.code_style,pylint.extensions.typing,pylint_strict_informational,pylint.extensions.docparams
-disable=unsubscriptable-object
