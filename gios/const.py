@@ -1,13 +1,14 @@
 """Constants for GIOS library."""
-ATTR_AQI: str = "AQI"
-ATTR_ID: str = "id"
-ATTR_INDEX: str = "index"
-ATTR_INDEX_LEVEL: str = "{}IndexLevel"
-ATTR_NAME: str = "name"
-ATTR_VALUE: str = "value"
+from typing import Final
 
-HTTP_OK: int = 200
-URL_INDEXES: str = "http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{}"
-URL_SENSOR: str = "http://api.gios.gov.pl/pjp-api/rest/data/getData/{}"
-URL_STATION: str = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/{}"
-URL_STATIONS: str = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
+ATTR_AQI: Final[str] = "AQI"
+ATTR_ID: Final[str] = "id"
+ATTR_INDEX: Final[str] = "index"
+ATTR_INDEX_LEVEL: Final[str] = "{}IndexLevel"
+ATTR_NAME: Final[str] = "name"
+ATTR_VALUE: Final[str] = "value"
+
+URL_INDEXES: Final[str] = "http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{}"
+URL_SENSOR: Final[str] = "http://api.gios.gov.pl/pjp-api/rest/data/getData/{}"
+URL_STATION: Final[str] = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/{}"
+URL_STATIONS: Final[str] = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
