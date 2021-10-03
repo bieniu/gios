@@ -8,20 +8,20 @@ class Sensor:
     """Data class for sensor."""
 
     name: str
-    id: Optional[int]  # pylint: disable=invalid-name
+    id: Optional[int]
     index: Optional[str] = None
     value: Optional[Union[float, str]] = None
 
 
 @dataclass
-class GiosSensors:  # pylint: disable=too-many-instance-attributes
+class GiosSensors:
     """Data class for polutants."""
 
     aqi: Optional[Sensor]
     c6h6: Optional[Sensor]
-    co: Optional[Sensor]  # pylint: disable=invalid-name
+    co: Optional[Sensor]
     no2: Optional[Sensor]
-    o3: Optional[Sensor]  # pylint: disable=invalid-name
+    o3: Optional[Sensor]
     pm10: Optional[Sensor]
     pm25: Optional[Sensor]
     so2: Optional[Sensor]

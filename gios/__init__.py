@@ -28,7 +28,7 @@ from .model import GiosSensors
 _LOGGER: Final = logging.getLogger(__name__)
 
 
-class Gios:  # pylint:disable=too-few-public-methods
+class Gios:
     """Main class to perform GIOS API requests"""
 
     def __init__(self, station_id: int, session: ClientSession) -> None:
@@ -41,7 +41,7 @@ class Gios:  # pylint:disable=too-few-public-methods
 
         self.session = session
 
-    async def async_update(self) -> GiosSensors:  # pylint:disable=too-many-branches
+    async def async_update(self) -> GiosSensors:
         """Update GIOS data."""
         data: dict[str, dict[str, Any]] = {}
         invalid_sensors: list[str] = []
