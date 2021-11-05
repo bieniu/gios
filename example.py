@@ -2,11 +2,13 @@ import asyncio
 import logging
 
 from aiohttp import ClientError, ClientSession
-from gios import ApiError, InvalidSensorsData, Gios, NoStationError
+
+from gios import ApiError, Gios, InvalidSensorsData, NoStationError
 
 GIOS_STATION_ID = 568
 
 logging.basicConfig(level=logging.DEBUG)
+
 
 async def main():
     try:
