@@ -1,6 +1,5 @@
-"""
-Python wrapper for getting air quality data from GIOS.
-"""
+"""Python wrapper for getting air quality data from GIOS."""
+
 from __future__ import annotations
 
 import logging
@@ -29,7 +28,7 @@ _LOGGER: Final = logging.getLogger(__name__)
 
 
 class Gios:
-    """Main class to perform GIOS API requests"""
+    """Main class to perform GIOS API requests."""
 
     def __init__(self, station_id: int, session: ClientSession) -> None:
         """Initialize."""
@@ -114,16 +113,16 @@ class Gios:
         return from_dict(data_class=GiosSensors, data=data)
 
     async def _get_stations(self) -> Any:
-        """Retreive list of measuring stations."""
+        """Retrieve list of measuring stations."""
         return await self._async_get(URL_STATIONS)
 
     async def _get_station(self) -> Any:
-        """Retreive measuring station data."""
+        """Retrieve measuring station data."""
         url = URL_STATION.format(self.station_id)
         return await self._async_get(url)
 
     async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
-        """Retreive all sensors data."""
+        """Retrieve all sensors data."""
         data: dict[str, Any] = {}
         for sensor in sensors:
             sensor_data = await self._get_sensor(sensors[sensor][ATTR_ID])
@@ -131,17 +130,17 @@ class Gios:
         return data
 
     async def _get_sensor(self, sensor: int) -> Any:
-        """Retreive sensor data."""
+        """Retrieve sensor data."""
         url = URL_SENSOR.format(sensor)
         return await self._async_get(url)
 
     async def _get_indexes(self) -> Any:
-        """Retreive indexes data."""
+        """Retrieve indexes data."""
         url = URL_INDEXES.format(self.station_id)
         return await self._async_get(url)
 
     async def _async_get(self, url: str) -> Any:
-        """Retreive data from GIOS API."""
+        """Retrieve data from GIOS API."""
         async with self.session.get(url) as resp:
             _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
             if resp.status != HTTPStatus.OK.value:
