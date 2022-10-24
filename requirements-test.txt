@@ -6,7 +6,7 @@ mypy==0.982
 pre-commit==2.20.0
 pylint==2.15.5
 pylint_strict_informational==0.1
-pytest-asyncio==0.19.0
+pytest-asyncio==0.20.1
 pytest-cov==4.0.0
 pytest-error-for-skips==2.0.2
 pytest==7.1.3
