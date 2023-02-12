@@ -21,6 +21,7 @@ from .const import (
     URL_STATION,
     URL_STATIONS,
 )
+from .exceptions import ApiError, InvalidSensorsData, NoStationError
 from .model import GiosSensors
 
 _LOGGER: Final = logging.getLogger(__name__)
@@ -151,30 +152,3 @@ class Gios:
                 raise ApiError(str(resp.status))
             data = await resp.json()
         return data
-
-
-class ApiError(Exception):
-    """Raised when GIOS API request ended in error."""
-
-    def __init__(self, status: str) -> None:
-        """Initialize."""
-        super().__init__(status)
-        self.status = status
-
-
-class InvalidSensorsData(Exception):
-    """Raised when sensors data is invalid."""
-
-    def __init__(self, status: str) -> None:
-        """Initialize."""
-        super().__init__(status)
-        self.status = status
-
-
-class NoStationError(Exception):
-    """Raised when no measuring station error."""
-
-    def __init__(self, status: str) -> None:
-        """Initialize."""
-        super().__init__(status)
-        self.status = status
