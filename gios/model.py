@@ -1,6 +1,4 @@
 """Type definitions for GIOS."""
-from __future__ import annotations
-
 from dataclasses import dataclass
 
 
