@@ -39,6 +39,8 @@ class Gios:
 
         self.session = session
 
+        _LOGGER.info("Initializing GIOS for station ID: %s", self.station_id)
+
     async def async_update(self) -> GiosSensors:
         """Update GIOS data."""
         data: dict[str, dict[str, Any]] = {}
