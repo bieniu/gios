@@ -114,16 +114,15 @@ async def test_api_error():
     """Test GIOS API error."""
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock:
+    with aioresponses() as session_mock, pytest.raises(ApiError) as excinfo:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             status=404,
         )
         gios = Gios(VALID_STATION_ID, session)
-        try:
-            await gios.async_update()
-        except ApiError as error:
-            assert str(error.status) == "404"
+        await gios.async_update()
+
+        assert excinfo == "404"
 
     await session.close()
 
@@ -363,7 +362,7 @@ async def test_no_sensor_data_1():  # pylint:disable=too-many-statements
 
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock:
+    with aioresponses() as session_mock, pytest.raises(InvalidSensorsData) as excinfo:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
@@ -404,12 +403,10 @@ async def test_no_sensor_data_1():  # pylint:disable=too-many-statements
             f"http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
             payload=indexes,
         )
-
         gios = Gios(VALID_STATION_ID, session)
-        try:
-            await gios.async_update()
-        except InvalidSensorsData as error:
-            assert str(error.status) == "Invalid sensor data from GIOS API"
+        await gios.async_update()
+
+        assert excinfo == "Invalid sensor data from GIOS API"
 
     await session.close()
 
@@ -424,7 +421,7 @@ async def test_invalid_sensor_data_2():
 
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock:
+    with aioresponses() as session_mock, pytest.raises(InvalidSensorsData) as excinfo:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
@@ -461,12 +458,10 @@ async def test_invalid_sensor_data_2():
             "http://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
             payload=None,
         )
-
         gios = Gios(VALID_STATION_ID, session)
-        try:
-            await gios.async_update()
-        except InvalidSensorsData as error:
-            assert str(error.status) == "Invalid sensor data from GIOS API"
+        await gios.async_update()
+
+        assert excinfo == "Invalid sensor data from GIOS API"
 
     await session.close()
 
@@ -479,7 +474,7 @@ async def test_no_station_data():
 
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock:
+    with aioresponses() as session_mock, pytest.raises(InvalidSensorsData) as excinfo:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
@@ -489,10 +484,9 @@ async def test_no_station_data():
             payload={},
         )
         gios = Gios(VALID_STATION_ID, session)
-        try:
-            await gios.async_update()
-        except InvalidSensorsData as error:
-            assert str(error.status) == "Invalid measuring station data from GIOS API"
+        await gios.async_update()
+
+        assert excinfo == "Invalid measuring station data from GIOS API"
 
     await session.close()
 
@@ -502,16 +496,15 @@ async def test_no_stations_data():
     """Test with no stations data."""
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock:
+    with aioresponses() as session_mock, pytest.raises(ApiError) as excinfo:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload={},
         )
         gios = Gios(VALID_STATION_ID, session)
-        try:
-            await gios.async_update()
-        except ApiError as error:
-            assert str(error.status) == "Invalid measuring stations list from GIOS API"
+        await gios.async_update()
+
+    assert excinfo == "Invalid measuring stations list from GIOS API"
 
     await session.close()
 
@@ -524,16 +517,14 @@ async def test_invalid_station_id():
 
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock:
+    with aioresponses() as session_mock, pytest.raises(NoStationError) as excinfo:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
         )
-
         gios = Gios(INVALID_STATION_ID, session)
-        try:
-            await gios.async_update()
-        except NoStationError as error:
-            assert str(error.status) == "0 is not a valid measuring station ID"
+        await gios.async_update()
+
+        assert excinfo == "0 is not a valid measuring station ID"
 
     await session.close()
