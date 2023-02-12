@@ -97,15 +97,15 @@ async def test_valid_data_first_value():  # pylint:disable=too-many-statements
     assert data.c6h6.value == 2.57148
     assert data.c6h6.index == "very good"
     assert data.co.value == 786.702
-    assert data.co.index == "very good"
+    assert data.co.index == "very bad"
     assert data.no2.value == 59.9545
     assert data.no2.index == "very good"
     assert data.o3.value == 8.63111
-    assert data.o3.index == "good"
+    assert data.o3.index == "bad"
     assert data.pm25.value == 59.9428
-    assert data.pm25.index == "very good"
+    assert data.pm25.index == "sufficient"
     assert data.pm10.value == 123.879
-    assert data.pm10.index == "very good"
+    assert data.pm10.index == "moderate"
     assert data.aqi.value == "good"
 
 
@@ -218,15 +218,15 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
     assert data.c6h6.value == 3.24432
     assert data.c6h6.index == "very good"
     assert data.co.value == 1041.74
-    assert data.co.index == "very good"
+    assert data.co.index == "very bad"
     assert data.no2.value == 52.6198
     assert data.no2.index == "very good"
     assert data.o3.value == 4.93778
-    assert data.o3.index == "good"
+    assert data.o3.index == "bad"
     assert data.pm25.value == 72.0243
-    assert data.pm25.index == "very good"
+    assert data.pm25.index == "sufficient"
     assert data.pm10.value == 115.559
-    assert data.pm10.index == "very good"
+    assert data.pm10.index == "moderate"
     assert data.aqi.value == "good"
 
 

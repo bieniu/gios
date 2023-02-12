@@ -14,6 +14,8 @@ from .const import (
     ATTR_INDEX_LEVEL,
     ATTR_NAME,
     ATTR_VALUE,
+    POLLUTANT_MAP,
+    STATE_MAP,
     URL_INDEXES,
     URL_SENSOR,
     URL_STATION,
@@ -64,7 +66,7 @@ class Gios:
         for sensor_dict in self._station_data:
             data[sensor_dict["param"]["paramCode"].lower()] = {
                 ATTR_ID: sensor_dict[ATTR_ID],
-                ATTR_NAME: sensor_dict["param"]["paramName"],
+                ATTR_NAME: POLLUTANT_MAP[sensor_dict["param"]["paramName"]],
             }
 
         sensors = await self._get_all_sensors(data)
@@ -95,14 +97,16 @@ class Gios:
         for sensor, sensor_data in data.items():
             with suppress(IndexError, KeyError, TypeError):
                 index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
-                sensor_data[ATTR_INDEX] = indexes[index_level]["indexLevelName"].lower()
+                sensor_data[ATTR_INDEX] = STATE_MAP[
+                    indexes[index_level]["indexLevelName"]
+                ]
 
         with suppress(IndexError, KeyError, TypeError):
             if indexes["stIndexLevel"]["indexLevelName"]:
                 data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
-                data[ATTR_AQI.lower()][ATTR_VALUE] = indexes["stIndexLevel"][
-                    "indexLevelName"
-                ].lower()
+                data[ATTR_AQI.lower()][ATTR_VALUE] = STATE_MAP[
+                    indexes["stIndexLevel"]["indexLevelName"]
+                ]
 
         if data.get("pm2.5"):
             data["pm25"] = data.pop("pm2.5")

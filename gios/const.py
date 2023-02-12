@@ -12,3 +12,21 @@ URL_INDEXES: Final[str] = "http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/
 URL_SENSOR: Final[str] = "http://api.gios.gov.pl/pjp-api/rest/data/getData/{}"
 URL_STATION: Final[str] = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/{}"
 URL_STATIONS: Final[str] = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
+
+POLLUTANT_MAP = {
+    "benzen": "benzene",
+    "tlenek węgla": "carbon monoxide",
+    "dwutlenek azotu": "nitrogen dioxide",
+    "ozon": "ozone",
+    "pył zawieszony PM10": "particulate matter 10",
+    "pył zawieszony PM2.5": "particulate matter 2.5",
+    "dwutlenek siarki": "sulfur dioxide",
+}
+STATE_MAP = {
+    "Bardzo dobry": "very good",
+    "Bardzo zły": "very bad",
+    "Dobry": "good",
+    "Dostateczny": "sufficient",
+    "Umiarkowany": "moderate",
+    "Zły": "bad",
+}
