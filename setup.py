@@ -1,5 +1,6 @@
 """Setup module for gios."""
 from pathlib import Path
+
 from setuptools import setup
 
 PROJECT_DIR = Path(__file__).parent.resolve()
@@ -18,7 +19,7 @@ setup(
     license="Apache-2.0 License",
     packages=["gios"],
     package_data={"gios": ["py.typed"]},
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=list(
         val.strip() for val in open("requirements.txt", encoding="utf-8")
     ),
@@ -28,7 +29,6 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3 :: Only",

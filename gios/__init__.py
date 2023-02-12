@@ -1,7 +1,4 @@
 """Python wrapper for getting air quality data from GIOS."""
-
-from __future__ import annotations
-
 import logging
 from contextlib import suppress
 from http import HTTPStatus

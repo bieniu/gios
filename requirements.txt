@@ -1,2 +1,2 @@
 aiohttp>=3.7.0
-dacite
+dacite>=1.7.0
