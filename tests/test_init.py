@@ -93,13 +93,13 @@ async def test_valid_data_first_value():  # pylint:disable=too-many-statements
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
     assert data.so2.value == 11.6502
-    assert data.so2.index == "very good"
+    assert data.so2.index == "very_good"
     assert data.c6h6.value == 2.57148
-    assert data.c6h6.index == "very good"
+    assert data.c6h6.index == "very_good"
     assert data.co.value == 786.702
-    assert data.co.index == "very bad"
+    assert data.co.index == "very_bad"
     assert data.no2.value == 59.9545
-    assert data.no2.index == "very good"
+    assert data.no2.index == "very_good"
     assert data.o3.value == 8.63111
     assert data.o3.index == "bad"
     assert data.pm25.value == 59.9428
@@ -213,13 +213,13 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
     assert data.so2.value == 11.501
-    assert data.so2.index == "very good"
+    assert data.so2.index == "very_good"
     assert data.c6h6.value == 3.24432
-    assert data.c6h6.index == "very good"
+    assert data.c6h6.index == "very_good"
     assert data.co.value == 1041.74
-    assert data.co.index == "very bad"
+    assert data.co.index == "very_bad"
     assert data.no2.value == 52.6198
-    assert data.no2.index == "very good"
+    assert data.no2.index == "very_good"
     assert data.o3.value == 4.93778
     assert data.o3.index == "bad"
     assert data.pm25.value == 72.0243

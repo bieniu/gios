@@ -23,8 +23,8 @@ POLLUTANT_MAP = {
     "dwutlenek siarki": "sulfur dioxide",
 }
 STATE_MAP = {
-    "Bardzo dobry": "very good",
-    "Bardzo zły": "very bad",
+    "Bardzo dobry": "very_good",
+    "Bardzo zły": "very_bad",
     "Dobry": "good",
     "Dostateczny": "sufficient",
     "Umiarkowany": "moderate",
