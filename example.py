@@ -1,3 +1,4 @@
+"""Example for GIOS"""
 import asyncio
 import logging
 
@@ -10,14 +11,15 @@ GIOS_STATION_ID = 568
 logging.basicConfig(level=logging.DEBUG)
 
 
-async def main():
-    try:
-        async with ClientSession() as websession:
-            gios = Gios(GIOS_STATION_ID, websession)
+async def main() -> None:
+    """Main function."""
+    async with ClientSession() as websession:
+        gios = Gios(GIOS_STATION_ID, websession)
+        try:
             data = await gios.async_update()
-    except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
-        print(f"{error}")
-        return
+        except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
+            print(f"{error}")
+            return
 
     latitude = gios.latitude
     longitude = gios.longitude
