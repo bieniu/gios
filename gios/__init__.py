@@ -114,7 +114,8 @@ class Gios:
         if data.get("pm2.5"):
             data["pm25"] = data.pop("pm2.5")
 
-        return from_dict(data_class=GiosSensors, data=data)
+        result: GiosSensors = from_dict(data_class=GiosSensors, data=data)
+        return result
 
     async def _get_stations(self) -> Any:
         """Retrieve list of measuring stations."""
