@@ -10,29 +10,33 @@ Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Oc
 ## How to find station_id
 - go to http://powietrze.gios.gov.pl/pjp/current
 - find on the map a measurement station located closest to your home
-- go to "More info" link
-- look at site address, for ex. for this address http://powietrze.gios.gov.pl/pjp/current/station_details/chart/291 `station_id` is 291
+- go to "More infotmation" link
+- look at site address, for ex. for this address https://powietrze.gios.gov.pl/pjp/current/station_details/table/10124/3/0 `station_id` is 10124
 
 ## How to use package
 ```python
+"""Example for GIOS"""
 import asyncio
 import logging
 
 from aiohttp import ClientError, ClientSession
-from gios import ApiError, InvalidSensorsData, Gios, NoStationError
 
-GIOS_STATION_ID = 117
+from gios import ApiError, Gios, InvalidSensorsData, NoStationError
+
+GIOS_STATION_ID = 568
 
 logging.basicConfig(level=logging.DEBUG)
 
-async def main():
-    try:
-        async with ClientSession() as websession:
-            gios = Gios(GIOS_STATION_ID, websession)
+
+async def main() -> None:
+    """Main function."""
+    async with ClientSession() as websession:
+        gios = Gios(GIOS_STATION_ID, websession)
+        try:
             data = await gios.async_update()
-    except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
-        print(f"{error}")
-        return
+        except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
+            print(f"{error}")
+            return
 
     latitude = gios.latitude
     longitude = gios.longitude
@@ -46,7 +50,6 @@ async def main():
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
 loop.close()
-
 ```
 [releases]: https://github.com/bieniu/gios/releases
 [releases-shield]: https://img.shields.io/github/release/bieniu/gios.svg?style=popout
