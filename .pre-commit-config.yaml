@@ -58,8 +58,8 @@ repos:
         args:
           - --quiet
         files: ^(gios)/.+\.py$
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.12.0
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: "v5.10.1"
     hooks:
       - id: isort
   - repo: https://github.com/pre-commit/pre-commit-hooks
