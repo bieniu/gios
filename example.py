@@ -1,4 +1,4 @@
-"""Example for GIOS"""
+"""Example for GIOS."""
 import asyncio
 import logging
 
@@ -12,22 +12,22 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 async def main() -> None:
-    """Main function."""
+    """Run main function."""
     async with ClientSession() as websession:
         gios = Gios(GIOS_STATION_ID, websession)
         try:
             data = await gios.async_update()
         except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
-            print(f"{error}")
+            print(error)  # noqa: T201
             return
 
     latitude = gios.latitude
     longitude = gios.longitude
     station_name = gios.station_name
-    print(f"Longitude: {longitude}")
-    print(f"Latitude: {latitude}")
-    print(f"Station name: {station_name}")
-    print(data)
+    print(f"Longitude: {longitude}")  # noqa: T201
+    print(f"Latitude: {latitude}")  # noqa: T201
+    print(f"Station name: {station_name}")  # noqa: T201
+    print(data)  # noqa: T201
 
 
 loop = asyncio.get_event_loop()

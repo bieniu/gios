@@ -20,9 +20,9 @@ setup(
     packages=["gios"],
     package_data={"gios": ["py.typed"]},
     python_requires=">=3.10",
-    install_requires=list(
+    install_requires=[
         val.strip() for val in open("requirements.txt", encoding="utf-8")
-    ),
+    ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: Apache Software License",
