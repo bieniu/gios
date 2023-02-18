@@ -5,7 +5,10 @@ from setuptools import setup
 
 PROJECT_DIR = Path(__file__).parent.resolve()
 README_FILE = PROJECT_DIR / "README.md"
-VERSION = "3.0.0"
+VERSION = "3.1.0"
+
+with open("requirements.txt", encoding="utf-8") as file:
+    requirements = file.read().splitlines()
 
 setup(
     name="gios",
@@ -20,9 +23,7 @@ setup(
     packages=["gios"],
     package_data={"gios": ["py.typed"]},
     python_requires=">=3.10",
-    install_requires=list(
-        val.strip() for val in open("requirements.txt", encoding="utf-8")
-    ),
+    install_requires=requirements,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: Apache Software License",
