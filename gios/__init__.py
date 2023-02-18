@@ -151,5 +151,5 @@ class Gios:
             if resp.status != HTTPStatus.OK.value:
                 _LOGGER.warning("Invalid response from GIOS API: %s", resp.status)
                 raise ApiError(str(resp.status))
-            data = await resp.json()
-        return data
+
+            return await resp.json()

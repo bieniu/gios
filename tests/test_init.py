@@ -16,7 +16,7 @@ VALID_LONGITUDE = 88.88
 
 
 @pytest.mark.asyncio
-async def test_valid_data_first_value():  # pylint:disable=too-many-statements
+async def test_valid_data_first_value():
     """Test with valid data and valid first sensor's value."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -128,7 +128,7 @@ async def test_api_error():
 
 
 @pytest.mark.asyncio
-async def test_valid_data_second_value():  # pylint:disable=too-many-statements
+async def test_valid_data_second_value():
     """Test with valid data and valid second sensor's value."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -230,7 +230,7 @@ async def test_valid_data_second_value():  # pylint:disable=too-many-statements
 
 
 @pytest.mark.asyncio
-async def test_no_indexes_data():  # pylint: disable=too-many-statements
+async def test_no_indexes_data():
     """Test with valid data."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -322,7 +322,7 @@ async def test_no_indexes_data():  # pylint: disable=too-many-statements
 
 
 @pytest.mark.asyncio
-async def test_no_sensor_data_1():  # pylint:disable=too-many-statements
+async def test_no_sensor_data_1():
     """Test with no sensor data."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
