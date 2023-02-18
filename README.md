@@ -15,7 +15,7 @@ Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Oc
 
 ## How to use package
 ```python
-"""Example for GIOS"""
+"""Example for GIOS."""
 import asyncio
 import logging
 
@@ -29,13 +29,13 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 async def main() -> None:
-    """Main function."""
+    """Run main function."""
     async with ClientSession() as websession:
         gios = Gios(GIOS_STATION_ID, websession)
         try:
             data = await gios.async_update()
         except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
-            print(f"{error}")
+            print(error)
             return
 
     latitude = gios.latitude
