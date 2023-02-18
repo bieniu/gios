@@ -14,7 +14,7 @@ class ApiError(GiosError):
     """Raised when GIOS API request ended in error."""
 
 
-class InvalidSensorsData(GiosError):
+class InvalidSensorsDataError(GiosError):
     """Raised when sensors data is invalid."""
 
 

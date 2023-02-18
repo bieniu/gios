@@ -21,7 +21,7 @@ from .const import (
     URL_STATION,
     URL_STATIONS,
 )
-from .exceptions import ApiError, InvalidSensorsData, NoStationError
+from .exceptions import ApiError, InvalidSensorsDataError, NoStationError
 from .model import GiosSensors
 
 _LOGGER: Final = logging.getLogger(__name__)
@@ -64,7 +64,9 @@ class Gios:
             self._station_data = await self._get_station()
 
         if not self._station_data:
-            raise InvalidSensorsData("Invalid measuring station data from GIOS API")
+            raise InvalidSensorsDataError(
+                "Invalid measuring station data from GIOS API"
+            )
 
         for sensor_dict in self._station_data:
             data[sensor_dict["param"]["paramCode"].lower()] = {
@@ -93,7 +95,7 @@ class Gios:
                 data.pop(sensor)
 
         if not data:
-            raise InvalidSensorsData("Invalid sensor data from GIOS API")
+            raise InvalidSensorsDataError("Invalid sensor data from GIOS API")
 
         indexes = await self._get_indexes()
 

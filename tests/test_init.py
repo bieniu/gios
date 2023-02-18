@@ -5,7 +5,7 @@ import aiohttp
 import pytest
 from aioresponses import aioresponses
 
-from gios import ApiError, Gios, InvalidSensorsData, NoStationError
+from gios import ApiError, Gios, InvalidSensorsDataError, NoStationError
 
 INVALID_STATION_ID = 0
 
@@ -114,15 +114,17 @@ async def test_api_error():
     """Test GIOS API error."""
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock, pytest.raises(ApiError) as excinfo:
+    with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             status=404,
         )
         gios = Gios(VALID_STATION_ID, session)
-        await gios.async_update()
 
-        assert excinfo == "404"
+        with pytest.raises(ApiError) as excinfo:
+            await gios.async_update()
+
+        assert str(excinfo.value) == "404"
 
     await session.close()
 
@@ -362,7 +364,7 @@ async def test_no_sensor_data_1():
 
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock, pytest.raises(InvalidSensorsData):
+    with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
@@ -404,7 +406,9 @@ async def test_no_sensor_data_1():
             payload=indexes,
         )
         gios = Gios(VALID_STATION_ID, session)
-        await gios.async_update()
+
+        with pytest.raises(InvalidSensorsDataError):
+            await gios.async_update()
 
     await session.close()
 
@@ -419,7 +423,7 @@ async def test_invalid_sensor_data_2():
 
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock, pytest.raises(InvalidSensorsData):
+    with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
@@ -457,7 +461,9 @@ async def test_invalid_sensor_data_2():
             payload=None,
         )
         gios = Gios(VALID_STATION_ID, session)
-        await gios.async_update()
+
+        with pytest.raises(InvalidSensorsDataError):
+            await gios.async_update()
 
     await session.close()
 
@@ -470,7 +476,7 @@ async def test_no_station_data():
 
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock, pytest.raises(InvalidSensorsData):
+    with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
@@ -480,7 +486,9 @@ async def test_no_station_data():
             payload={},
         )
         gios = Gios(VALID_STATION_ID, session)
-        await gios.async_update()
+
+        with pytest.raises(InvalidSensorsDataError):
+            await gios.async_update()
 
     await session.close()
 
@@ -490,13 +498,15 @@ async def test_no_stations_data():
     """Test with no stations data."""
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock, pytest.raises(ApiError):
+    with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload={},
         )
         gios = Gios(VALID_STATION_ID, session)
-        await gios.async_update()
+
+        with pytest.raises(ApiError):
+            await gios.async_update()
 
     await session.close()
 
@@ -509,14 +519,16 @@ async def test_invalid_station_id():
 
     session = aiohttp.ClientSession()
 
-    with aioresponses() as session_mock, pytest.raises(NoStationError) as excinfo:
+    with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
         )
         gios = Gios(INVALID_STATION_ID, session)
-        await gios.async_update()
 
-        assert excinfo == "0 is not a valid measuring station ID"
+        with pytest.raises(NoStationError) as excinfo:
+            await gios.async_update()
+
+        assert str(excinfo.value) == "0 is not a valid measuring station ID"
 
     await session.close()
