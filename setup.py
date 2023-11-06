@@ -20,10 +20,7 @@ setup(
     packages=["gios"],
     package_data={"gios": ["py.typed"]},
     python_requires=">=3.10",
-    install_requires=[
-        "aiohttp>=3.7.0",
-        "dacite>=1.7.0"
-    ],
+    install_requires=["aiohttp>=3.7.0", "dacite>=1.7.0"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: Apache Software License",
