@@ -7,7 +7,7 @@ class Sensor:
     """Data class for sensor."""
 
     name: str
-    id: int | None  # noqa: A003
+    id: int | None
     index: str | None = None
     value: float | str | None = None
 
