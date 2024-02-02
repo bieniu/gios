@@ -15,8 +15,8 @@ VALID_LATITUDE = 99.99
 VALID_LONGITUDE = 88.88
 
 
-@pytest.mark.asyncio
-async def test_valid_data_first_value():
+@pytest.mark.asyncio()
+async def test_valid_data_first_value() -> None:
     """Test with valid data and valid first sensor's value."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -109,8 +109,8 @@ async def test_valid_data_first_value():
     assert data.aqi.value == "good"
 
 
-@pytest.mark.asyncio
-async def test_api_error():
+@pytest.mark.asyncio()
+async def test_api_error() -> None:
     """Test GIOS API error."""
     session = aiohttp.ClientSession()
 
@@ -129,8 +129,8 @@ async def test_api_error():
     await session.close()
 
 
-@pytest.mark.asyncio
-async def test_valid_data_second_value():
+@pytest.mark.asyncio()
+async def test_valid_data_second_value() -> None:
     """Test with valid data and valid second sensor's value."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -231,8 +231,8 @@ async def test_valid_data_second_value():
     assert data.aqi.value == "good"
 
 
-@pytest.mark.asyncio
-async def test_no_indexes_data():
+@pytest.mark.asyncio()
+async def test_no_indexes_data() -> None:
     """Test with valid data."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -323,8 +323,8 @@ async def test_no_indexes_data():
     assert data.aqi is None
 
 
-@pytest.mark.asyncio
-async def test_no_sensor_data_1():
+@pytest.mark.asyncio()
+async def test_no_sensor_data_1() -> None:
     """Test with no sensor data."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -413,8 +413,8 @@ async def test_no_sensor_data_1():
     await session.close()
 
 
-@pytest.mark.asyncio
-async def test_invalid_sensor_data_2():
+@pytest.mark.asyncio()
+async def test_invalid_sensor_data_2() -> None:
     """Test with invalid sensor data."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -468,8 +468,8 @@ async def test_invalid_sensor_data_2():
     await session.close()
 
 
-@pytest.mark.asyncio
-async def test_no_station_data():
+@pytest.mark.asyncio()
+async def test_no_station_data() -> None:
     """Test with no station data."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -493,8 +493,8 @@ async def test_no_station_data():
     await session.close()
 
 
-@pytest.mark.asyncio
-async def test_no_stations_data():
+@pytest.mark.asyncio()
+async def test_no_stations_data() -> None:
     """Test with no stations data."""
     session = aiohttp.ClientSession()
 
@@ -511,8 +511,8 @@ async def test_no_stations_data():
     await session.close()
 
 
-@pytest.mark.asyncio
-async def test_invalid_station_id():
+@pytest.mark.asyncio()
+async def test_invalid_station_id() -> None:
     """Test with invalid station_id."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
