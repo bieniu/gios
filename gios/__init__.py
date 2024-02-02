@@ -49,8 +49,7 @@ class Gios:
 
         if not self.station_name:
             if not (stations := await self._get_stations()):
-                error = "Invalid measuring stations list from GIOS API"
-                raise ApiError(error)
+                raise ApiError("Invalid measuring stations list from GIOS API")
 
             for station in stations:
                 if station[ATTR_ID] == self.station_id:
@@ -58,14 +57,16 @@ class Gios:
                     self.longitude = float(station["gegrLon"])
                     self.station_name = station["stationName"]
             if not self.station_name:
-                error = f"{self.station_id} is not a valid measuring station ID"
-                raise NoStationError(error)
+                raise NoStationError(
+                    f"{self.station_id} is not a valid measuring station ID"
+                )
 
             self._station_data = await self._get_station()
 
         if not self._station_data:
-            error = "Invalid measuring station data from GIOS API"
-            raise InvalidSensorsDataError(error)
+            raise InvalidSensorsDataError(
+                "Invalid measuring station data from GIOS API"
+            )
 
         for sensor_dict in self._station_data:
             data[sensor_dict["param"]["paramCode"].lower()] = {
@@ -94,8 +95,7 @@ class Gios:
                 data.pop(sensor)
 
         if not data:
-            error = "Invalid sensor data from GIOS API"
-            raise InvalidSensorsDataError(error)
+            raise InvalidSensorsDataError("Invalid sensor data from GIOS API")
 
         indexes = await self._get_indexes()
 
