@@ -49,7 +49,8 @@ class Gios:
 
         if not self.station_name:
             if not (stations := await self._get_stations()):
-                raise ApiError("Invalid measuring stations list from GIOS API")
+                error = "Invalid measuring stations list from GIOS API"
+                raise ApiError(error)
 
             for station in stations:
                 if station[ATTR_ID] == self.station_id:
@@ -57,16 +58,14 @@ class Gios:
                     self.longitude = float(station["gegrLon"])
                     self.station_name = station["stationName"]
             if not self.station_name:
-                raise NoStationError(
-                    f"{self.station_id} is not a valid measuring station ID"
-                )
+                error = f"{self.station_id} is not a valid measuring station ID"
+                raise NoStationError(error)
 
             self._station_data = await self._get_station()
 
         if not self._station_data:
-            raise InvalidSensorsDataError(
-                "Invalid measuring station data from GIOS API"
-            )
+            error = "Invalid measuring station data from GIOS API"
+            raise InvalidSensorsDataError(error)
 
         for sensor_dict in self._station_data:
             data[sensor_dict["param"]["paramCode"].lower()] = {
@@ -87,7 +86,7 @@ class Gios:
                     sensor_data[ATTR_VALUE] = sensors[sensor]["values"][1][ATTR_VALUE]
                 else:
                     invalid_sensors.append(sensor)
-            except (IndexError, KeyError, TypeError):
+            except (IndexError, KeyError, TypeError):  # noqa: PERF203
                 invalid_sensors.append(sensor)
 
         if invalid_sensors:
@@ -95,7 +94,8 @@ class Gios:
                 data.pop(sensor)
 
         if not data:
-            raise InvalidSensorsDataError("Invalid sensor data from GIOS API")
+            error = "Invalid sensor data from GIOS API"
+            raise InvalidSensorsDataError(error)
 
         indexes = await self._get_indexes()
 
