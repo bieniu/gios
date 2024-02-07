@@ -87,7 +87,7 @@ class Gios:
                     sensor_data[ATTR_VALUE] = sensors[sensor]["values"][1][ATTR_VALUE]
                 else:
                     invalid_sensors.append(sensor)
-            except (IndexError, KeyError, TypeError):  # noqa: PERF203
+            except (IndexError, KeyError, TypeError):
                 invalid_sensors.append(sensor)
 
         if invalid_sensors:
