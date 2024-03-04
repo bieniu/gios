@@ -1,4 +1,5 @@
 """Type definitions for GIOS."""
+
 from dataclasses import dataclass
 
 

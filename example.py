@@ -1,4 +1,5 @@
 """Example for GIOS."""
+
 import asyncio
 import logging
 

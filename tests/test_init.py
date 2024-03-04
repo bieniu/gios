@@ -1,4 +1,5 @@
 """Tests for gios package."""
+
 import json
 
 import aiohttp

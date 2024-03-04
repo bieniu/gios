@@ -1,4 +1,5 @@
 """Constants for GIOS library."""
+
 from typing import Final
 
 ATTR_AQI: Final[str] = "AQI"

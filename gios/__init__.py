@@ -1,4 +1,5 @@
 """Python wrapper for getting air quality data from GIOS."""
+
 import logging
 from contextlib import suppress
 from http import HTTPStatus
