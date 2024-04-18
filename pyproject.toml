@@ -44,6 +44,7 @@ lint.ignore = [
 "tests/*" = [
     "ANN102",   # Missing type annotation for `cls` in classmethod
     "ASYNC101", # Async functions should not call `open`, `time.sleep`, or `subprocess` methods
+    "PLR0913",  # Too many arguments in function definition
     "PLR2004",  # Magic value used in comparison
     "PTH123",   # `open()` should be replaced by `Path.open()`
     "S101",     # Use of `assert` detected

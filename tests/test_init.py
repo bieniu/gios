@@ -1,6 +1,6 @@
 """Tests for gios package."""
 
-import json
+from typing import Any
 
 import aiohttp
 import pytest
@@ -18,29 +18,20 @@ VALID_LONGITUDE = 88.88
 
 
 @pytest.mark.asyncio()
-async def test_valid_data_first_value(snapshot: SnapshotAssertion) -> None:
+async def test_valid_data_first_value(
+    snapshot: SnapshotAssertion,
+    stations: list[dict[str, Any]],
+    station: list[dict[str, Any]],
+    indexes: dict[str, Any],
+    sensor_658: dict[str, Any],
+    sensor_660: dict[str, Any],
+    sensor_665: dict[str, Any],
+    sensor_667: dict[str, Any],
+    sensor_670: dict[str, Any],
+    sensor_672: dict[str, Any],
+    sensor_14395: dict[str, Any],
+) -> None:
     """Test with valid data and valid first sensor's value."""
-    with open("tests/fixtures/stations.json", encoding="utf-8") as file:
-        stations = json.load(file)
-    with open("tests/fixtures/station.json", encoding="utf-8") as file:
-        station = json.load(file)
-    with open("tests/fixtures/sensor_658.json", encoding="utf-8") as file:
-        sensor_658 = json.load(file)
-    with open("tests/fixtures/sensor_660.json", encoding="utf-8") as file:
-        sensor_660 = json.load(file)
-    with open("tests/fixtures/sensor_665.json", encoding="utf-8") as file:
-        sensor_665 = json.load(file)
-    with open("tests/fixtures/sensor_667.json", encoding="utf-8") as file:
-        sensor_667 = json.load(file)
-    with open("tests/fixtures/sensor_670.json", encoding="utf-8") as file:
-        sensor_670 = json.load(file)
-    with open("tests/fixtures/sensor_672.json", encoding="utf-8") as file:
-        sensor_672 = json.load(file)
-    with open("tests/fixtures/sensor_14395.json", encoding="utf-8") as file:
-        sensor_14395 = json.load(file)
-    with open("tests/fixtures/indexes.json", encoding="utf-8") as file:
-        indexes = json.load(file)
-
     session = aiohttp.ClientSession()
 
     with aioresponses() as session_mock:
@@ -118,29 +109,20 @@ async def test_api_error() -> None:
 
 
 @pytest.mark.asyncio()
-async def test_valid_data_second_value(snapshot: SnapshotAssertion) -> None:
+async def test_valid_data_second_value(
+    snapshot: SnapshotAssertion,
+    stations: list[dict[str, Any]],
+    station: list[dict[str, Any]],
+    indexes: dict[str, Any],
+    sensor_658: dict[str, Any],
+    sensor_660: dict[str, Any],
+    sensor_665: dict[str, Any],
+    sensor_667: dict[str, Any],
+    sensor_670: dict[str, Any],
+    sensor_672: dict[str, Any],
+    sensor_14395: dict[str, Any],
+) -> None:
     """Test with valid data and valid second sensor's value."""
-    with open("tests/fixtures/stations.json", encoding="utf-8") as file:
-        stations = json.load(file)
-    with open("tests/fixtures/station.json", encoding="utf-8") as file:
-        station = json.load(file)
-    with open("tests/fixtures/sensor_658.json", encoding="utf-8") as file:
-        sensor_658 = json.load(file)
-    with open("tests/fixtures/sensor_660.json", encoding="utf-8") as file:
-        sensor_660 = json.load(file)
-    with open("tests/fixtures/sensor_665.json", encoding="utf-8") as file:
-        sensor_665 = json.load(file)
-    with open("tests/fixtures/sensor_667.json", encoding="utf-8") as file:
-        sensor_667 = json.load(file)
-    with open("tests/fixtures/sensor_670.json", encoding="utf-8") as file:
-        sensor_670 = json.load(file)
-    with open("tests/fixtures/sensor_672.json", encoding="utf-8") as file:
-        sensor_672 = json.load(file)
-    with open("tests/fixtures/sensor_14395.json", encoding="utf-8") as file:
-        sensor_14395 = json.load(file)
-    with open("tests/fixtures/indexes.json", encoding="utf-8") as file:
-        indexes = json.load(file)
-
     sensor_658["values"][0]["value"] = None
     sensor_660["values"][0]["value"] = None
     sensor_665["values"][0]["value"] = None
@@ -206,27 +188,19 @@ async def test_valid_data_second_value(snapshot: SnapshotAssertion) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_no_indexes_data(snapshot: SnapshotAssertion) -> None:
+async def test_no_indexes_data(
+    snapshot: SnapshotAssertion,
+    stations: list[dict[str, Any]],
+    station: list[dict[str, Any]],
+    sensor_658: dict[str, Any],
+    sensor_660: dict[str, Any],
+    sensor_665: dict[str, Any],
+    sensor_667: dict[str, Any],
+    sensor_670: dict[str, Any],
+    sensor_672: dict[str, Any],
+    sensor_14395: dict[str, Any],
+) -> None:
     """Test with valid data."""
-    with open("tests/fixtures/stations.json", encoding="utf-8") as file:
-        stations = json.load(file)
-    with open("tests/fixtures/station.json", encoding="utf-8") as file:
-        station = json.load(file)
-    with open("tests/fixtures/sensor_658.json", encoding="utf-8") as file:
-        sensor_658 = json.load(file)
-    with open("tests/fixtures/sensor_660.json", encoding="utf-8") as file:
-        sensor_660 = json.load(file)
-    with open("tests/fixtures/sensor_665.json", encoding="utf-8") as file:
-        sensor_665 = json.load(file)
-    with open("tests/fixtures/sensor_667.json", encoding="utf-8") as file:
-        sensor_667 = json.load(file)
-    with open("tests/fixtures/sensor_670.json", encoding="utf-8") as file:
-        sensor_670 = json.load(file)
-    with open("tests/fixtures/sensor_672.json", encoding="utf-8") as file:
-        sensor_672 = json.load(file)
-    with open("tests/fixtures/sensor_14395.json", encoding="utf-8") as file:
-        sensor_14395 = json.load(file)
-
     session = aiohttp.ClientSession()
 
     with aioresponses() as session_mock:
@@ -284,29 +258,19 @@ async def test_no_indexes_data(snapshot: SnapshotAssertion) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_no_sensor_data_1() -> None:
+async def test_no_sensor_data_1(
+    stations: list[dict[str, Any]],
+    station: list[dict[str, Any]],
+    indexes: dict[str, Any],
+    sensor_658: dict[str, Any],
+    sensor_660: dict[str, Any],
+    sensor_665: dict[str, Any],
+    sensor_667: dict[str, Any],
+    sensor_670: dict[str, Any],
+    sensor_672: dict[str, Any],
+    sensor_14395: dict[str, Any],
+) -> None:
     """Test with no sensor data."""
-    with open("tests/fixtures/stations.json", encoding="utf-8") as file:
-        stations = json.load(file)
-    with open("tests/fixtures/station.json", encoding="utf-8") as file:
-        station = json.load(file)
-    with open("tests/fixtures/sensor_658.json", encoding="utf-8") as file:
-        sensor_658 = json.load(file)
-    with open("tests/fixtures/sensor_660.json", encoding="utf-8") as file:
-        sensor_660 = json.load(file)
-    with open("tests/fixtures/sensor_665.json", encoding="utf-8") as file:
-        sensor_665 = json.load(file)
-    with open("tests/fixtures/sensor_667.json", encoding="utf-8") as file:
-        sensor_667 = json.load(file)
-    with open("tests/fixtures/sensor_670.json", encoding="utf-8") as file:
-        sensor_670 = json.load(file)
-    with open("tests/fixtures/sensor_672.json", encoding="utf-8") as file:
-        sensor_672 = json.load(file)
-    with open("tests/fixtures/sensor_14395.json", encoding="utf-8") as file:
-        sensor_14395 = json.load(file)
-    with open("tests/fixtures/indexes.json", encoding="utf-8") as file:
-        indexes = json.load(file)
-
     sensor_658["values"][0]["value"] = None
     sensor_658["values"][1]["value"] = None
     sensor_660["values"][0]["value"] = None
@@ -374,13 +338,10 @@ async def test_no_sensor_data_1() -> None:
 
 
 @pytest.mark.asyncio()
-async def test_invalid_sensor_data_2() -> None:
+async def test_invalid_sensor_data_2(
+    stations: list[dict[str, Any]], station: list[dict[str, Any]]
+) -> None:
     """Test with invalid sensor data."""
-    with open("tests/fixtures/stations.json", encoding="utf-8") as file:
-        stations = json.load(file)
-    with open("tests/fixtures/station.json", encoding="utf-8") as file:
-        station = json.load(file)
-
     session = aiohttp.ClientSession()
 
     with aioresponses() as session_mock:
@@ -429,11 +390,8 @@ async def test_invalid_sensor_data_2() -> None:
 
 
 @pytest.mark.asyncio()
-async def test_no_station_data() -> None:
+async def test_no_station_data(stations: list[dict[str, Any]]) -> None:
     """Test with no station data."""
-    with open("tests/fixtures/stations.json", encoding="utf-8") as file:
-        stations = json.load(file)
-
     session = aiohttp.ClientSession()
 
     with aioresponses() as session_mock:
@@ -472,11 +430,8 @@ async def test_no_stations_data() -> None:
 
 
 @pytest.mark.asyncio()
-async def test_invalid_station_id() -> None:
+async def test_invalid_station_id(stations: list[dict[str, Any]]) -> None:
     """Test with invalid station_id."""
-    with open("tests/fixtures/stations.json", encoding="utf-8") as file:
-        stations = json.load(file)
-
     session = aiohttp.ClientSession()
 
     with aioresponses() as session_mock:
