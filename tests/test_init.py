@@ -5,6 +5,7 @@ import json
 import aiohttp
 import pytest
 from aioresponses import aioresponses
+from syrupy import SnapshotAssertion
 
 from gios import ApiError, Gios, InvalidSensorsDataError, NoStationError
 
@@ -17,7 +18,7 @@ VALID_LONGITUDE = 88.88
 
 
 @pytest.mark.asyncio()
-async def test_valid_data_first_value() -> None:
+async def test_valid_data_first_value(snapshot: SnapshotAssertion) -> None:
     """Test with valid data and valid first sensor's value."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -93,21 +94,7 @@ async def test_valid_data_first_value() -> None:
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert data.so2.value == 11.6502
-    assert data.so2.index == "very_good"
-    assert data.c6h6.value == 2.57148
-    assert data.c6h6.index == "very_good"
-    assert data.co.value == 786.702
-    assert data.co.index == "very_bad"
-    assert data.no2.value == 59.9545
-    assert data.no2.index == "very_good"
-    assert data.o3.value == 8.63111
-    assert data.o3.index == "bad"
-    assert data.pm25.value == 59.9428
-    assert data.pm25.index == "sufficient"
-    assert data.pm10.value == 123.879
-    assert data.pm10.index == "moderate"
-    assert data.aqi.value == "good"
+    assert data == snapshot
 
 
 @pytest.mark.asyncio()
@@ -131,7 +118,7 @@ async def test_api_error() -> None:
 
 
 @pytest.mark.asyncio()
-async def test_valid_data_second_value() -> None:
+async def test_valid_data_second_value(snapshot: SnapshotAssertion) -> None:
     """Test with valid data and valid second sensor's value."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -215,25 +202,11 @@ async def test_valid_data_second_value() -> None:
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert data.so2.value == 11.501
-    assert data.so2.index == "very_good"
-    assert data.c6h6.value == 3.24432
-    assert data.c6h6.index == "very_good"
-    assert data.co.value == 1041.74
-    assert data.co.index == "very_bad"
-    assert data.no2.value == 52.6198
-    assert data.no2.index == "very_good"
-    assert data.o3.value == 4.93778
-    assert data.o3.index == "bad"
-    assert data.pm25.value == 72.0243
-    assert data.pm25.index == "sufficient"
-    assert data.pm10.value == 115.559
-    assert data.pm10.index == "moderate"
-    assert data.aqi.value == "good"
+    assert data == snapshot
 
 
 @pytest.mark.asyncio()
-async def test_no_indexes_data() -> None:
+async def test_no_indexes_data(snapshot: SnapshotAssertion) -> None:
     """Test with valid data."""
     with open("tests/fixtures/stations.json", encoding="utf-8") as file:
         stations = json.load(file)
@@ -307,21 +280,7 @@ async def test_no_indexes_data() -> None:
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
-    assert data.so2.value == 11.6502
-    assert data.so2.index is None
-    assert data.c6h6.value == 2.57148
-    assert data.c6h6.index is None
-    assert data.co.value == 786.702
-    assert data.co.index is None
-    assert data.no2.value == 59.9545
-    assert data.no2.index is None
-    assert data.o3.value == 8.63111
-    assert data.o3.index is None
-    assert data.pm25.value == 59.9428
-    assert data.pm25.index is None
-    assert data.pm10.value == 123.879
-    assert data.pm10.index is None
-    assert data.aqi is None
+    assert data == snapshot
 
 
 @pytest.mark.asyncio()
