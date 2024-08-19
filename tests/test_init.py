@@ -17,7 +17,7 @@ VALID_LATITUDE = 99.99
 VALID_LONGITUDE = 88.88
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_valid_data_first_value(
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
@@ -88,7 +88,7 @@ async def test_valid_data_first_value(
     assert data == snapshot
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_api_error() -> None:
     """Test GIOS API error."""
     session = aiohttp.ClientSession()
@@ -108,7 +108,7 @@ async def test_api_error() -> None:
     await session.close()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_valid_data_second_value(
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
@@ -187,7 +187,7 @@ async def test_valid_data_second_value(
     assert data == snapshot
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_no_indexes_data(
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
@@ -257,7 +257,7 @@ async def test_no_indexes_data(
     assert data == snapshot
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_no_sensor_data_1(
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
@@ -337,7 +337,7 @@ async def test_no_sensor_data_1(
     await session.close()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_invalid_sensor_data_2(
     stations: list[dict[str, Any]], station: list[dict[str, Any]]
 ) -> None:
@@ -389,7 +389,7 @@ async def test_invalid_sensor_data_2(
     await session.close()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_no_station_data(stations: list[dict[str, Any]]) -> None:
     """Test with no station data."""
     session = aiohttp.ClientSession()
@@ -411,7 +411,7 @@ async def test_no_station_data(stations: list[dict[str, Any]]) -> None:
     await session.close()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_no_stations_data() -> None:
     """Test with no stations data."""
     session = aiohttp.ClientSession()
@@ -429,7 +429,7 @@ async def test_no_stations_data() -> None:
     await session.close()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_invalid_station_id(stations: list[dict[str, Any]]) -> None:
     """Test with invalid station_id."""
     session = aiohttp.ClientSession()
