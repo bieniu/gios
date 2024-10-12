@@ -5,9 +5,6 @@
 # name: test_valid_data_first_value
   GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=Sensor(name='benzene', id=658, index='very_good', value=2.57148), co=Sensor(name='carbon monoxide', id=660, index='very_bad', value=786.702), no2=Sensor(name='nitrogen dioxide', id=665, index='very_good', value=59.9545), o3=Sensor(name='ozone', id=667, index='bad', value=8.63111), pm10=Sensor(name='particulate matter 10', id=14395, index='moderate', value=123.879), pm25=Sensor(name='particulate matter 2.5', id=670, index='sufficient', value=59.9428), so2=Sensor(name='sulfur dioxide', id=672, index='very_good', value=11.6502))
 # ---
-# name: test_valid_data_first_value.1
-  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=Sensor(name='benzene', id=658, index='very_good', value=2.57148), co=Sensor(name='carbon monoxide', id=660, index='very_bad', value=786.702), no2=Sensor(name='nitrogen dioxide', id=665, index='very_good', value=59.9545), o3=Sensor(name='ozone', id=667, index='bad', value=8.63111), pm10=Sensor(name='particulate matter 10', id=14395, index='moderate', value=123.879), pm25=Sensor(name='particulate matter 2.5', id=670, index='sufficient', value=59.9428), so2=Sensor(name='sulfur dioxide', id=672, index='very_good', value=11.6502))
-# ---
 # name: test_valid_data_second_value
   GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=Sensor(name='benzene', id=658, index='very_good', value=3.24432), co=Sensor(name='carbon monoxide', id=660, index='very_bad', value=1041.74), no2=Sensor(name='nitrogen dioxide', id=665, index='very_good', value=52.6198), o3=Sensor(name='ozone', id=667, index='bad', value=4.93778), pm10=Sensor(name='particulate matter 10', id=14395, index='moderate', value=115.559), pm25=Sensor(name='particulate matter 2.5', id=670, index='sufficient', value=72.0243), so2=Sensor(name='sulfur dioxide', id=672, index='very_good', value=11.501))
 # ---
