@@ -5,7 +5,7 @@ import logging
 
 from aiohttp import ClientError, ClientSession
 
-from gios import ApiError, Gios, InvalidSensorsData, NoStationError
+from gios import ApiError, Gios, InvalidSensorsDataError, NoStationError
 
 GIOS_STATION_ID = 568
 
@@ -18,7 +18,12 @@ async def main() -> None:
         gios = Gios(GIOS_STATION_ID, websession)
         try:
             data = await gios.async_update()
-        except (ApiError, NoStationError, InvalidSensorsData, ClientError) as error:
+        except (
+            ApiError,
+            NoStationError,
+            InvalidSensorsDataError,
+            ClientError,
+        ) as error:
             print(error)
             return
 
