@@ -1,5 +1,6 @@
 """Python wrapper for getting air quality data from GIOS."""
 
+import asyncio
 import logging
 from contextlib import suppress
 from http import HTTPStatus
@@ -131,11 +132,10 @@ class Gios:
 
     async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
         """Retrieve all sensors data."""
-        data: dict[str, Any] = {}
-        for sensor in sensors:
-            sensor_data = await self._get_sensor(sensors[sensor][ATTR_ID])
-            data[sensor] = sensor_data
-        return data
+        results = await asyncio.gather(
+            *[self._get_sensor(sensors[sensor][ATTR_ID]) for sensor in sensors]
+        )
+        return dict(zip(sensors, results, strict=True))
 
     async def _get_sensor(self, sensor: int) -> Any:
         """Retrieve sensor data."""
