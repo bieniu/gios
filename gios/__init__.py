@@ -40,16 +40,16 @@ class Gios:
         self.longitude: float | None = None
         self.station_name: str | None = None
         self._station_data: list[dict[str, Any]] = []
-        self._station_list: dict[int, GiosStation] = {}
+        self._measurement_stations: dict[int, GiosStation] = {}
 
         self.session = session
 
         _LOGGER.info("Initializing GIOS for station ID: %s", self.station_id)
 
     @property
-    def station_list(self) -> dict[int, GiosStation]:
-        """Return list of stations."""
-        return self._station_list
+    def measurement_stations(self) -> dict[int, GiosStation]:
+        """Return measurement stations dict."""
+        return self._measurement_stations
 
     async def async_update(self) -> GiosSensors:
         """Update GIOS data."""
@@ -59,15 +59,15 @@ class Gios:
         if not self.station_name:
             await self._get_stations()
 
-            if not self.station_list:
+            if not self.measurement_stations:
                 raise ApiError("Invalid measuring stations list from GIOS API")
 
-            if self.station_id not in self.station_list:
+            if self.station_id not in self.measurement_stations:
                 raise NoStationError(
                     f"{self.station_id} is not a valid measuring station ID"
                 )
 
-            station = self.station_list[self.station_id]
+            station = self.measurement_stations[self.station_id]
             self.latitude = station.latitude
             self.longitude = station.longitude
             self.station_name = station.name
@@ -130,13 +130,12 @@ class Gios:
         result: GiosSensors = from_dict(data_class=GiosSensors, data=data)
         return result
 
-    async def _get_stations(self) -> Any:
-        """Retrieve list of measuring stations."""
+    async def _get_stations(self) -> None:
+        """Retrieve list of measurement stations."""
         result = await self._async_get(URL_STATIONS)
-        self._station_list = {
+        self._measurement_stations = {
             station.id: station for station in self._parse_stations(result)
         }
-        return result
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
         """Parse stations data."""

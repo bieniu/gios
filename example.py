@@ -27,11 +27,8 @@ async def main() -> None:
             print(error)
             return
 
-    latitude = gios.latitude
-    longitude = gios.longitude
-    station_name = gios.station_name
-    print(f"Station list: {gios.station_list}")
-    print(f"Station: {station_name} ({latitude}, {longitude})")
+    print(f"Measurement stations: {gios.measurement_stations}")
+    print(f"Station: {gios.station_name} ({gios.latitude}, {gios.longitude})")
     print(data)
 
 
