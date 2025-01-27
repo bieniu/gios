@@ -2,9 +2,10 @@
 
 import asyncio
 import logging
+from collections.abc import Generator
 from contextlib import suppress
 from http import HTTPStatus
-from typing import Any, Final
+from typing import Any, Final, cast
 
 from aiohttp import ClientSession
 from dacite import from_dict
@@ -24,7 +25,7 @@ from .const import (
     URL_STATIONS,
 )
 from .exceptions import ApiError, InvalidSensorsDataError, NoStationError
-from .model import GiosSensors
+from .model import GiosSensors, GiosStation
 
 _LOGGER: Final = logging.getLogger(__name__)
 
@@ -39,10 +40,16 @@ class Gios:
         self.longitude: float | None = None
         self.station_name: str | None = None
         self._station_data: list[dict[str, Any]] = []
+        self._station_list: dict[int, GiosStation] = {}
 
         self.session = session
 
         _LOGGER.info("Initializing GIOS for station ID: %s", self.station_id)
+
+    @property
+    def station_list(self) -> dict[int, GiosStation]:
+        """Return list of stations."""
+        return self._station_list
 
     async def async_update(self) -> GiosSensors:
         """Update GIOS data."""
@@ -50,18 +57,20 @@ class Gios:
         invalid_sensors: list[str] = []
 
         if not self.station_name:
-            if not (stations := await self._get_stations()):
+            await self._get_stations()
+
+            if not self.station_list:
                 raise ApiError("Invalid measuring stations list from GIOS API")
 
-            for station in stations:
-                if station[ATTR_ID] == self.station_id:
-                    self.latitude = float(station["gegrLat"])
-                    self.longitude = float(station["gegrLon"])
-                    self.station_name = station["stationName"]
-            if not self.station_name:
+            if self.station_id not in self.station_list:
                 raise NoStationError(
                     f"{self.station_id} is not a valid measuring station ID"
                 )
+
+            station = self.station_list[self.station_id]
+            self.latitude = station.latitude
+            self.longitude = station.longitude
+            self.station_name = station.name
 
             self._station_data = await self._get_station()
 
@@ -123,7 +132,21 @@ class Gios:
 
     async def _get_stations(self) -> Any:
         """Retrieve list of measuring stations."""
-        return await self._async_get(URL_STATIONS)
+        result = await self._async_get(URL_STATIONS)
+        self._station_list = {
+            station.id: station for station in self._parse_stations(result)
+        }
+        return result
+
+    def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
+        """Parse stations data."""
+        for station in stations:
+            yield GiosStation(
+                cast(int, station["id"]),
+                station["stationName"],
+                float(station["gegrLat"]),
+                float(station["gegrLon"]),
+            )
 
     async def _get_station(self) -> Any:
         """Retrieve measuring station data."""

@@ -25,3 +25,13 @@ class GiosSensors:
     pm10: Sensor | None
     pm25: Sensor | None
     so2: Sensor | None
+
+
+@dataclass
+class GiosStation:
+    """Data class for measeurement station."""
+
+    id: int
+    name: str
+    latitude: float
+    longitude: float

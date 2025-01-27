@@ -30,9 +30,8 @@ async def main() -> None:
     latitude = gios.latitude
     longitude = gios.longitude
     station_name = gios.station_name
-    print(f"Longitude: {longitude}")
-    print(f"Latitude: {latitude}")
-    print(f"Station name: {station_name}")
+    print(f"Station list: {gios.station_list}")
+    print(f"Station: {station_name} ({latitude}, {longitude})")
     print(data)
 
 
