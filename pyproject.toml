@@ -57,3 +57,51 @@ max-complexity = 25
 
 [tool.coverage.run]
 source = ["gios"]
+
+[tool.tox]
+envlist = ["py312", "py313", "lint", "typing", "coverage"]
+skip_missing_interpreters = true
+
+[tool.tox.gh-actions]
+python = { "3.12" = ["py312", "lint", "typing", "coverage"], "3.13" = ["py313"] }
+
+[tool.tox.testenv]
+commands = [
+  "pytest --timeout=30 --cov=gios --cov-report=xml {posargs} --error-for-skips"
+]
+deps = [
+  "-rrequirements.txt",
+  "-rrequirements-test.txt"
+]
+
+[tool.tox.testenv.lint]
+basepython = "python3"
+ignore_errors = true
+commands = [
+  "ruff check .",
+  "ruff format --check ."
+]
+deps = [
+  "-rrequirements.txt",
+  "-rrequirements-test.txt"
+]
+
+[tool.tox.testenv.typing]
+basepython = "python3"
+ignore_errors = true
+commands = [
+  "mypy gios"
+]
+deps = [
+  "-rrequirements.txt",
+  "-rrequirements-test.txt"
+]
+
+[tool.tox.testenv.coverage]
+deps = [
+  "-rrequirements.txt",
+  "-rrequirements-test.txt"
+]
+commands = [
+  "coverage report --fail-under=79"
+]
