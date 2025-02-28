@@ -76,7 +76,7 @@ async def test_valid_data_first_value(
             payload=indexes,
         )
 
-        gios = Gios(VALID_STATION_ID, session)
+        gios = await Gios.create(session, VALID_STATION_ID)
         data = await gios.async_update()
 
     await session.close()
@@ -99,10 +99,9 @@ async def test_api_error() -> None:
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             status=404,
         )
-        gios = Gios(VALID_STATION_ID, session)
 
         with pytest.raises(ApiError) as excinfo:
-            await gios.async_update()
+            await Gios.create(session, VALID_STATION_ID)
 
         assert str(excinfo.value) == "404"
 
@@ -176,7 +175,7 @@ async def test_valid_data_second_value(
             payload=indexes,
         )
 
-        gios = Gios(VALID_STATION_ID, session)
+        gios = await Gios.create(session, VALID_STATION_ID)
         data = await gios.async_update()
 
     await session.close()
@@ -247,7 +246,7 @@ async def test_no_indexes_data(
             payload={},
         )
 
-        gios = Gios(VALID_STATION_ID, session)
+        gios = await Gios.create(session, VALID_STATION_ID)
         data = await gios.async_update()
 
     await session.close()
@@ -332,9 +331,11 @@ async def test_no_sensor_data_1(
             f"http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
             payload=indexes,
         )
-        gios = Gios(VALID_STATION_ID, session)
+        gios = await Gios.create(session, VALID_STATION_ID)
 
-        with pytest.raises(InvalidSensorsDataError):
+        with pytest.raises(
+            InvalidSensorsDataError, match="Invalid sensor data from GIOS API"
+        ):
             await gios.async_update()
 
     await session.close()
@@ -384,9 +385,11 @@ async def test_invalid_sensor_data_2(
             "http://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
             payload=None,
         )
-        gios = Gios(VALID_STATION_ID, session)
+        gios = await Gios.create(session, VALID_STATION_ID)
 
-        with pytest.raises(InvalidSensorsDataError):
+        with pytest.raises(
+            InvalidSensorsDataError, match="Invalid sensor data from GIOS API"
+        ):
             await gios.async_update()
 
     await session.close()
@@ -406,9 +409,12 @@ async def test_no_station_data(stations: list[dict[str, Any]]) -> None:
             f"http://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
             payload={},
         )
-        gios = Gios(VALID_STATION_ID, session)
+        gios = await Gios.create(session, VALID_STATION_ID)
 
-        with pytest.raises(InvalidSensorsDataError):
+        with pytest.raises(
+            InvalidSensorsDataError,
+            match="Invalid measuring station data from GIOS API",
+        ):
             await gios.async_update()
 
     await session.close()
@@ -424,10 +430,11 @@ async def test_no_stations_data() -> None:
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload={},
         )
-        gios = Gios(VALID_STATION_ID, session)
 
-        with pytest.raises(ApiError):
-            await gios.async_update()
+        with pytest.raises(
+            NoStationError, match="552 is not a valid measuring station ID"
+        ):
+            await Gios.create(session, VALID_STATION_ID)
 
     await session.close()
 
@@ -442,11 +449,10 @@ async def test_invalid_station_id(stations: list[dict[str, Any]]) -> None:
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
             payload=stations,
         )
-        gios = Gios(INVALID_STATION_ID, session)
 
-        with pytest.raises(NoStationError) as excinfo:
-            await gios.async_update()
-
-        assert str(excinfo.value) == "0 is not a valid measuring station ID"
+        with pytest.raises(
+            NoStationError, match="0 is not a valid measuring station ID"
+        ):
+            await Gios.create(session, INVALID_STATION_ID)
 
     await session.close()
