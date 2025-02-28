@@ -85,6 +85,7 @@ async def test_valid_data_first_value(
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
+    assert gios.measurement_stations == snapshot
     assert data == snapshot
 
 
@@ -184,6 +185,7 @@ async def test_valid_data_second_value(
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
+    assert gios.measurement_stations == snapshot
     assert data == snapshot
 
 
@@ -254,6 +256,7 @@ async def test_no_indexes_data(
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
     assert gios.longitude == VALID_LONGITUDE
+    assert gios.measurement_stations == snapshot
     assert data == snapshot
 
 
