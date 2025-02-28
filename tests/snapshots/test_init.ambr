@@ -1,4 +1,9 @@
 # serializer version: 1
+# name: test_init_only
+  dict({
+    552: GiosStation(id=552, name='Test Name', latitude=99.99, longitude=88.88),
+  })
+# ---
 # name: test_no_indexes_data
   dict({
     552: GiosStation(id=552, name='Test Name', latitude=99.99, longitude=88.88),

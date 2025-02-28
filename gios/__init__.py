@@ -86,7 +86,7 @@ class Gios:
         """Update GIOS data."""
         if self.station_id is None:
             msg = "Measuring station ID is not set"
-            raise ApiError(msg)
+            raise NoStationError(msg)
 
         data: dict[str, dict[str, Any]] = {}
         invalid_sensors: list[str] = []

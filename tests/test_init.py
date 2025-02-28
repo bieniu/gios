@@ -18,6 +18,34 @@ VALID_LONGITUDE = 88.88
 
 
 @pytest.mark.asyncio
+async def test_init_only(
+    snapshot: SnapshotAssertion,
+    stations: list[dict[str, Any]],
+) -> None:
+    """Test init without station ID."""
+    session = aiohttp.ClientSession()
+
+    with aioresponses() as session_mock:
+        session_mock.get(
+            "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+            payload=stations,
+        )
+
+        gios = await Gios.create(session)
+
+        with pytest.raises(NoStationError, match="Measuring station ID is not set"):
+            await gios.async_update()
+
+    await session.close()
+
+    assert gios.station_name is None
+    assert gios.station_id is None
+    assert gios.latitude is None
+    assert gios.longitude is None
+    assert gios.measurement_stations == snapshot
+
+
+@pytest.mark.asyncio
 async def test_valid_data_first_value(
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
