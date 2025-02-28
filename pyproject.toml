@@ -30,7 +30,7 @@ Homepage = "https://github.com/bieniu/gios"
 include = ["gios*"]
 
 [tool.pytest.ini_options]
-asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
 
 [tool.mypy]
 python_version = "3.13"
