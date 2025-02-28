@@ -15,8 +15,8 @@ logging.basicConfig(level=logging.DEBUG)
 async def main() -> None:
     """Run main function."""
     async with ClientSession() as websession:
-        gios = Gios(GIOS_STATION_ID, websession)
         try:
+            gios = await Gios.create(websession, GIOS_STATION_ID)
             data = await gios.async_update()
         except (
             ApiError,

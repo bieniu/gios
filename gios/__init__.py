@@ -5,7 +5,7 @@ import logging
 from collections.abc import Generator
 from contextlib import suppress
 from http import HTTPStatus
-from typing import Any, Final, cast
+from typing import Any, Final, Self, cast
 
 from aiohttp import ClientSession
 from dacite import from_dict
@@ -33,7 +33,7 @@ _LOGGER: Final = logging.getLogger(__name__)
 class Gios:
     """Main class to perform GIOS API requests."""
 
-    def __init__(self, station_id: int, session: ClientSession) -> None:
+    def __init__(self, station_id: int | None, session: ClientSession) -> None:
         """Initialize."""
         self.station_id = station_id
         self.latitude: float | None = None
@@ -44,7 +44,38 @@ class Gios:
 
         self.session = session
 
-        _LOGGER.info("Initializing GIOS for station ID: %s", self.station_id)
+    @classmethod
+    async def create(
+        cls: type[Self],
+        session: ClientSession,
+        station_id: int | None = None,
+    ) -> Self:
+        """Create a new instance."""
+        instance = cls(station_id, session)
+
+        await instance.initialize()
+
+        return instance
+
+    async def initialize(self) -> None:
+        """Initialize."""
+        msg = "Initializing GIOS"
+        if self.station_id:
+            msg += f" for station ID: {self.station_id}"
+        _LOGGER.debug(msg)
+
+        await self._get_stations()
+
+        if self.station_id is None:
+            return
+
+        if (station := self.measurement_stations.get(self.station_id)) is None:
+            msg = f"{self.station_id} is not a valid measuring station ID"
+            raise NoStationError(msg)
+
+        self.latitude = station.latitude
+        self.longitude = station.longitude
+        self.station_name = station.name
 
     @property
     def measurement_stations(self) -> dict[int, GiosStation]:
@@ -53,31 +84,18 @@ class Gios:
 
     async def async_update(self) -> GiosSensors:
         """Update GIOS data."""
+        if self.station_id is None:
+            msg = "Measuring station ID is not set"
+            raise ApiError(msg)
+
         data: dict[str, dict[str, Any]] = {}
         invalid_sensors: list[str] = []
 
-        if not self.station_name:
-            await self._get_stations()
-
-            if not self.measurement_stations:
-                raise ApiError("Invalid measuring stations list from GIOS API")
-
-            if self.station_id not in self.measurement_stations:
-                raise NoStationError(
-                    f"{self.station_id} is not a valid measuring station ID"
-                )
-
-            station = self.measurement_stations[self.station_id]
-            self.latitude = station.latitude
-            self.longitude = station.longitude
-            self.station_name = station.name
-
-            self._station_data = await self._get_station()
+        self._station_data = await self._get_station()
 
         if not self._station_data:
-            raise InvalidSensorsDataError(
-                "Invalid measuring station data from GIOS API"
-            )
+            msg = "Invalid measuring station data from GIOS API"
+            raise InvalidSensorsDataError(msg)
 
         for sensor_dict in self._station_data:
             data[sensor_dict["param"]["paramCode"].lower()] = {
@@ -106,7 +124,8 @@ class Gios:
                 data.pop(sensor)
 
         if not data:
-            raise InvalidSensorsDataError("Invalid sensor data from GIOS API")
+            msg = "Invalid sensor data from GIOS API"
+            raise InvalidSensorsDataError(msg)
 
         indexes = await self._get_indexes()
 
