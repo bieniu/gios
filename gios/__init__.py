@@ -105,7 +105,7 @@ class Gios:
 
         sensors = await self._get_all_sensors(data)
 
-        # The GIOS server sends a null values for sensors several minutes before
+        # The GIOS server sends null values for sensors several minutes before
         # adding new data from measuring station. If the newest value is null
         # we take the earlier value.
         for sensor, sensor_data in data.items():
@@ -173,9 +173,8 @@ class Gios:
 
     async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
         """Retrieve all sensors data."""
-        results = await asyncio.gather(
-            *[self._get_sensor(sensors[sensor][ATTR_ID]) for sensor in sensors]
-        )
+        tasks = [self._get_sensor(sensors[sensor][ATTR_ID]) for sensor in sensors]
+        results = await asyncio.gather(*tasks)
         return dict(zip(sensors, results, strict=True))
 
     async def _get_sensor(self, sensor: int) -> Any:

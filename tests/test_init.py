@@ -19,12 +19,11 @@ VALID_LONGITUDE = 88.88
 
 @pytest.mark.asyncio
 async def test_init_only(
+    session: aiohttp.ClientSession,
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
 ) -> None:
-    """Test init without station ID."""
-    session = aiohttp.ClientSession()
-
+    """Test init without station."""
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -36,8 +35,6 @@ async def test_init_only(
         with pytest.raises(NoStationError, match="Measuring station ID is not set"):
             await gios.async_update()
 
-    await session.close()
-
     assert gios.station_name is None
     assert gios.station_id is None
     assert gios.latitude is None
@@ -47,6 +44,7 @@ async def test_init_only(
 
 @pytest.mark.asyncio
 async def test_valid_data_first_value(
+    session: aiohttp.ClientSession,
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
@@ -60,8 +58,6 @@ async def test_valid_data_first_value(
     sensor_14395: dict[str, Any],
 ) -> None:
     """Test with valid data and valid first sensor's value."""
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -107,8 +103,6 @@ async def test_valid_data_first_value(
         gios = await Gios.create(session, VALID_STATION_ID)
         data = await gios.async_update()
 
-    await session.close()
-
     assert gios.station_name == VALID_STATION_NAME
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
@@ -118,10 +112,8 @@ async def test_valid_data_first_value(
 
 
 @pytest.mark.asyncio
-async def test_api_error() -> None:
+async def test_api_error(session: aiohttp.ClientSession) -> None:
     """Test GIOS API error."""
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -133,11 +125,10 @@ async def test_api_error() -> None:
 
         assert str(excinfo.value) == "404"
 
-    await session.close()
-
 
 @pytest.mark.asyncio
 async def test_valid_data_second_value(
+    session: aiohttp.ClientSession,
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
@@ -159,8 +150,6 @@ async def test_valid_data_second_value(
     sensor_672["values"][0]["value"] = None
     sensor_14395["values"][0]["value"] = None
 
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -206,8 +195,6 @@ async def test_valid_data_second_value(
         gios = await Gios.create(session, VALID_STATION_ID)
         data = await gios.async_update()
 
-    await session.close()
-
     assert gios.station_name == VALID_STATION_NAME
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
@@ -218,6 +205,7 @@ async def test_valid_data_second_value(
 
 @pytest.mark.asyncio
 async def test_no_indexes_data(
+    session: aiohttp.ClientSession,
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
@@ -230,8 +218,6 @@ async def test_no_indexes_data(
     sensor_14395: dict[str, Any],
 ) -> None:
     """Test with valid data."""
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -277,8 +263,6 @@ async def test_no_indexes_data(
         gios = await Gios.create(session, VALID_STATION_ID)
         data = await gios.async_update()
 
-    await session.close()
-
     assert gios.station_name == VALID_STATION_NAME
     assert gios.station_id == VALID_STATION_ID
     assert gios.latitude == VALID_LATITUDE
@@ -289,6 +273,7 @@ async def test_no_indexes_data(
 
 @pytest.mark.asyncio
 async def test_no_sensor_data_1(
+    session: aiohttp.ClientSession,
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
@@ -316,8 +301,6 @@ async def test_no_sensor_data_1(
     sensor_14395["values"][0]["value"] = None
     sensor_14395["values"][1]["value"] = None
 
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -366,16 +349,14 @@ async def test_no_sensor_data_1(
         ):
             await gios.async_update()
 
-    await session.close()
-
 
 @pytest.mark.asyncio
 async def test_invalid_sensor_data_2(
-    stations: list[dict[str, Any]], station: list[dict[str, Any]]
+    session: aiohttp.ClientSession,
+    stations: list[dict[str, Any]],
+    station: list[dict[str, Any]],
 ) -> None:
     """Test with invalid sensor data."""
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -420,14 +401,12 @@ async def test_invalid_sensor_data_2(
         ):
             await gios.async_update()
 
-    await session.close()
-
 
 @pytest.mark.asyncio
-async def test_no_station_data(stations: list[dict[str, Any]]) -> None:
+async def test_no_station_data(
+    session: aiohttp.ClientSession, stations: list[dict[str, Any]]
+) -> None:
     """Test with no station data."""
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -445,14 +424,10 @@ async def test_no_station_data(stations: list[dict[str, Any]]) -> None:
         ):
             await gios.async_update()
 
-    await session.close()
-
 
 @pytest.mark.asyncio
-async def test_no_stations_data() -> None:
+async def test_no_stations_data(session: aiohttp.ClientSession) -> None:
     """Test with no stations data."""
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -464,14 +439,12 @@ async def test_no_stations_data() -> None:
         ):
             await Gios.create(session, VALID_STATION_ID)
 
-    await session.close()
-
 
 @pytest.mark.asyncio
-async def test_invalid_station_id(stations: list[dict[str, Any]]) -> None:
+async def test_invalid_station_id(
+    session: aiohttp.ClientSession, stations: list[dict[str, Any]]
+) -> None:
     """Test with invalid station_id."""
-    session = aiohttp.ClientSession()
-
     with aioresponses() as session_mock:
         session_mock.get(
             "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
@@ -482,5 +455,3 @@ async def test_invalid_station_id(stations: list[dict[str, Any]]) -> None:
             NoStationError, match="0 is not a valid measuring station ID"
         ):
             await Gios.create(session, INVALID_STATION_ID)
-
-    await session.close()
