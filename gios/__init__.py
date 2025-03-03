@@ -94,7 +94,8 @@ class Gios:
         data: dict[str, dict[str, Any]] = {}
         invalid_sensors: list[str] = []
 
-        self._station_data = await self._get_station()
+        if not self._station_data:
+            self._station_data = await self._get_station()
 
         if not self._station_data:
             msg = "Invalid measuring station data from GIOS API"
