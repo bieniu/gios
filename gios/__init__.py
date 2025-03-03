@@ -64,7 +64,10 @@ class Gios:
             msg += f" for station ID: {self.station_id}"
         _LOGGER.debug(msg)
 
-        await self._get_stations()
+        stations = await self._get_stations()
+        self._measurement_stations = {
+            station.id: station for station in self._parse_stations(stations)
+        }
 
         if self.station_id is None:
             return
@@ -149,12 +152,9 @@ class Gios:
         result: GiosSensors = from_dict(data_class=GiosSensors, data=data)
         return result
 
-    async def _get_stations(self) -> None:
+    async def _get_stations(self) -> Any:
         """Retrieve list of measurement stations."""
-        result = await self._async_get(URL_STATIONS)
-        self._measurement_stations = {
-            station.id: station for station in self._parse_stations(result)
-        }
+        return await self._async_get(URL_STATIONS)
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
         """Parse stations data."""
