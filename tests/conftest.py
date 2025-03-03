@@ -1,13 +1,14 @@
 """Set up some common test helper things."""
 
 import json
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Generator
 from pathlib import Path
 from typing import Any
 
 import aiohttp
 import pytest
 import pytest_asyncio
+from aioresponses import aioresponses
 from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.amber import AmberSnapshotExtension
 from syrupy.location import PyTestLocation
@@ -21,6 +22,13 @@ async def session() -> AsyncGenerator[aiohttp.ClientSession]:
     session = aiohttp.ClientSession()
     yield session
     await session.close()
+
+
+@pytest.fixture
+def session_mock() -> Generator[aioresponses]:
+    """Create a reusable aioresponses mock."""
+    with aioresponses() as mock:
+        yield mock
 
 
 @pytest.fixture
