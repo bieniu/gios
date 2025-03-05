@@ -26,7 +26,7 @@ async def test_init_only(
 ) -> None:
     """Test init without station."""
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload=stations,
     )
 
@@ -60,43 +60,43 @@ async def test_valid_data_first_value(
 ) -> None:
     """Test with valid data and valid first sensor's value."""
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload=stations,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/672",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/672",
         payload=sensor_672,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/658",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/658",
         payload=sensor_658,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/660",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/660",
         payload=sensor_660,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/665",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/665",
         payload=sensor_665,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/667",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/667",
         payload=sensor_667,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/670",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/670",
         payload=sensor_670,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
         payload=sensor_14395,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
         payload=indexes,
     )
 
@@ -117,7 +117,7 @@ async def test_api_error(
 ) -> None:
     """Test GIOS API error."""
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         status=404,
     )
 
@@ -153,43 +153,43 @@ async def test_valid_data_second_value(
     sensor_14395["values"][0]["value"] = None
 
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload=stations,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/672",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/672",
         payload=sensor_672,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/658",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/658",
         payload=sensor_658,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/660",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/660",
         payload=sensor_660,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/665",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/665",
         payload=sensor_665,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/667",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/667",
         payload=sensor_667,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/670",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/670",
         payload=sensor_670,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
         payload=sensor_14395,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
         payload=indexes,
     )
 
@@ -221,43 +221,43 @@ async def test_no_indexes_data(
 ) -> None:
     """Test with valid data."""
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload=stations,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/672",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/672",
         payload=sensor_672,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/658",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/658",
         payload=sensor_658,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/660",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/660",
         payload=sensor_660,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/665",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/665",
         payload=sensor_665,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/667",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/667",
         payload=sensor_667,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/670",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/670",
         payload=sensor_670,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
         payload=sensor_14395,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
         payload={},
     )
 
@@ -304,43 +304,43 @@ async def test_no_sensor_data_1(
     sensor_14395["values"][1]["value"] = None
 
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload=stations,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/672",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/672",
         payload=sensor_672,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/658",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/658",
         payload=sensor_658,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/660",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/660",
         payload=sensor_660,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/665",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/665",
         payload=sensor_665,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/667",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/667",
         payload=sensor_667,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/670",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/670",
         payload=sensor_670,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
         payload=sensor_14395,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/{VALID_STATION_ID}",
         payload=indexes,
     )
     gios = await Gios.create(session, VALID_STATION_ID)
@@ -360,39 +360,39 @@ async def test_invalid_sensor_data_2(
 ) -> None:
     """Test with invalid sensor data."""
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload=stations,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/672",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/672",
         payload=None,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/658",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/658",
         payload=None,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/660",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/660",
         payload=None,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/665",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/665",
         payload=None,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/667",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/667",
         payload=None,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/670",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/670",
         payload=None,
     )
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
+        "https://api.gios.gov.pl/pjp-api/rest/data/getData/14395",
         payload=None,
     )
     gios = await Gios.create(session, VALID_STATION_ID)
@@ -411,11 +411,11 @@ async def test_no_station_data(
 ) -> None:
     """Test with no station data."""
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload=stations,
     )
     session_mock.get(
-        f"http://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
+        f"https://api.gios.gov.pl/pjp-api/rest/station/sensors/{VALID_STATION_ID}",
         payload={},
     )
     gios = await Gios.create(session, VALID_STATION_ID)
@@ -433,7 +433,7 @@ async def test_no_stations_data(
 ) -> None:
     """Test with no stations data."""
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload={},
     )
 
@@ -449,7 +449,7 @@ async def test_invalid_station_id(
 ) -> None:
     """Test with invalid station_id."""
     session_mock.get(
-        "http://api.gios.gov.pl/pjp-api/rest/station/findAll",
+        "https://api.gios.gov.pl/pjp-api/rest/station/findAll",
         payload=stations,
     )
 
