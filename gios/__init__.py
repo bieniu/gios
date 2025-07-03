@@ -3,7 +3,6 @@
 import asyncio
 import logging
 from collections.abc import Generator
-from contextlib import suppress
 from http import HTTPStatus
 from typing import Any, Final, Self, cast
 
@@ -102,10 +101,11 @@ class Gios:
             raise InvalidSensorsDataError(msg)
 
         for sensor_dict in self._station_data:
-            data[sensor_dict["param"]["paramCode"].lower()] = {
-                ATTR_ID: sensor_dict[ATTR_ID],
-                ATTR_NAME: POLLUTANT_MAP[sensor_dict["param"]["paramName"]],
-            }
+            if sensor_dict["Wskaźnik"] in POLLUTANT_MAP:
+                data[sensor_dict["Wskaźnik - wzór"].lower()] = {
+                    ATTR_ID: sensor_dict["Identyfikator stanowiska"],
+                    ATTR_NAME: POLLUTANT_MAP[sensor_dict["Wskaźnik"]],
+                }
 
         sensors = await self._get_all_sensors(data)
 
@@ -114,10 +114,14 @@ class Gios:
         # we take the earlier value.
         for sensor, sensor_data in data.items():
             try:
-                if sensors[sensor]["values"][0][ATTR_VALUE]:
-                    sensor_data[ATTR_VALUE] = sensors[sensor]["values"][0][ATTR_VALUE]
-                elif sensors[sensor].get("values")[1][ATTR_VALUE]:
-                    sensor_data[ATTR_VALUE] = sensors[sensor]["values"][1][ATTR_VALUE]
+                if sensors[sensor]["Lista danych pomiarowych"][0]["Wartość"]:
+                    sensor_data[ATTR_VALUE] = sensors[sensor][
+                        "Lista danych pomiarowych"
+                    ][0]["Wartość"]
+                elif sensors[sensor]["Lista danych pomiarowych"][1]["Wartość"]:
+                    sensor_data[ATTR_VALUE] = sensors[sensor][
+                        "Lista danych pomiarowych"
+                    ][1]["Wartość"]
                 else:
                     invalid_sensors.append(sensor)
             except (IndexError, KeyError, TypeError):
@@ -134,18 +138,13 @@ class Gios:
         indexes = await self._get_indexes()
 
         for sensor, sensor_data in data.items():
-            with suppress(IndexError, KeyError, TypeError):
-                index_level = ATTR_INDEX_LEVEL.format(sensor.lower().replace(".", ""))
-                sensor_data[ATTR_INDEX] = STATE_MAP[
-                    indexes[index_level]["indexLevelName"]
-                ]
+            index_level = ATTR_INDEX_LEVEL.format(sensor.upper())
+            if index_value := indexes["AqIndex"].get(index_level):
+                sensor_data[ATTR_INDEX] = STATE_MAP[index_value]
 
-        with suppress(IndexError, KeyError, TypeError):
-            if indexes["stIndexLevel"]["indexLevelName"]:
-                data[ATTR_AQI.lower()] = {ATTR_NAME: ATTR_AQI}
-                data[ATTR_AQI.lower()][ATTR_VALUE] = STATE_MAP[
-                    indexes["stIndexLevel"]["indexLevelName"]
-                ]
+        if index_value := indexes["AqIndex"].get("Nazwa kategorii indeksu"):
+            aqi_index = {ATTR_NAME: ATTR_AQI, ATTR_VALUE: STATE_MAP[index_value]}
+            data[ATTR_AQI.lower()] = aqi_index
 
         if data.get("pm2.5"):
             data["pm25"] = data.pop("pm2.5")
@@ -155,22 +154,24 @@ class Gios:
 
     async def _get_stations(self) -> Any:
         """Retrieve list of measurement stations."""
-        return await self._async_get(URL_STATIONS)
+        result = await self._async_get(URL_STATIONS)
+        return result["Lista stacji pomiarowych"]
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
         """Parse stations data."""
         for station in stations:
             yield GiosStation(
-                cast(int, station["id"]),
-                station["stationName"],
-                float(station["gegrLat"]),
-                float(station["gegrLon"]),
+                cast(int, station["Identyfikator stacji"]),
+                station["Nazwa stacji"],
+                float(station["WGS84 φ N"]),
+                float(station["WGS84 λ E"]),
             )
 
     async def _get_station(self) -> Any:
         """Retrieve measuring station data."""
         url = URL_STATION.format(self.station_id)
-        return await self._async_get(url)
+        result = await self._async_get(url)
+        return result["Lista stanowisk pomiarowych dla podanej stacji"]
 
     async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
         """Retrieve all sensors data."""
