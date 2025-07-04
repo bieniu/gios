@@ -100,12 +100,14 @@ class Gios:
             msg = "Invalid measuring station data from GIOS API"
             raise InvalidSensorsDataError(msg)
 
-        for sensor_dict in self._station_data:
-            if sensor_dict["Wskaźnik"] in POLLUTANT_MAP:
-                data[sensor_dict["Wskaźnik - wzór"].lower()] = {
-                    ATTR_ID: sensor_dict["Identyfikator stanowiska"],
-                    ATTR_NAME: POLLUTANT_MAP[sensor_dict["Wskaźnik"]],
-                }
+        data = {
+            sensor["Wskaźnik - wzór"].lower(): {
+                ATTR_ID: sensor["Identyfikator stanowiska"],
+                ATTR_NAME: POLLUTANT_MAP[sensor["Wskaźnik"]],
+            }
+            for sensor in self._station_data
+            if sensor["Wskaźnik"] in POLLUTANT_MAP
+        }
 
         sensors = await self._get_all_sensors(data)
 
@@ -138,13 +140,16 @@ class Gios:
         indexes = await self._get_indexes()
 
         for sensor, sensor_data in data.items():
-            index_level = ATTR_INDEX_LEVEL.format(sensor.upper())
-            if index_value := indexes.get("AqIndex", {}).get(index_level):
+            if index_value := indexes.get("AqIndex", {}).get(
+                ATTR_INDEX_LEVEL.format(sensor.upper())
+            ):
                 sensor_data[ATTR_INDEX] = STATE_MAP[index_value]
 
         if index_value := indexes.get("AqIndex", {}).get("Nazwa kategorii indeksu"):
-            aqi_index = {ATTR_NAME: ATTR_AQI, ATTR_VALUE: STATE_MAP[index_value]}
-            data[ATTR_AQI.lower()] = aqi_index
+            data[ATTR_AQI.lower()] = {
+                ATTR_NAME: ATTR_AQI,
+                ATTR_VALUE: STATE_MAP[index_value],
+            }
 
         if data.get("pm2.5"):
             data["pm25"] = data.pop("pm2.5")
