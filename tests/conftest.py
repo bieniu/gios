@@ -67,6 +67,13 @@ def sensor_3760() -> dict[str, Any]:
 
 
 @pytest.fixture
+def sensor_3761() -> dict[str, Any]:
+    """Return sensor 3761 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3761.json"), encoding="utf-8") as file:
+        return json.load(file)
+
+
+@pytest.fixture
 def sensor_3762() -> dict[str, Any]:
     """Return sensor 3762 data from the fixture file."""
     with Path.open(Path(f"{BASE}sensor_3762.json"), encoding="utf-8") as file:

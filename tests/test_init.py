@@ -53,6 +53,7 @@ async def test_valid_data_first_value(
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
+    sensor_3761: dict[str, Any],
     sensor_3762: dict[str, Any],
     sensor_3764: dict[str, Any],
     sensor_3765: dict[str, Any],
@@ -74,6 +75,10 @@ async def test_valid_data_first_value(
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
         payload=sensor_3760,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3761",
+        payload=sensor_3761,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3762",
@@ -134,6 +139,7 @@ async def test_valid_data_second_value(
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
+    sensor_3761: dict[str, Any],
     sensor_3762: dict[str, Any],
     sensor_3764: dict[str, Any],
     sensor_3765: dict[str, Any],
@@ -141,6 +147,7 @@ async def test_valid_data_second_value(
 ) -> None:
     """Test with valid data and valid second sensor's value."""
     sensor_3760["Lista danych pomiarowych"][0]["Wartość"] = None
+    sensor_3761["Lista danych pomiarowych"][0]["Wartość"] = None
     sensor_3762["Lista danych pomiarowych"][0]["Wartość"] = None
     sensor_3764["Lista danych pomiarowych"][0]["Wartość"] = None
 
@@ -159,6 +166,10 @@ async def test_valid_data_second_value(
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
         payload=sensor_3760,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3761",
+        payload=sensor_3761,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3762",
@@ -202,6 +213,7 @@ async def test_no_indexes_data(
     station: list[dict[str, Any]],
     sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
+    sensor_3761: dict[str, Any],
     sensor_3762: dict[str, Any],
     sensor_3764: dict[str, Any],
     sensor_3765: dict[str, Any],
@@ -223,6 +235,10 @@ async def test_no_indexes_data(
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
         payload=sensor_3760,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3761",
+        payload=sensor_3761,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3762",
@@ -266,6 +282,7 @@ async def test_no_sensor_data_1(
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
+    sensor_3761: dict[str, Any],
     sensor_3762: dict[str, Any],
     sensor_3764: dict[str, Any],
     sensor_3765: dict[str, Any],
@@ -276,6 +293,8 @@ async def test_no_sensor_data_1(
     sensor_3759["Lista danych pomiarowych"][1]["Wartość"] = None
     sensor_3760["Lista danych pomiarowych"][0]["Wartość"] = None
     sensor_3760["Lista danych pomiarowych"][1]["Wartość"] = None
+    sensor_3761["Lista danych pomiarowych"][0]["Wartość"] = None
+    sensor_3761["Lista danych pomiarowych"][1]["Wartość"] = None
     sensor_3762["Lista danych pomiarowych"][0]["Wartość"] = None
     sensor_3762["Lista danych pomiarowych"][1]["Wartość"] = None
     sensor_3764["Lista danych pomiarowych"][0]["Wartość"] = None
@@ -298,6 +317,10 @@ async def test_no_sensor_data_1(
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
         payload=sensor_3760,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3761",
+        payload=sensor_3761,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3762",
@@ -350,6 +373,10 @@ async def test_invalid_sensor_data_2(
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
+        payload=None,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3761",
         payload=None,
     )
     session_mock.get(

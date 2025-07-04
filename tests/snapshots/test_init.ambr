@@ -12,7 +12,7 @@
   })
 # ---
 # name: test_no_indexes_data.1
-  GiosSensors(aqi=None, c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index=None, value=5.1), o3=Sensor(name='ozone', id=3762, index=None, value=83.9), pm10=Sensor(name='particulate matter 10', id=3764, index=None, value=7.6), pm25=Sensor(name='particulate matter 2.5', id=14688, index=None, value=2.3), so2=None)
+  GiosSensors(aqi=None, c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index=None, value=5.1), nox=None, o3=Sensor(name='ozone', id=3762, index=None, value=83.9), pm10=Sensor(name='particulate matter 10', id=3764, index=None, value=7.6), pm25=Sensor(name='particulate matter 2.5', id=14688, index=None, value=2.3), so2=None)
 # ---
 # name: test_valid_data_first_value
   dict({
@@ -21,7 +21,7 @@
   })
 # ---
 # name: test_valid_data_first_value.1
-  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index='very_good', value=5.1), o3=Sensor(name='ozone', id=3762, index='good', value=83.9), pm10=Sensor(name='particulate matter 10', id=3764, index='very_good', value=7.6), pm25=Sensor(name='particulate matter 2.5', id=14688, index='very_good', value=2.3), so2=None)
+  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index='very_good', value=5.1), nox=None, o3=Sensor(name='ozone', id=3762, index='good', value=83.9), pm10=Sensor(name='particulate matter 10', id=3764, index='very_good', value=7.6), pm25=Sensor(name='particulate matter 2.5', id=14688, index='very_good', value=2.3), so2=None)
 # ---
 # name: test_valid_data_second_value
   dict({
@@ -30,5 +30,5 @@
   })
 # ---
 # name: test_valid_data_second_value.1
-  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index='very_good', value=4.0), o3=Sensor(name='ozone', id=3762, index='good', value=80.7), pm10=Sensor(name='particulate matter 10', id=3764, index='very_good', value=7.4), pm25=Sensor(name='particulate matter 2.5', id=14688, index='very_good', value=2.3), so2=None)
+  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index='very_good', value=4.0), nox=None, o3=Sensor(name='ozone', id=3762, index='good', value=80.7), pm10=Sensor(name='particulate matter 10', id=3764, index='very_good', value=7.4), pm25=Sensor(name='particulate matter 2.5', id=14688, index='very_good', value=2.3), so2=None)
 # ---

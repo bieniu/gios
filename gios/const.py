@@ -18,13 +18,14 @@ URL_STATIONS: Final[str] = (
 
 POLLUTANT_MAP = {
     "benzen": "benzene",
-    "tlenek węgla": "carbon monoxide",
     "dwutlenek azotu": "nitrogen dioxide",
-    "tlenek azotu": "nitrogen monoxide",
+    "dwutlenek siarki": "sulfur dioxide",
     "ozon": "ozone",
     "pył zawieszony PM10": "particulate matter 10",
     "pył zawieszony PM2.5": "particulate matter 2.5",
-    "dwutlenek siarki": "sulfur dioxide",
+    "tlenek azotu": "nitrogen monoxide",
+    "tlenek węgla": "carbon monoxide",
+    "tleneki azotu": "nitrogen oxides",
 }
 STATE_MAP = {
     "Bardzo dobry": "very_good",
