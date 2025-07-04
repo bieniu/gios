@@ -1,0 +1,143 @@
+{
+  "@context": {
+    "Lista danych pomiarowych": {
+      "@id": "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData"
+    },
+    "links": "https://schema.org/relatedLink",
+    "totalPages": "https://schema.org/numberOfPages"
+  },
+  "Lista danych pomiarowych": [
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 15:00:00",
+      "Wartość": 7.6
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 14:00:00",
+      "Wartość": 7.4
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 13:00:00",
+      "Wartość": 8.0
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 12:00:00",
+      "Wartość": 10.3
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 11:00:00",
+      "Wartość": 12.4
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 10:00:00",
+      "Wartość": 11.9
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 09:00:00",
+      "Wartość": 14.8
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 08:00:00",
+      "Wartość": 16.0
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 07:00:00",
+      "Wartość": 12.4
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 06:00:00",
+      "Wartość": 8.1
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 05:00:00",
+      "Wartość": 7.6
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 04:00:00",
+      "Wartość": 7.3
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 03:00:00",
+      "Wartość": 7.6
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 02:00:00",
+      "Wartość": 6.8
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 01:00:00",
+      "Wartość": 7.5
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-04 00:00:00",
+      "Wartość": 8.2
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-03 23:00:00",
+      "Wartość": 10.4
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-03 22:00:00",
+      "Wartość": 10.0
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-03 21:00:00",
+      "Wartość": 13.3
+    },
+    {
+      "Kod stanowiska": "MzWarKondrat-PM10-1g",
+      "Data": "2025-07-03 20:00:00",
+      "Wartość": 29.1
+    }
+  ],
+  "meta": {
+    "dc:description": "Usługa sieciowa udostępniająca wyniki jednogodzinnych pomiarów dwutlenku siarki (SO2), dwutlenku azotu (NO2), pyłu PM10, pyłu PM2,5, tlenku węgla (CO), benzenu (C6H6), ozonu (O3), od ostatniego dostępnego wyniku do trzeciej doby wstecz, na podstawie identyfikatora stanowiska pomiarowego. Dane udostępniane są w czasie lokalnym w jednostce μg/m3",
+    "sy:updateFrequency": "1",
+    "dc:language": "pol (ISO 639-2 / ISO 639-3)",
+    "schema:contentType": "application/ld+json",
+    "schema:provider": {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Warszawa",
+        "postalCode": "02-362",
+        "streetAddress": "Bitwy Warszawskiej 1920 3"
+      },
+      "email": "api@gios.gov.pl",
+      "name": "Główny Inspektorat Ochrony Środowiska"
+    },
+    "schema:dateModified": "03.11.2022",
+    "dc:title": "Bieżące dane pomiarowe z wybranego stanowiska",
+    "schema:datePublished": "10.04.2017",
+    "schema:keywords": "dane pomiarowe, wyniki pomiarów, powietrze, jakość powietrza, zanieczyszczenie powietrza, stacje pomiarowe, stanowiska pomiarowe, monitoring powietrza, Państwowy Monitoring Środowiska, środowisko, stan środowiska",
+    "sy:updatePeriod": "hourly",
+    "schema:isPartOf": "Państwowy Monitoring Środowiska, Jakość powietrza"
+  },
+  "links": {
+    "next": "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3764?page=1&size=20",
+    "last": "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3764?page=3&size=20",
+    "prev": "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3764?page=0&size=20",
+    "self": "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3764?page=0&size=20",
+    "first": "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3764?page=0&size=20"
+  },
+  "totalPages": 4
+}

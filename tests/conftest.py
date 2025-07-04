@@ -74,6 +74,13 @@ def sensor_3762() -> dict[str, Any]:
 
 
 @pytest.fixture
+def sensor_3764() -> dict[str, Any]:
+    """Return sensor 3764 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3764.json"), encoding="utf-8") as file:
+        return json.load(file)
+
+
+@pytest.fixture
 def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
     """Return snapshot assertion fixture."""
     return snapshot.use_extension(SnapshotExtension)
