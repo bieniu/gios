@@ -182,19 +182,25 @@ class Gios:
     async def _get_sensor(self, sensor: int) -> Any:
         """Retrieve sensor data."""
         url = URL_SENSOR.format(sensor)
-        return await self._async_get(url)
+        return await self._async_get(url, do_not_raise=True)
 
     async def _get_indexes(self) -> Any:
         """Retrieve indexes data."""
         url = URL_INDEXES.format(self.station_id)
         return await self._async_get(url)
 
-    async def _async_get(self, url: str) -> Any:
+    async def _async_get(self, url: str, do_not_raise: bool = False) -> Any:
         """Retrieve data from GIOS API."""
         async with self.session.get(url) as resp:
             _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
             if resp.status != HTTPStatus.OK.value:
-                _LOGGER.warning("Invalid response from GIOS API: %s", resp.status)
+                msg = f"Invalid response from GIOS API: {resp.status}"
+
+                if do_not_raise:
+                    _LOGGER.info(msg)
+                    return {}
+
+                _LOGGER.warning(msg)
                 raise ApiError(str(resp.status))
 
             return await resp.json()

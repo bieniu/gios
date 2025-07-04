@@ -23,7 +23,7 @@ POLLUTANT_MAP = {
     "tlenek azotu": "nitrogen monoxide",
     "ozon": "ozone",
     "pył zawieszony PM10": "particulate matter 10",
-    # "pył zawieszony PM2.5": "particulate matter 2.5",
+    "pył zawieszony PM2.5": "particulate matter 2.5",
     "dwutlenek siarki": "sulfur dioxide",
 }
 STATE_MAP = {
