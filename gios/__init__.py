@@ -116,22 +116,19 @@ class Gios:
         # we take the earlier value.
         for sensor, sensor_data in data.items():
             try:
-                if sensors[sensor]["Lista danych pomiarowych"][0]["Wartość"]:
-                    sensor_data[ATTR_VALUE] = sensors[sensor][
-                        "Lista danych pomiarowych"
-                    ][0]["Wartość"]
-                elif sensors[sensor]["Lista danych pomiarowych"][1]["Wartość"]:
-                    sensor_data[ATTR_VALUE] = sensors[sensor][
-                        "Lista danych pomiarowych"
-                    ][1]["Wartość"]
+                sensor_entry = sensors[sensor]["Lista danych pomiarowych"]
+                if (
+                    sensor_value := sensor_entry[0]["Wartość"]
+                    or sensor_entry[1]["Wartość"]
+                ):
+                    sensor_data[ATTR_VALUE] = sensor_value
                 else:
                     invalid_sensors.append(sensor)
             except (IndexError, KeyError, TypeError):
                 invalid_sensors.append(sensor)
 
-        if invalid_sensors:
-            for sensor in invalid_sensors:
-                data.pop(sensor)
+        for sensor in invalid_sensors:
+            data.pop(sensor)
 
         if not data:
             msg = "Invalid sensor data from GIOS API"
