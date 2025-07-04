@@ -20,6 +20,7 @@ class GiosSensors:
     aqi: Sensor | None
     c6h6: Sensor | None
     co: Sensor | None
+    no: Sensor | None
     no2: Sensor | None
     o3: Sensor | None
     pm10: Sensor | None

@@ -53,6 +53,13 @@ def indexes() -> dict[str, Any]:
 
 
 @pytest.fixture
+def sensor_3759() -> dict[str, Any]:
+    """Return sensor 3759 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3759.json"), encoding="utf-8") as file:
+        return json.load(file)
+
+
+@pytest.fixture
 def sensor_3760() -> dict[str, Any]:
     """Return sensor 3760 data from the fixture file."""
     with Path.open(Path(f"{BASE}sensor_3760.json"), encoding="utf-8") as file:

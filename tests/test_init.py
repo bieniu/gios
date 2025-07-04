@@ -50,6 +50,7 @@ async def test_valid_data_first_value(
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
+    sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
     sensor_3762: dict[str, Any],
 ) -> None:
@@ -61,6 +62,10 @@ async def test_valid_data_first_value(
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3759",
+        payload=sensor_3759,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
@@ -110,6 +115,7 @@ async def test_valid_data_second_value(
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
+    sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
     sensor_3762: dict[str, Any],
 ) -> None:
@@ -124,6 +130,10 @@ async def test_valid_data_second_value(
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3759",
+        payload=sensor_3759,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
@@ -156,6 +166,7 @@ async def test_no_indexes_data(
     snapshot: SnapshotAssertion,
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
+    sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
     sensor_3762: dict[str, Any],
 ) -> None:
@@ -167,6 +178,10 @@ async def test_no_indexes_data(
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3759",
+        payload=sensor_3759,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
@@ -199,10 +214,13 @@ async def test_no_sensor_data_1(
     stations: list[dict[str, Any]],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
+    sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
     sensor_3762: dict[str, Any],
 ) -> None:
     """Test with no sensor data."""
+    sensor_3759["Lista danych pomiarowych"][0]["Wartość"] = None
+    sensor_3759["Lista danych pomiarowych"][1]["Wartość"] = None
     sensor_3760["Lista danych pomiarowych"][0]["Wartość"] = None
     sensor_3760["Lista danych pomiarowych"][1]["Wartość"] = None
     sensor_3762["Lista danych pomiarowych"][0]["Wartość"] = None
@@ -215,6 +233,10 @@ async def test_no_sensor_data_1(
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3759",
+        payload=sensor_3759,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
@@ -251,6 +273,10 @@ async def test_invalid_sensor_data_2(
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
         payload=station,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3759",
+        payload=None,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
