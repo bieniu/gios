@@ -139,10 +139,10 @@ class Gios:
 
         for sensor, sensor_data in data.items():
             index_level = ATTR_INDEX_LEVEL.format(sensor.upper())
-            if index_value := indexes["AqIndex"].get(index_level):
+            if index_value := indexes.get("AqIndex", {}).get(index_level):
                 sensor_data[ATTR_INDEX] = STATE_MAP[index_value]
 
-        if index_value := indexes["AqIndex"].get("Nazwa kategorii indeksu"):
+        if index_value := indexes.get("AqIndex", {}).get("Nazwa kategorii indeksu"):
             aqi_index = {ATTR_NAME: ATTR_AQI, ATTR_VALUE: STATE_MAP[index_value]}
             data[ATTR_AQI.lower()] = aqi_index
 
@@ -155,7 +155,7 @@ class Gios:
     async def _get_stations(self) -> Any:
         """Retrieve list of measurement stations."""
         result = await self._async_get(URL_STATIONS)
-        return result["Lista stacji pomiarowych"]
+        return result.get("Lista stacji pomiarowych", [])
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
         """Parse stations data."""
@@ -171,7 +171,7 @@ class Gios:
         """Retrieve measuring station data."""
         url = URL_STATION.format(self.station_id)
         result = await self._async_get(url)
-        return result["Lista stanowisk pomiarowych dla podanej stacji"]
+        return result.get("Lista stanowisk pomiarowych dla podanej stacji", [])
 
     async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
         """Retrieve all sensors data."""
