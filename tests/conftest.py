@@ -53,51 +53,51 @@ def indexes() -> dict[str, Any]:
 
 
 @pytest.fixture
-def sensor_658() -> dict[str, Any]:
-    """Return sensor 658 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_658.json"), encoding="utf-8") as file:
+def sensor_3759() -> dict[str, Any]:
+    """Return sensor 3759 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3759.json"), encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
-def sensor_660() -> dict[str, Any]:
-    """Return sensor 660 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_660.json"), encoding="utf-8") as file:
+def sensor_3760() -> dict[str, Any]:
+    """Return sensor 3760 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3760.json"), encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
-def sensor_665() -> dict[str, Any]:
-    """Return sensor 665 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_665.json"), encoding="utf-8") as file:
+def sensor_3761() -> dict[str, Any]:
+    """Return sensor 3761 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3761.json"), encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
-def sensor_667() -> dict[str, Any]:
-    """Return sensor 667 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_667.json"), encoding="utf-8") as file:
+def sensor_3762() -> dict[str, Any]:
+    """Return sensor 3762 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3762.json"), encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
-def sensor_670() -> dict[str, Any]:
-    """Return sensor 670 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_670.json"), encoding="utf-8") as file:
+def sensor_3764() -> dict[str, Any]:
+    """Return sensor 3764 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3764.json"), encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
-def sensor_672() -> dict[str, Any]:
-    """Return sensor 672 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_672.json"), encoding="utf-8") as file:
+def sensor_3765() -> dict[str, Any]:
+    """Return sensor 3765 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_3765.json"), encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
-def sensor_14395() -> dict[str, Any]:
-    """Return sensor 14395 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_14395.json"), encoding="utf-8") as file:
+def sensor_14688() -> dict[str, Any]:
+    """Return sensor 14688 data from the fixture file."""
+    with Path.open(Path(f"{BASE}sensor_14688.json"), encoding="utf-8") as file:
         return json.load(file)
 
 

@@ -1,16 +1,69 @@
-[{
-	"id": 552,
-	"stationName": "Test Name",
-	"gegrLat": "99.99",
-	"gegrLon": "88.88",
-	"city": {
-		"id": 1006,
-		"name": "Test City",
-		"commune": {
-			"communeName": "Test Comune",
-			"districtName": "Test District",
-			"provinceName": "Test Province"
-		}
+{
+	"@context": {
+		"Lista stacji pomiarów": {
+			"@id": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll"
+		},
+		"links": "https://schema.org/relatedLink",
+		"totalPages": "https://schema.org/numberOfPages"
 	},
-	"addressStreet": "Foo"
-}]
+	"Lista stacji pomiarowych": [
+		{
+			"Identyfikator stacji": 552,
+			"Kod stacji": "MzWarKondrat",
+			"Nazwa stacji": "Warszawa, ul. Kondratowicza",
+			"WGS84 φ N": "52.290864",
+			"WGS84 λ E": "21.042458",
+			"Identyfikator miasta": 1006,
+			"Nazwa miasta": "Warszawa",
+			"Gmina": "Warszawa",
+			"Powiat": "Warszawa",
+			"Województwo": "MAZOWIECKIE",
+			"Ulica": "ul. Kondratowicza 8"
+		},
+		{
+			"Identyfikator stacji": 562,
+			"Kod stacji": "MzZyraRoosev",
+			"Nazwa stacji": "Żyrardów, ul. Roosevelta",
+			"WGS84 φ N": "52.053811",
+			"WGS84 λ E": "20.429892",
+			"Identyfikator miasta": 1130,
+			"Nazwa miasta": "Żyrardów",
+			"Gmina": "Żyrardów",
+			"Powiat": "żyrardowski",
+			"Województwo": "MAZOWIECKIE",
+			"Ulica": "ul. Roosevelta 2"
+		}
+	],
+	"meta": {
+		"dc:description": "Usługa sieciowa udostępniająca listę funkcjonujących stacji pomiarowych",
+		"sy:updateFrequency": "1",
+		"dc:language": "pol (ISO 639-2 / ISO 639-3)",
+		"schema:contentType": "application/ld+json",
+		"schema:provider": {
+			"@context": "https://schema.org",
+			"@type": "Organization",
+			"address": {
+				"@type": "PostalAddress",
+				"addressLocality": "Warszawa",
+				"postalCode": "02-362",
+				"streetAddress": "Bitwy Warszawskiej 1920 3"
+			},
+			"email": "api@gios.gov.pl",
+			"name": "Główny Inspektorat Ochrony Środowiska"
+		},
+		"schema:dateModified": "do uzupełnienia po publikacji (ISO 8601)",
+		"dc:title": "Lista stacji pomiarowych",
+		"schema:datePublished": "10.04.2017",
+		"schema:keywords": "powietrze, jakość powietrza, zanieczyszczenie powietrza, stacje pomiarowe, stanowiska pomiarowe, monitoring powietrza, Państwowy Monitoring Środowiska, środowisko, stan środowiska",
+		"sy:updatePeriod": "year",
+		"schema:isPartOf": "Państwowy Monitoring Środowiska, Jakość powietrza"
+	},
+	"links": {
+		"next": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=1000",
+		"last": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+		"prev": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+		"self": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+		"first": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000"
+	},
+	"totalPages": 1
+}

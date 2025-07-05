@@ -1,29 +1,70 @@
 {
-  "id": 117,
-  "stCalcDate": "2020-07-31 15:10:17",
-  "stIndexLevel": { "id": 1, "indexLevelName": "Dobry" },
-  "stSourceDataDate": "2020-07-31 14:00:00",
-  "so2CalcDate": "2020-07-31 15:10:17",
-  "so2IndexLevel": { "id": 0, "indexLevelName": "Bardzo dobry" },
-  "so2SourceDataDate": "2020-07-31 14:00:00",
-  "no2CalcDate": 1596201017000,
-  "no2IndexLevel": { "id": 0, "indexLevelName": "Bardzo dobry" },
-  "no2SourceDataDate": "2020-07-31 14:00:00",
-  "coCalcDate": "2020-07-31 15:10:17",
-  "coIndexLevel": { "id": 0, "indexLevelName": "Bardzo zły" },
-  "coSourceDataDate": "2020-07-31 14:00:00",
-  "pm10CalcDate": "2020-07-31 15:10:17",
-  "pm10IndexLevel": { "id": 0, "indexLevelName": "Umiarkowany" },
-  "pm10SourceDataDate": "2020-07-31 14:00:00",
-  "pm25CalcDate": "2020-07-31 15:10:17",
-  "pm25IndexLevel": { "id": 0, "indexLevelName": "Dostateczny" },
-  "pm25SourceDataDate": "2020-07-31 14:00:00",
-  "o3CalcDate": "2020-07-31 15:10:17",
-  "o3IndexLevel": { "id": 1, "indexLevelName": "Zły" },
-  "o3SourceDataDate": "2020-07-31 14:00:00",
-  "c6h6CalcDate": "2020-07-31 15:10:17",
-  "c6h6IndexLevel": { "id": 0, "indexLevelName": "Bardzo dobry" },
-  "c6h6SourceDataDate": "2020-07-31 14:00:00",
-  "stIndexStatus": true,
-  "stIndexCrParam": "OZON"
+  "@context": {
+    "AqIndex": {
+      "@id": "https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex"
+    },
+    "links": "https://schema.org/relatedLink",
+    "totalPages": "https://schema.org/numberOfPages"
+  },
+  "AqIndex": {
+    "Identyfikator stacji pomiarowej": 552,
+    "Data wykonania obliczeń indeksu": "2025-07-04 14:35:10",
+    "Wartość indeksu": 1,
+    "Nazwa kategorii indeksu": "Dobry",
+    "Data danych źródłowych, z których policzono wartość indeksu dla wskaźnika st": "2025-07-04 14:00:00",
+    "Data wykonania obliczeń indeksu dla wskaźnika SO2": "2025-07-04 14:35:10",
+    "Wartość indeksu dla wskaźnika SO2": null,
+    "Nazwa kategorii indeksu dla wskażnika SO2": null,
+    "Data danych źródłowych, z których policzono wartość indeksu dla wskaźnika SO2": null,
+    "Data wykonania obliczeń indeksu dla wskaźnika NO2": "2025-07-04 14:35:10",
+    "Wartość indeksu dla wskaźnika NO2": 0,
+    "Nazwa kategorii indeksu dla wskażnika NO2": "Bardzo dobry",
+    "Data danych źródłowych, z których policzono wartość indeksu dla wskaźnika NO2": "2025-07-04 14:00:00",
+    "Data wykonania obliczeń indeksu dla wskaźnika PM10": "2025-07-04 14:35:10",
+    "Wartość indeksu dla wskaźnika PM10": 0,
+    "Nazwa kategorii indeksu dla wskażnika PM10": "Bardzo dobry",
+    "Data danych źródłowych, z których policzono wartość indeksu dla wskaźnika PM10": "2025-07-04 14:00:00",
+    "Data wykonania obliczeń indeksu dla wskaźnika PM2.5": "2025-07-04 14:35:10",
+    "Wartość indeksu dla wskaźnika PM2.5": 0,
+    "Nazwa kategorii indeksu dla wskażnika PM2.5": "Bardzo dobry",
+    "Data danych źródłowych, z których policzono wartość indeksu dla wskaźnika PM2.5": "2025-07-04 14:00:00",
+    "Data wykonania obliczeń indeksu dla wskaźnika O3": "2025-07-04 14:35:10",
+    "Wartość indeksu dla wskaźnika O3": 1,
+    "Nazwa kategorii indeksu dla wskażnika O3": "Dobry",
+    "Data danych źródłowych, z których policzono wartość indeksu dla wskaźnika O3": "2025-07-04 14:00:00",
+    "Status indeksu ogólnego dla stacji pomiarowej": true,
+    "Kod zanieczyszczenia krytycznego": "OZON"
+  },
+  "meta": {
+    "dc:description": "Usługa sieciowa udostępniająca bieżące wskazania Polskiego indeksu jakości powietrza oraz indeksów cząstkowych zanieczyszczeń: pyłu zawieszonego PM10 i PM2,5, dwutlenku siarki, dwutlenku azotu, ozonu, w podziale na 6 kategorii lub jako \"Brak indeksu\". Usługa zwraca dane na podstawie identyfikatora stacji pomiarowej w czasie lokalnym.",
+    "sy:updateFrequency": "1",
+    "dc:language": "pol (ISO 639-2 / ISO 639-3)",
+    "schema:contentType": "application/ld+json",
+    "schema:provider": {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Warszawa",
+        "postalCode": "02-362",
+        "streetAddress": "Bitwy Warszawskiej 1920 3"
+      },
+      "email": "api@gios.gov.pl",
+      "name": "Główny Inspektorat Ochrony Środowiska"
+    },
+    "schema:dateModified": "03.11.2022",
+    "dc:title": "Bieżące wskazania Polskiego indeksu jakości powietrza",
+    "schema:datePublished": "10.04.2017",
+    "schema:keywords": "indeks, indeks jakości powietrza, dobra jakość powietrza, zła jakość powietrza, dane pomiarowe, powietrze, jakość powietrza, zanieczyszczenie powietrza, stacje pomiarowe, stanowiska pomiarowe, monitoring powietrza, Państwowy Monitoring Środowiska, środowisko, stan środowiska",
+    "sy:updatePeriod": "hourly",
+    "schema:isPartOf": "Państwowy Monitoring Środowiska, Jakość powietrza"
+  },
+  "links": {
+    "next": "https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/552?page=1&size=20",
+    "last": "https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/552?page=0&size=20",
+    "prev": "https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/552?page=0&size=20",
+    "self": "https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/552?page=0&size=20",
+    "first": "https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/552?page=0&size=20"
+  },
+  "totalPages": 1
 }

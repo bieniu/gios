@@ -1,72 +1,99 @@
-[
-  {
-    "id": 672,
-    "stationId": 117,
-    "param": {
-      "paramName": "dwutlenek siarki",
-      "paramFormula": "SO2",
-      "paramCode": "SO2",
-      "idParam": 1
-    }
+{
+  "@context": {
+    "Lista stanowisk pomiarowych dla podanej stacji": {
+      "@id": "https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors"
+    },
+    "links": "https://schema.org/relatedLink",
+    "totalPages": "https://schema.org/numberOfPages"
   },
-  {
-    "id": 658,
-    "stationId": 117,
-    "param": {
-      "paramName": "benzen",
-      "paramFormula": "C6H6",
-      "paramCode": "C6H6",
-      "idParam": 10
+  "Lista stanowisk pomiarowych dla podanej stacji": [
+    {
+      "Identyfikator stanowiska": 3759,
+      "Identyfikator stacji": 552,
+      "Wskaźnik": "tlenek azotu",
+      "Wskaźnik - wzór": "NO",
+      "Wskaźnik - kod": "NO",
+      "Id wskaźnika": 16
+    },
+    {
+      "Identyfikator stanowiska": 3760,
+      "Identyfikator stacji": 552,
+      "Wskaźnik": "dwutlenek azotu",
+      "Wskaźnik - wzór": "NO2",
+      "Wskaźnik - kod": "NO2",
+      "Id wskaźnika": 6
+    },
+    {
+      "Identyfikator stanowiska": 3761,
+      "Identyfikator stacji": 552,
+      "Wskaźnik": "tlenki azotu",
+      "Wskaźnik - wzór": "NOx",
+      "Wskaźnik - kod": "NOx",
+      "Id wskaźnika": 7
+    },
+    {
+      "Identyfikator stanowiska": 3762,
+      "Identyfikator stacji": 552,
+      "Wskaźnik": "ozon",
+      "Wskaźnik - wzór": "O3",
+      "Wskaźnik - kod": "O3",
+      "Id wskaźnika": 5
+    },
+    {
+      "Identyfikator stanowiska": 3764,
+      "Identyfikator stacji": 552,
+      "Wskaźnik": "pył zawieszony PM10",
+      "Wskaźnik - wzór": "PM10",
+      "Wskaźnik - kod": "PM10",
+      "Id wskaźnika": 3
+    },
+    {
+      "Identyfikator stanowiska": 3765,
+      "Identyfikator stacji": 552,
+      "Wskaźnik": "pył zawieszony PM2.5",
+      "Wskaźnik - wzór": "PM2.5",
+      "Wskaźnik - kod": "PM2.5",
+      "Id wskaźnika": 69
+    },
+    {
+      "Identyfikator stanowiska": 14688,
+      "Identyfikator stacji": 552,
+      "Wskaźnik": "pył zawieszony PM2.5",
+      "Wskaźnik - wzór": "PM2.5",
+      "Wskaźnik - kod": "PM2.5",
+      "Id wskaźnika": 69
     }
+  ],
+  "meta": {
+    "dc:description": "Usługa sieciowa udostępniająca listę funkcjonujących stanowisk pomiarowych",
+    "sy:updateFrequency": "1",
+    "dc:language": "pol (ISO 639-2 / ISO 639-3)",
+    "schema:contentType": "application/ld+json",
+    "schema:provider": {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Warszawa",
+        "postalCode": "02-362",
+        "streetAddress": "Bitwy Warszawskiej 1920 3"
+      },
+      "email": "api@gios.gov.pl",
+      "name": "Główny Inspektorat Ochrony Środowiska"
+    },
+    "schema:dateModified": "03.11.2022",
+    "dc:title": "Lista stanowisk pomiarowych na stacji",
+    "schema:datePublished": "10.04.2017",
+    "schema:keywords": "powietrze, jakość powietrza, zanieczyszczenie powietrza, stacje pomiarowe, stanowiska pomiarowe, monitoring powietrza, Państwowy Monitoring Środowiska, środowisko, stan środowiska",
+    "sy:updatePeriod": "year",
+    "schema:isPartOf": "Państwowy Monitoring Środowiska, Jakość powietrza"
   },
-  {
-    "id": 660,
-    "stationId": 117,
-    "param": {
-      "paramName": "tlenek węgla",
-      "paramFormula": "CO",
-      "paramCode": "CO",
-      "idParam": 8
-    }
+  "links": {
+    "next": "https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/552?page=1&size=20",
+    "last": "https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/552?page=0&size=20",
+    "prev": "https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/552?page=0&size=20",
+    "self": "https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/552?page=0&size=20",
+    "first": "https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/552?page=0&size=20"
   },
-  {
-    "id": 665,
-    "stationId": 117,
-    "param": {
-      "paramName": "dwutlenek azotu",
-      "paramFormula": "NO2",
-      "paramCode": "NO2",
-      "idParam": 6
-    }
-  },
-  {
-    "id": 667,
-    "stationId": 117,
-    "param": {
-      "paramName": "ozon",
-      "paramFormula": "O3",
-      "paramCode": "O3",
-      "idParam": 5
-    }
-  },
-  {
-    "id": 670,
-    "stationId": 117,
-    "param": {
-      "paramName": "pył zawieszony PM2.5",
-      "paramFormula": "PM2.5",
-      "paramCode": "PM2.5",
-      "idParam": 69
-    }
-  },
-  {
-    "id": 14395,
-    "stationId": 117,
-    "param": {
-      "paramName": "pył zawieszony PM10",
-      "paramFormula": "PM10",
-      "paramCode": "PM10",
-      "idParam": 3
-    }
-  }
-]
+  "totalPages": 1
+}

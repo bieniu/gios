@@ -1,0 +1,7 @@
+{
+  "error_result": "Przepraszamy, nie można zwrócić danych.",
+  "error_reason": "Dla stanowiska typu manualnego wyniki pomiarów nie są dostępne na bieżąco, są one udostępniane po 4-8 tygodniach od poboru próby przez usługę API „Archiwalne dane pomiarowe”",
+  "error_solution": "Prosimy o podanie wartości parametrów zgodnych z dokumentacją.",
+  "error_help": "https://powietrze.gios.gov.pl/pjp/content/api",
+  "error_code": "API-ERR-100003"
+}

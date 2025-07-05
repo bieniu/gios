@@ -1,30 +1,34 @@
 # serializer version: 1
 # name: test_init_only
   dict({
-    552: GiosStation(id=552, name='Test Name', latitude=99.99, longitude=88.88),
+    552: GiosStation(id=552, name='Warszawa, ul. Kondratowicza', latitude=52.290864, longitude=21.042458),
+    562: GiosStation(id=562, name='Żyrardów, ul. Roosevelta', latitude=52.053811, longitude=20.429892),
   })
 # ---
 # name: test_no_indexes_data
   dict({
-    552: GiosStation(id=552, name='Test Name', latitude=99.99, longitude=88.88),
+    552: GiosStation(id=552, name='Warszawa, ul. Kondratowicza', latitude=52.290864, longitude=21.042458),
+    562: GiosStation(id=562, name='Żyrardów, ul. Roosevelta', latitude=52.053811, longitude=20.429892),
   })
 # ---
 # name: test_no_indexes_data.1
-  GiosSensors(aqi=None, c6h6=Sensor(name='benzene', id=658, index=None, value=2.57148), co=Sensor(name='carbon monoxide', id=660, index=None, value=786.702), no2=Sensor(name='nitrogen dioxide', id=665, index=None, value=59.9545), o3=Sensor(name='ozone', id=667, index=None, value=8.63111), pm10=Sensor(name='particulate matter 10', id=14395, index=None, value=123.879), pm25=Sensor(name='particulate matter 2.5', id=670, index=None, value=59.9428), so2=Sensor(name='sulfur dioxide', id=672, index=None, value=11.6502))
+  GiosSensors(aqi=None, c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index=None, value=5.1), nox=None, o3=Sensor(name='ozone', id=3762, index=None, value=83.9), pm10=Sensor(name='particulate matter 10', id=3764, index=None, value=7.6), pm25=Sensor(name='particulate matter 2.5', id=14688, index=None, value=2.3), so2=None)
 # ---
 # name: test_valid_data_first_value
   dict({
-    552: GiosStation(id=552, name='Test Name', latitude=99.99, longitude=88.88),
+    552: GiosStation(id=552, name='Warszawa, ul. Kondratowicza', latitude=52.290864, longitude=21.042458),
+    562: GiosStation(id=562, name='Żyrardów, ul. Roosevelta', latitude=52.053811, longitude=20.429892),
   })
 # ---
 # name: test_valid_data_first_value.1
-  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=Sensor(name='benzene', id=658, index='very_good', value=2.57148), co=Sensor(name='carbon monoxide', id=660, index='very_bad', value=786.702), no2=Sensor(name='nitrogen dioxide', id=665, index='very_good', value=59.9545), o3=Sensor(name='ozone', id=667, index='bad', value=8.63111), pm10=Sensor(name='particulate matter 10', id=14395, index='moderate', value=123.879), pm25=Sensor(name='particulate matter 2.5', id=670, index='sufficient', value=59.9428), so2=Sensor(name='sulfur dioxide', id=672, index='very_good', value=11.6502))
+  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index='very_good', value=5.1), nox=None, o3=Sensor(name='ozone', id=3762, index='good', value=83.9), pm10=Sensor(name='particulate matter 10', id=3764, index='very_good', value=7.6), pm25=Sensor(name='particulate matter 2.5', id=14688, index='very_good', value=2.3), so2=None)
 # ---
 # name: test_valid_data_second_value
   dict({
-    552: GiosStation(id=552, name='Test Name', latitude=99.99, longitude=88.88),
+    552: GiosStation(id=552, name='Warszawa, ul. Kondratowicza', latitude=52.290864, longitude=21.042458),
+    562: GiosStation(id=562, name='Żyrardów, ul. Roosevelta', latitude=52.053811, longitude=20.429892),
   })
 # ---
 # name: test_valid_data_second_value.1
-  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=Sensor(name='benzene', id=658, index='very_good', value=3.24432), co=Sensor(name='carbon monoxide', id=660, index='very_bad', value=1041.74), no2=Sensor(name='nitrogen dioxide', id=665, index='very_good', value=52.6198), o3=Sensor(name='ozone', id=667, index='bad', value=4.93778), pm10=Sensor(name='particulate matter 10', id=14395, index='moderate', value=115.559), pm25=Sensor(name='particulate matter 2.5', id=670, index='sufficient', value=72.0243), so2=Sensor(name='sulfur dioxide', id=672, index='very_good', value=11.501))
+  GiosSensors(aqi=Sensor(name='AQI', id=None, index=None, value='good'), c6h6=None, co=None, no=Sensor(name='nitrogen monoxide', id=3759, index=None, value=0.6), no2=Sensor(name='nitrogen dioxide', id=3760, index='very_good', value=4.0), nox=None, o3=Sensor(name='ozone', id=3762, index='good', value=80.7), pm10=Sensor(name='particulate matter 10', id=3764, index='very_good', value=7.4), pm25=Sensor(name='particulate matter 2.5', id=14688, index='very_good', value=2.3), so2=None)
 # ---
