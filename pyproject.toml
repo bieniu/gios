@@ -23,6 +23,7 @@ requires-python = ">=3.12"
 dependencies = [
   "aiohttp>=3.9.4",
   "dacite>=1.7.0",
+  "yarl",
 ]
 
 [project.optional-dependencies]

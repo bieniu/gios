@@ -8,6 +8,7 @@ from typing import Any, Final, Self, cast
 
 from aiohttp import ClientSession
 from dacite import from_dict
+from yarl import URL
 
 from .const import (
     ATTR_AQI,
@@ -156,7 +157,7 @@ class Gios:
 
     async def _get_stations(self) -> Any:
         """Retrieve list of measurement stations."""
-        result = await self._async_get(URL_STATIONS)
+        result = await self._async_get(URL_STATIONS.with_query(page=0, size=1000))
         return result.get("Lista stacji pomiarowych", [])
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
@@ -171,7 +172,7 @@ class Gios:
 
     async def _get_station(self) -> Any:
         """Retrieve measuring station data."""
-        url = URL_STATION.format(self.station_id)
+        url = URL_STATION / str(self.station_id)
         result = await self._async_get(url)
         return result.get("Lista stanowisk pomiarowych dla podanej stacji", [])
 
@@ -183,15 +184,15 @@ class Gios:
 
     async def _get_sensor(self, sensor: int) -> Any:
         """Retrieve sensor data."""
-        url = URL_SENSOR.format(sensor)
+        url = URL_SENSOR / str(sensor)
         return await self._async_get(url, do_not_raise=True)
 
     async def _get_indexes(self) -> Any:
         """Retrieve indexes data."""
-        url = URL_INDEXES.format(self.station_id)
+        url = URL_INDEXES / str(self.station_id)
         return await self._async_get(url)
 
-    async def _async_get(self, url: str, do_not_raise: bool = False) -> Any:
+    async def _async_get(self, url: URL, do_not_raise: bool = False) -> Any:
         """Retrieve data from GIOS API."""
         async with self.session.get(url) as resp:
             _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
