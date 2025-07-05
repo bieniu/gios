@@ -2,6 +2,8 @@
 
 from typing import Final
 
+from yarl import URL
+
 ATTR_AQI: Final[str] = "AQI"
 ATTR_ID: Final[str] = "id"
 ATTR_INDEX: Final[str] = "index"
@@ -9,12 +11,13 @@ ATTR_INDEX_LEVEL: Final[str] = "Nazwa kategorii indeksu dla wskażnika {}"
 ATTR_NAME: Final[str] = "name"
 ATTR_VALUE: Final[str] = "value"
 
-URL_INDEXES: Final[str] = "https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/{}"
-URL_SENSOR: Final[str] = "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{}"
-URL_STATION: Final[str] = "https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{}"
-URL_STATIONS: Final[str] = (
-    "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000"
-)
+URL_API_BASE: Final[URL] = URL("https://api.gios.gov.pl/pjp-api/v1/rest")
+
+URL_INDEXES: Final[URL] = URL_API_BASE / "aqindex" / "getIndex"
+URL_SENSOR: Final[URL] = URL_API_BASE / "data" / "getData"
+URL_STATION: Final[URL] = URL_API_BASE / "station" / "sensors"
+URL_STATIONS: Final[URL] = URL_API_BASE / "station" / "findAll"
+
 
 POLLUTANT_MAP = {
     "benzen": "benzene",
