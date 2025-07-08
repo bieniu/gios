@@ -28,7 +28,7 @@ POLLUTANT_MAP = {
     "pył zawieszony PM2.5": "particulate matter 2.5",
     "tlenek azotu": "nitrogen monoxide",
     "tlenek węgla": "carbon monoxide",
-    "tleneki azotu": "nitrogen oxides",
+    "tlenki azotu": "nitrogen oxides",
 }
 STATE_MAP = {
     "Bardzo dobry": "very_good",
