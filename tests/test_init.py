@@ -455,3 +455,70 @@ async def test_invalid_station_id(
 
     with pytest.raises(NoStationError, match="0 is not a valid measuring station ID"):
         await Gios.create(session, INVALID_STATION_ID)
+
+
+@pytest.mark.asyncio
+async def test_no_common_index(
+    session: aiohttp.ClientSession,
+    session_mock: aioresponses,
+    stations: list[dict[str, Any]],
+    station: list[dict[str, Any]],
+    indexes: dict[str, Any],
+    sensor_3759: dict[str, Any],
+    sensor_3760: dict[str, Any],
+    sensor_3761: dict[str, Any],
+    sensor_3762: dict[str, Any],
+    sensor_3764: dict[str, Any],
+    sensor_3765: dict[str, Any],
+    sensor_14688: dict[str, Any],
+) -> None:
+    """Test with valid data and valid first sensor's value."""
+    indexes["AqIndex"]["Nazwa kategorii indeksu"] = "Brak indeksu"
+    indexes["AqIndex"]["Status indeksu ogólnego dla stacji pomiarowej"] = False
+
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        payload=stations,
+    )
+    session_mock.get(
+        f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
+        payload=station,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3759",
+        payload=sensor_3759,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3760",
+        payload=sensor_3760,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3761",
+        payload=sensor_3761,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3762",
+        payload=sensor_3762,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3764",
+        payload=sensor_3764,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3765",
+        payload=sensor_3765,
+        status=HTTPStatus.BAD_REQUEST.value,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/14688",
+        payload=sensor_14688,
+    )
+    session_mock.get(
+        f"https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/{VALID_STATION_ID}",
+        payload=indexes,
+    )
+
+    gios = await Gios.create(session, VALID_STATION_ID)
+    data = await gios.async_update()
+
+    assert data.aqi is None
