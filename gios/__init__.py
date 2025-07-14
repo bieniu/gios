@@ -145,10 +145,10 @@ class Gios:
 
         if (aq_index := indexes.get("AqIndex", {})).get(
             "Status indeksu ogólnego dla stacji pomiarowej"
-        ):
+        ) and (index_value := aq_index.get("Nazwa kategorii indeksu")):
             data[ATTR_AQI.lower()] = {
                 ATTR_NAME: ATTR_AQI,
-                ATTR_VALUE: STATE_MAP[aq_index.get("Nazwa kategorii indeksu")],
+                ATTR_VALUE: STATE_MAP[index_value],
             }
 
         if data.get("pm2.5"):
