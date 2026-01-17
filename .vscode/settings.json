@@ -1,5 +1,4 @@
 {
-    "python.pythonPath": "venv/bin/python",
     "python.testing.pytestArgs": [
         "tests"
     ],
@@ -7,6 +6,5 @@
     "python.testing.pytestEnabled": true,
     "files.associations": {
         "*.yaml": "home-assistant"
-    },
-    "python.analysis.typeCheckingMode": "basic"
+    }
 }

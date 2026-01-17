@@ -1,3 +1,5 @@
+[![CI](https://img.shields.io/github/actions/workflow/status/bieniu/gios/ci.yml?branch=master&label=CI&logo=github&style=popout)](https://github.com/bieniu/gios/actions/workflows/ci.yml?query=branch%3Amaster)
+[![codecov](https://codecov.io/github/bieniu/gios/graph/badge.svg?token=TAC2HB79HA)](https://codecov.io/github/bieniu/gios)
 [![GitHub Release][releases-shield]][releases]
 [![PyPI][pypi-releases-shield]][pypi-releases]
 [![PyPI - Downloads][pypi-downloads]][pypi-statistics]
@@ -52,6 +54,19 @@ loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
 loop.close()
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## How to create a dev environment
+
+```bash
+git clone https://github.com/bieniu/gios.git
+cd gios
+./scripts/setup-local-env.sh
+```
+
 [releases]: https://github.com/bieniu/gios/releases
 [releases-shield]: https://img.shields.io/github/release/bieniu/gios.svg?style=popout
 [pypi-releases]: https://pypi.org/project/gios/
