@@ -9,17 +9,19 @@ updates:
     groups:
       dev:
         patterns:
-          - "aioresponses"
           - "prek"
+          - "ruff"
+          - "ty"
+      test:
+        patterns:
+          - "aioresponses"
           - "pytest"
           - "pytest-*"
-          - "ruff"
           - "syrupy"
-          - "ty"
-        ignore:
-          - dependency-name: "aiohttp"
-          - dependency-name: "dacite"
-          - dependency-name: "yarl"
+    ignore:
+      - dependency-name: "aiohttp"
+      - dependency-name: "dacite"
+      - dependency-name: "yarl"
 
   - package-ecosystem: "github-actions"
     directory: "/"
