@@ -157,10 +157,25 @@ class Gios:
         result: GiosSensors = from_dict(data_class=GiosSensors, data=data)
         return result
 
-    async def _get_stations(self) -> Any:
-        """Retrieve list of measurement stations."""
-        result = await self._async_get(URL_STATIONS.with_query(page=0, size=1000))
-        return result.get("Lista stacji pomiarowych", [])
+    async def _get_stations(self) -> list[dict[str, Any]]:
+        """Retrieve list of measurement stations.
+
+        The GIOS API returns HTTP 500 when ``size`` exceeds roughly 150,
+        regardless of what the OpenAPI spec suggests. We use ``size=150`` and
+        iterate through pages, stopping when a page returns no items or after
+        a generous safety cap.
+        """
+        all_stations: list[dict[str, Any]] = []
+        page = 0
+        max_pages = 50
+        while page < max_pages:
+            result = await self._async_get(URL_STATIONS.with_query(page=page, size=150))
+            page_items = result.get("Lista stacji pomiarowych", [])
+            if not page_items:
+                break
+            all_stations.extend(page_items)
+            page += 1
+        return all_stations
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
         """Parse stations data."""

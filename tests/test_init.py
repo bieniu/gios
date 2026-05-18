@@ -27,8 +27,12 @@ async def test_init_only(
 ) -> None:
     """Test init without station."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
 
     gios = await Gios.create(session)
@@ -61,8 +65,12 @@ async def test_valid_data_first_value(
 ) -> None:
     """Test with valid data and valid first sensor's value."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
@@ -119,8 +127,12 @@ async def test_api_error(
 ) -> None:
     """Test GIOS API error."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         status=HTTPStatus.NOT_FOUND.value,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
 
     with pytest.raises(ApiError) as excinfo:
@@ -152,8 +164,12 @@ async def test_valid_data_second_value(
     sensor_3764["Lista danych pomiarowych"][0]["Wartość"] = None
 
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
@@ -221,8 +237,12 @@ async def test_no_indexes_data(
 ) -> None:
     """Test with valid data."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
@@ -303,8 +323,12 @@ async def test_no_sensor_data_1(
     sensor_14688["Lista danych pomiarowych"][1]["Wartość"] = None
 
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
@@ -360,8 +384,12 @@ async def test_invalid_sensor_data_2(
 ) -> None:
     """Test with invalid sensor data."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
@@ -411,8 +439,12 @@ async def test_no_station_data(
 ) -> None:
     """Test with no station data."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
@@ -433,7 +465,11 @@ async def test_no_stations_data(
 ) -> None:
     """Test with no stations data."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
+        payload={},
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
         payload={},
     )
 
@@ -449,8 +485,12 @@ async def test_invalid_station_id(
 ) -> None:
     """Test with invalid station_id."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
 
     with pytest.raises(NoStationError, match="0 is not a valid measuring station ID"):
@@ -477,8 +517,12 @@ async def test_no_common_index(
     indexes["AqIndex"]["Status indeksu ogólnego dla stacji pomiarowej"] = False
 
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload=stations,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
     )
     session_mock.get(
         f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
