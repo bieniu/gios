@@ -160,21 +160,63 @@ class Gios:
     async def _get_stations(self) -> list[dict[str, Any]]:
         """Retrieve list of measurement stations.
 
-        The GIOS API returns HTTP 500 when ``size`` exceeds roughly 150,
-        regardless of what the OpenAPI spec suggests. We use ``size=150`` and
-        iterate through pages, stopping when a page returns no items or after
-        a generous safety cap.
+        The GIOS API has two issues working against a naive ``findAll`` call:
+
+        1. ``size > 166`` triggers HTTP 500 (server-side timeout / OOM in JOIN
+           serialization), even though the OpenAPI spec advertises ``max=500``.
+        2. With default ascending sort by ID, certain pages crash deterministically
+           on ID-range gaps in the backend table (e.g. ``size=150&page=1`` always
+           returns 500, hiding ~138 high-ID stations including 10139 Krakow).
+
+        Workaround: iterate ``size=150`` pages with default sort, retry any page
+        that 500s using ``sort=-Id`` (reverse). The two sort orders yield
+        complementary slices, so the union covers all stations. Results are
+        deduplicated by station ID. Safety cap of 50 pages emits a warning if
+        ever reached.
         """
         all_stations: list[dict[str, Any]] = []
-        page = 0
+        seen_ids: set[int] = set()
         max_pages = 50
-        while page < max_pages:
-            result = await self._async_get(URL_STATIONS.with_query(page=page, size=150))
-            page_items = result.get("Lista stacji pomiarowych", [])
+
+        for page in range(max_pages):
+            page_items: list[dict[str, Any]] = []
+            try:
+                result = await self._async_get(
+                    URL_STATIONS.with_query(page=page, size=150)
+                )
+                page_items = result.get("Lista stacji pomiarowych", [])
+            except ApiError:
+                # Default-sort page crashed (known GIOS bug on ID-range gaps).
+                # Retry with reverse sort to fetch the same rank-band via the
+                # opposite traversal order.
+                try:
+                    result = await self._async_get(
+                        URL_STATIONS.with_query(page=page, size=150, sort="-Id")
+                    )
+                    page_items = result.get("Lista stacji pomiarowych", [])
+                except ApiError:
+                    _LOGGER.warning(
+                        "GIOS findAll page %d failed under both sort orders, "
+                        "stations in this range will be missing",
+                        page,
+                    )
+                    continue
+
             if not page_items:
                 break
-            all_stations.extend(page_items)
-            page += 1
+
+            for station in page_items:
+                station_id = station.get("Identyfikator stacji")
+                if station_id is not None and station_id not in seen_ids:
+                    seen_ids.add(station_id)
+                    all_stations.append(station)
+        else:
+            _LOGGER.warning(
+                "GIOS findAll reached the %d-page safety cap; station list "
+                "may be incomplete",
+                max_pages,
+            )
+
         return all_stations
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:

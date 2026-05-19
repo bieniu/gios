@@ -8,7 +8,7 @@ import pytest
 from aioresponses import aioresponses
 from syrupy import SnapshotAssertion
 
-from gios import ApiError, Gios, InvalidSensorsDataError, NoStationError
+from gios import Gios, InvalidSensorsDataError, NoStationError
 
 INVALID_STATION_ID = 0
 
@@ -125,20 +125,30 @@ async def test_valid_data_first_value(
 async def test_api_error(
     session: aiohttp.ClientSession, session_mock: aioresponses
 ) -> None:
-    """Test GIOS API error."""
+    """Test that NoStationError is raised when both sort orders fail.
+
+    The library retries with ``sort=-Id`` on failure. If both fail, the page
+    is skipped with a warning, returning an empty station list. Without
+    stations, ``initialize`` cannot validate ``station_id`` and raises
+    ``NoStationError``.
+    """
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         status=HTTPStatus.NOT_FOUND.value,
     )
     session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150&sort=-Id",
+        status=HTTPStatus.NOT_FOUND.value,
+    )
+    # After page 0 fails under both sorts, loop continues to page 1, which
+    # returns empty and terminates iteration.
+    session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
         payload={},
     )
 
-    with pytest.raises(ApiError) as excinfo:
+    with pytest.raises(NoStationError):
         await Gios.create(session, VALID_STATION_ID)
-
-    assert str(excinfo.value) == "404"
 
 
 @pytest.mark.asyncio
@@ -468,13 +478,183 @@ async def test_no_stations_data(
         "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
         payload={},
     )
+
+    with pytest.raises(NoStationError, match="552 is not a valid measuring station ID"):
+        await Gios.create(session, VALID_STATION_ID)
+
+
+@pytest.mark.asyncio
+async def test_retry_with_reverse_sort(
+    session: aiohttp.ClientSession,
+    session_mock: aioresponses,
+    stations: list[dict[str, Any]],
+    station: list[dict[str, Any]],
+    indexes: dict[str, Any],
+    sensor_3759: dict[str, Any],
+    sensor_3760: dict[str, Any],
+    sensor_3761: dict[str, Any],
+    sensor_3762: dict[str, Any],
+    sensor_3764: dict[str, Any],
+    sensor_3765: dict[str, Any],
+    sensor_14688: dict[str, Any],
+) -> None:
+    """Test page retry with ``sort=-Id`` when default sort returns HTTP 500.
+
+    GIOS deterministically crashes on some pages due to ID-range gaps in the
+    backend. Library should retry with reverse sort to access the same data.
+    """
+    # page=0 default sort: fail (simulating the GIOS bug)
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
+        status=HTTPStatus.INTERNAL_SERVER_ERROR.value,
+    )
+    # page=0 with sort=-Id: succeeds (the workaround)
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150&sort=-Id",
+        payload=stations,
+    )
+    # page=1: empty, terminates pagination
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
         payload={},
     )
 
+    session_mock.get(
+        f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
+        payload=station,
+    )
+    for sid, payload in (
+        (3759, sensor_3759),
+        (3760, sensor_3760),
+        (3761, sensor_3761),
+        (3762, sensor_3762),
+        (3764, sensor_3764),
+        (14688, sensor_14688),
+    ):
+        session_mock.get(
+            f"https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{sid}",
+            payload=payload,
+        )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3765",
+        payload=sensor_3765,
+        status=HTTPStatus.BAD_REQUEST.value,
+    )
+    session_mock.get(
+        f"https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/{VALID_STATION_ID}",
+        payload=indexes,
+    )
+
+    gios = await Gios.create(session, VALID_STATION_ID)
+
+    assert gios.station_name == VALID_STATION_NAME
+    assert gios.station_id == VALID_STATION_ID
+
+
+@pytest.mark.asyncio
+async def test_both_sort_orders_fail(
+    session: aiohttp.ClientSession,
+    session_mock: aioresponses,
+) -> None:
+    """Test that a page failing under both sort orders is skipped with a warning.
+
+    If both default and ``sort=-Id`` return 500 for the same page, the library
+    logs a warning and continues to the next page rather than aborting.
+    """
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
+        status=HTTPStatus.INTERNAL_SERVER_ERROR.value,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150&sort=-Id",
+        status=HTTPStatus.INTERNAL_SERVER_ERROR.value,
+    )
+    # Loop continues to page 1, which returns empty and terminates.
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        payload={},
+    )
+
+    # Both sorts fail on page 0, loop continues to page 1, which returns empty.
+    # Library returns empty station list, station_id validation raises NoStationError.
     with pytest.raises(NoStationError, match="552 is not a valid measuring station ID"):
         await Gios.create(session, VALID_STATION_ID)
+
+
+@pytest.mark.asyncio
+async def test_dedupe_overlapping_pages(
+    session: aiohttp.ClientSession,
+    session_mock: aioresponses,
+    stations: list[dict[str, Any]],
+    station: list[dict[str, Any]],
+    indexes: dict[str, Any],
+    sensor_3759: dict[str, Any],
+    sensor_3760: dict[str, Any],
+    sensor_3761: dict[str, Any],
+    sensor_3762: dict[str, Any],
+    sensor_3764: dict[str, Any],
+    sensor_3765: dict[str, Any],
+    sensor_14688: dict[str, Any],
+) -> None:
+    """Test deduplication when default sort and reverse sort return overlapping data.
+
+    If page 0 with default sort returns stations including ID 552, and page 1
+    (after retry with sort=-Id) returns the same station, the deduped result
+    should still resolve station_id 552 correctly without duplicates.
+    """
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=150",
+        payload=stations,
+    )
+    # page=1 default sort fails, retry with sort=-Id returns same stations
+    # (simulating overlap due to GIOS pagination quirk)
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150",
+        status=HTTPStatus.INTERNAL_SERVER_ERROR.value,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=150&sort=-Id",
+        payload=stations,
+    )
+    # page=2 default empty - terminates
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=2&size=150",
+        payload={},
+    )
+
+    session_mock.get(
+        f"https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{VALID_STATION_ID}",
+        payload=station,
+    )
+    for sid, payload in (
+        (3759, sensor_3759),
+        (3760, sensor_3760),
+        (3761, sensor_3761),
+        (3762, sensor_3762),
+        (3764, sensor_3764),
+        (14688, sensor_14688),
+    ):
+        session_mock.get(
+            f"https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{sid}",
+            payload=payload,
+        )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3765",
+        payload=sensor_3765,
+        status=HTTPStatus.BAD_REQUEST.value,
+    )
+    session_mock.get(
+        f"https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/{VALID_STATION_ID}",
+        payload=indexes,
+    )
+
+    gios = await Gios.create(session, VALID_STATION_ID)
+
+    # Despite overlapping pages, station should resolve and dict should not
+    # contain duplicates.
+    assert gios.station_id == VALID_STATION_ID
+    stations_count = sum(1 for _ in gios.measurement_stations.values())
+    assert stations_count == len(stations.get("Lista stacji pomiarowych", []))
 
 
 @pytest.mark.asyncio
