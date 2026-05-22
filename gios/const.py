@@ -17,6 +17,7 @@ URL_INDEXES: Final[URL] = URL_API_BASE / "aqindex" / "getIndex"
 URL_SENSOR: Final[URL] = URL_API_BASE / "data" / "getData"
 URL_STATION: Final[URL] = URL_API_BASE / "station" / "sensors"
 URL_STATIONS: Final[URL] = URL_API_BASE / "station" / "findAll"
+STATIONS_PAGE_SIZE: Final[int] = 500
 
 
 POLLUTANT_MAP = {

@@ -1,69 +1,69 @@
 {
-	"@context": {
-		"Lista stacji pomiarów": {
-			"@id": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll"
-		},
-		"links": "https://schema.org/relatedLink",
-		"totalPages": "https://schema.org/numberOfPages"
-	},
-	"Lista stacji pomiarowych": [
-		{
-			"Identyfikator stacji": 552,
-			"Kod stacji": "MzWarKondrat",
-			"Nazwa stacji": "Warszawa, ul. Kondratowicza",
-			"WGS84 φ N": "52.290864",
-			"WGS84 λ E": "21.042458",
-			"Identyfikator miasta": 1006,
-			"Nazwa miasta": "Warszawa",
-			"Gmina": "Warszawa",
-			"Powiat": "Warszawa",
-			"Województwo": "MAZOWIECKIE",
-			"Ulica": "ul. Kondratowicza 8"
-		},
-		{
-			"Identyfikator stacji": 562,
-			"Kod stacji": "MzZyraRoosev",
-			"Nazwa stacji": "Żyrardów, ul. Roosevelta",
-			"WGS84 φ N": "52.053811",
-			"WGS84 λ E": "20.429892",
-			"Identyfikator miasta": 1130,
-			"Nazwa miasta": "Żyrardów",
-			"Gmina": "Żyrardów",
-			"Powiat": "żyrardowski",
-			"Województwo": "MAZOWIECKIE",
-			"Ulica": "ul. Roosevelta 2"
-		}
-	],
-	"meta": {
-		"dc:description": "Usługa sieciowa udostępniająca listę funkcjonujących stacji pomiarowych",
-		"sy:updateFrequency": "1",
-		"dc:language": "pol (ISO 639-2 / ISO 639-3)",
-		"schema:contentType": "application/ld+json",
-		"schema:provider": {
-			"@context": "https://schema.org",
-			"@type": "Organization",
-			"address": {
-				"@type": "PostalAddress",
-				"addressLocality": "Warszawa",
-				"postalCode": "02-362",
-				"streetAddress": "Bitwy Warszawskiej 1920 3"
-			},
-			"email": "api@gios.gov.pl",
-			"name": "Główny Inspektorat Ochrony Środowiska"
-		},
-		"schema:dateModified": "do uzupełnienia po publikacji (ISO 8601)",
-		"dc:title": "Lista stacji pomiarowych",
-		"schema:datePublished": "10.04.2017",
-		"schema:keywords": "powietrze, jakość powietrza, zanieczyszczenie powietrza, stacje pomiarowe, stanowiska pomiarowe, monitoring powietrza, Państwowy Monitoring Środowiska, środowisko, stan środowiska",
-		"sy:updatePeriod": "year",
-		"schema:isPartOf": "Państwowy Monitoring Środowiska, Jakość powietrza"
-	},
-	"links": {
-		"next": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=1000",
-		"last": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
-		"prev": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
-		"self": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
-		"first": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000"
-	},
-	"totalPages": 1
+    "@context": {
+        "Lista stacji pomiar\u00f3w": {
+            "@id": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll"
+        },
+        "links": "https://schema.org/relatedLink",
+        "totalPages": "https://schema.org/numberOfPages"
+    },
+    "Lista stacji pomiarowych": [
+        {
+            "Identyfikator stacji": 552,
+            "Kod stacji": "MzWarKondrat",
+            "Nazwa stacji": "Warszawa, ul. Kondratowicza",
+            "WGS84 \u03c6 N": "52.290864",
+            "WGS84 \u03bb E": "21.042458",
+            "Identyfikator miasta": 1006,
+            "Nazwa miasta": "Warszawa",
+            "Gmina": "Warszawa",
+            "Powiat": "Warszawa",
+            "Wojew\u00f3dztwo": "MAZOWIECKIE",
+            "Ulica": "ul. Kondratowicza 8"
+        },
+        {
+            "Identyfikator stacji": 562,
+            "Kod stacji": "MzZyraRoosev",
+            "Nazwa stacji": "\u017byrard\u00f3w, ul. Roosevelta",
+            "WGS84 \u03c6 N": "52.053811",
+            "WGS84 \u03bb E": "20.429892",
+            "Identyfikator miasta": 1130,
+            "Nazwa miasta": "\u017byrard\u00f3w",
+            "Gmina": "\u017byrard\u00f3w",
+            "Powiat": "\u017cyrardowski",
+            "Wojew\u00f3dztwo": "MAZOWIECKIE",
+            "Ulica": "ul. Roosevelta 2"
+        }
+    ],
+    "meta": {
+        "dc:description": "Us\u0142uga sieciowa udost\u0119pniaj\u0105ca list\u0119 funkcjonuj\u0105cych stacji pomiarowych",
+        "sy:updateFrequency": "1",
+        "dc:language": "pol (ISO 639-2 / ISO 639-3)",
+        "schema:contentType": "application/ld+json",
+        "schema:provider": {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Warszawa",
+                "postalCode": "02-362",
+                "streetAddress": "Bitwy Warszawskiej 1920 3"
+            },
+            "email": "api@gios.gov.pl",
+            "name": "G\u0142\u00f3wny Inspektorat Ochrony \u015arodowiska"
+        },
+        "schema:dateModified": "do uzupe\u0142nienia po publikacji (ISO 8601)",
+        "dc:title": "Lista stacji pomiarowych",
+        "schema:datePublished": "10.04.2017",
+        "schema:keywords": "powietrze, jako\u015b\u0107 powietrza, zanieczyszczenie powietrza, stacje pomiarowe, stanowiska pomiarowe, monitoring powietrza, Pa\u0144stwowy Monitoring \u015arodowiska, \u015brodowisko, stan \u015brodowiska",
+        "sy:updatePeriod": "year",
+        "schema:isPartOf": "Pa\u0144stwowy Monitoring \u015arodowiska, Jako\u015b\u0107 powietrza"
+    },
+    "links": {
+        "next": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=500",
+        "last": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
+        "prev": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
+        "self": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
+        "first": "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500"
+    },
+    "totalPages": 1
 }

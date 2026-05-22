@@ -23,11 +23,11 @@ async def test_init_only(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
     snapshot: SnapshotAssertion,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
 ) -> None:
     """Test init without station."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
 
@@ -48,7 +48,7 @@ async def test_valid_data_first_value(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
     snapshot: SnapshotAssertion,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
@@ -61,7 +61,7 @@ async def test_valid_data_first_value(
 ) -> None:
     """Test with valid data and valid first sensor's value."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
     session_mock.get(
@@ -119,7 +119,7 @@ async def test_api_error(
 ) -> None:
     """Test GIOS API error."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         status=HTTPStatus.NOT_FOUND.value,
     )
 
@@ -134,7 +134,7 @@ async def test_valid_data_second_value(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
     snapshot: SnapshotAssertion,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
@@ -152,7 +152,7 @@ async def test_valid_data_second_value(
     sensor_3764["Lista danych pomiarowych"][0]["Wartość"] = None
 
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
     session_mock.get(
@@ -209,7 +209,7 @@ async def test_no_indexes_data(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
     snapshot: SnapshotAssertion,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
@@ -221,7 +221,7 @@ async def test_no_indexes_data(
 ) -> None:
     """Test with valid data."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
     session_mock.get(
@@ -277,7 +277,7 @@ async def test_no_indexes_data(
 async def test_no_sensor_data_1(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
@@ -303,7 +303,7 @@ async def test_no_sensor_data_1(
     sensor_14688["Lista danych pomiarowych"][1]["Wartość"] = None
 
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
     session_mock.get(
@@ -355,12 +355,12 @@ async def test_no_sensor_data_1(
 async def test_invalid_sensor_data_2(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
 ) -> None:
     """Test with invalid sensor data."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
     session_mock.get(
@@ -407,11 +407,11 @@ async def test_invalid_sensor_data_2(
 async def test_no_station_data(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
 ) -> None:
     """Test with no station data."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
     session_mock.get(
@@ -433,7 +433,7 @@ async def test_no_stations_data(
 ) -> None:
     """Test with no stations data."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload={},
     )
 
@@ -445,11 +445,11 @@ async def test_no_stations_data(
 async def test_invalid_station_id(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
 ) -> None:
     """Test with invalid station_id."""
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
 
@@ -461,7 +461,7 @@ async def test_invalid_station_id(
 async def test_no_common_index(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
@@ -477,7 +477,7 @@ async def test_no_common_index(
     indexes["AqIndex"]["Status indeksu ogólnego dla stacji pomiarowej"] = False
 
     session_mock.get(
-        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=1000",
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
         payload=stations,
     )
     session_mock.get(
@@ -522,3 +522,34 @@ async def test_no_common_index(
     data = await gios.async_update()
 
     assert data.aqi is None
+
+
+@pytest.mark.asyncio
+async def test_multiple_pages(
+    session: aiohttp.ClientSession,
+    session_mock: aioresponses,
+    stations: dict[str, Any],
+) -> None:
+    """Test that all pages are fetched when totalPages > 1."""
+    stations_list: list[dict[str, Any]] = stations["Lista stacji pomiarowych"]
+    page_0_payload = {
+        "Lista stacji pomiarowych": stations_list[:1],
+        "totalPages": 2,
+    }
+    page_1_payload = {
+        "Lista stacji pomiarowych": stations_list[1:],
+        "totalPages": 2,
+    }
+
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
+        payload=page_0_payload,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=500",
+        payload=page_1_payload,
+    )
+
+    gios = await Gios.create(session)
+
+    assert len(gios.measurement_stations) == len(stations_list)

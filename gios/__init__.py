@@ -19,6 +19,7 @@ from .const import (
     ATTR_VALUE,
     POLLUTANT_MAP,
     STATE_MAP,
+    STATIONS_PAGE_SIZE,
     URL_INDEXES,
     URL_SENSOR,
     URL_STATION,
@@ -159,8 +160,19 @@ class Gios:
 
     async def _get_stations(self) -> Any:
         """Retrieve list of measurement stations."""
-        result = await self._async_get(URL_STATIONS.with_query(page=0, size=1000))
-        return result.get("Lista stacji pomiarowych", [])
+        first = await self._async_get(
+            URL_STATIONS.with_query(page=0, size=STATIONS_PAGE_SIZE)
+        )
+        stations: list[Any] = first.get("Lista stacji pomiarowych", [])
+        total_pages: int = int(first.get("totalPages", 1) or 1)
+
+        for page in range(1, total_pages):
+            result = await self._async_get(
+                URL_STATIONS.with_query(page=page, size=STATIONS_PAGE_SIZE)
+            )
+            stations.extend(result.get("Lista stacji pomiarowych", []))
+
+        return stations
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
         """Parse stations data."""
