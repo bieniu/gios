@@ -28,7 +28,10 @@ tests/
 ## Python and environment
 
 - Target Python: >=3.13 (also tested on 3.14)
-- Local venv: `./venv` — set up with `source scripts/setup-local-env.sh`
+- Use the local venv in ./venv
+- Activate with: source venv/bin/activate
+- `scripts/setup-local-env.sh` creates the venv, installs `uv`, then installs all dependencies from `pyproject.toml`
+- The setup script also runs `prek install`
 - Package manager: `uv` — dependencies declared in `pyproject.toml`
 
 ## Linting, formatting, typing
@@ -51,7 +54,6 @@ tests/
 - Keep all I/O async; accept `aiohttp.ClientSession` from the caller
 - Use `aiohttp`'s built-in `.json()` for response parsing and `dacite.from_dict` for mapping to dataclasses
 - Use `yarl.URL` for all endpoint construction; keep all URLs/constants in `gios/const.py`
-- Stations endpoint (`findAll`) is paginated: use `size=500` (API maximum) and loop using the `totalPages` field from the response
 - Preserve the public API and model shapes; breaking changes require explicit discussion
 - Prefer specific exception types (`ApiError`, `InvalidSensorsDataError`, `NoStationError`) and use lazy logging (`_LOGGER.debug("msg %s", value)`)
 - Avoid very long docstrings; prefer one-line docstrings and keep them to 3 lines at most
