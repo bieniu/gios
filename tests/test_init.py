@@ -23,7 +23,7 @@ async def test_init_only(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
     snapshot: SnapshotAssertion,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
 ) -> None:
     """Test init without station."""
     session_mock.get(
@@ -48,7 +48,7 @@ async def test_valid_data_first_value(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
     snapshot: SnapshotAssertion,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
@@ -134,7 +134,7 @@ async def test_valid_data_second_value(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
     snapshot: SnapshotAssertion,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
@@ -209,7 +209,7 @@ async def test_no_indexes_data(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
     snapshot: SnapshotAssertion,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     sensor_3759: dict[str, Any],
     sensor_3760: dict[str, Any],
@@ -277,7 +277,7 @@ async def test_no_indexes_data(
 async def test_no_sensor_data_1(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
@@ -355,7 +355,7 @@ async def test_no_sensor_data_1(
 async def test_invalid_sensor_data_2(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
 ) -> None:
     """Test with invalid sensor data."""
@@ -407,7 +407,7 @@ async def test_invalid_sensor_data_2(
 async def test_no_station_data(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
 ) -> None:
     """Test with no station data."""
     session_mock.get(
@@ -445,7 +445,7 @@ async def test_no_stations_data(
 async def test_invalid_station_id(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
 ) -> None:
     """Test with invalid station_id."""
     session_mock.get(
@@ -461,7 +461,7 @@ async def test_invalid_station_id(
 async def test_no_common_index(
     session: aiohttp.ClientSession,
     session_mock: aioresponses,
-    stations: list[dict[str, Any]],
+    stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
     sensor_3759: dict[str, Any],
@@ -522,3 +522,34 @@ async def test_no_common_index(
     data = await gios.async_update()
 
     assert data.aqi is None
+
+
+@pytest.mark.asyncio
+async def test_multiple_pages(
+    session: aiohttp.ClientSession,
+    session_mock: aioresponses,
+    stations: dict[str, Any],
+) -> None:
+    """Test that all pages are fetched when totalPages > 1."""
+    stations_list: list[dict[str, Any]] = stations["Lista stacji pomiarowych"]
+    page_0_payload = {
+        "Lista stacji pomiarowych": stations_list[:1],
+        "totalPages": 2,
+    }
+    page_1_payload = {
+        "Lista stacji pomiarowych": stations_list[1:],
+        "totalPages": 2,
+    }
+
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=0&size=500",
+        payload=page_0_payload,
+    )
+    session_mock.get(
+        "https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll?page=1&size=500",
+        payload=page_1_payload,
+    )
+
+    gios = await Gios.create(session)
+
+    assert len(gios.measurement_stations) == len(stations_list)
