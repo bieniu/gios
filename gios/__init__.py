@@ -159,8 +159,15 @@ class Gios:
 
     async def _get_stations(self) -> Any:
         """Retrieve list of measurement stations."""
-        result = await self._async_get(URL_STATIONS.with_query(page=0, size=1000))
-        return result.get("Lista stacji pomiarowych", [])
+        first = await self._async_get(URL_STATIONS.with_query(page=0, size=500))
+        stations: list[Any] = first.get("Lista stacji pomiarowych", [])
+        total_pages: int = first.get("totalPages", 1)
+
+        for page in range(1, total_pages):
+            result = await self._async_get(URL_STATIONS.with_query(page=page, size=500))
+            stations.extend(result.get("Lista stacji pomiarowych", []))
+
+        return stations
 
     def _parse_stations(self, stations: list[dict[str, Any]]) -> Generator[GiosStation]:
         """Parse stations data."""
