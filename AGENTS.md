@@ -1,3 +1,4 @@
+<!-- CLAUDE.md is a symlink to this file — edit only AGENTS.md -->
 # Instructions for AI Agents (Copilot, Claude, Codex)
 
 ## Repository context
