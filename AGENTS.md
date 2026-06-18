@@ -29,8 +29,8 @@ tests/
 ## Python and environment
 
 - Target Python: >=3.13 (also tested on 3.14)
-- Use the local venv in ./venv
-- Activate with: source venv/bin/activate
+- Use the local venv in ./.venv
+- Activate with: source .venv/bin/activate
 - `scripts/setup-local-env.sh` creates the venv, installs `uv`, then installs all dependencies from `pyproject.toml`
 - The setup script also runs `prek install`
 - Package manager: `uv` — dependencies declared in `pyproject.toml`
