@@ -46,7 +46,7 @@ tests/
 ## Testing
 
 - Run with `pytest` (async tests use `pytest-asyncio`)
-- Mock HTTP via `aioresponses`; do not hit real endpoints in tests
+- Mock HTTP via `aiointercept`; do not hit real endpoints in tests
 - Snapshots use `syrupy` (`tests/snapshots/`) — update with `pytest --snapshot-update` when output structures change
 - Update both snapshots and fixtures together when response shapes change
 
