@@ -5,6 +5,7 @@ from typing import Any
 
 import aiohttp
 import pytest
+from aiointercept import aiointercept
 from syrupy import SnapshotAssertion
 
 from gios import ApiError, Gios, InvalidSensorsDataError, NoStationError
@@ -20,7 +21,7 @@ VALID_LONGITUDE = 21.042458
 @pytest.mark.asyncio
 async def test_init_only(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     snapshot: SnapshotAssertion,
     stations: dict[str, Any],
 ) -> None:
@@ -45,7 +46,7 @@ async def test_init_only(
 @pytest.mark.asyncio
 async def test_valid_data_first_value(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     snapshot: SnapshotAssertion,
     stations: dict[str, Any],
     station: list[dict[str, Any]],
@@ -114,7 +115,7 @@ async def test_valid_data_first_value(
 
 @pytest.mark.asyncio
 async def test_api_error(
-    session: aiohttp.ClientSession, session_mock: aioresponses
+    session: aiohttp.ClientSession, session_mock: aiointercept
 ) -> None:
     """Test GIOS API error."""
     session_mock.get(
@@ -131,7 +132,7 @@ async def test_api_error(
 @pytest.mark.asyncio
 async def test_valid_data_second_value(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     snapshot: SnapshotAssertion,
     stations: dict[str, Any],
     station: list[dict[str, Any]],
@@ -206,7 +207,7 @@ async def test_valid_data_second_value(
 @pytest.mark.asyncio
 async def test_no_indexes_data(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     snapshot: SnapshotAssertion,
     stations: dict[str, Any],
     station: list[dict[str, Any]],
@@ -275,7 +276,7 @@ async def test_no_indexes_data(
 @pytest.mark.asyncio
 async def test_no_sensor_data_1(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
@@ -353,7 +354,7 @@ async def test_no_sensor_data_1(
 @pytest.mark.asyncio
 async def test_invalid_sensor_data_2(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     stations: dict[str, Any],
     station: list[dict[str, Any]],
 ) -> None:
@@ -405,7 +406,7 @@ async def test_invalid_sensor_data_2(
 @pytest.mark.asyncio
 async def test_no_station_data(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     stations: dict[str, Any],
 ) -> None:
     """Test with no station data."""
@@ -428,7 +429,7 @@ async def test_no_station_data(
 
 @pytest.mark.asyncio
 async def test_no_stations_data(
-    session: aiohttp.ClientSession, session_mock: aioresponses
+    session: aiohttp.ClientSession, session_mock: aiointercept
 ) -> None:
     """Test with no stations data."""
     session_mock.get(
@@ -443,7 +444,7 @@ async def test_no_stations_data(
 @pytest.mark.asyncio
 async def test_invalid_station_id(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     stations: dict[str, Any],
 ) -> None:
     """Test with invalid station_id."""
@@ -459,7 +460,7 @@ async def test_invalid_station_id(
 @pytest.mark.asyncio
 async def test_no_common_index(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     stations: dict[str, Any],
     station: list[dict[str, Any]],
     indexes: dict[str, Any],
@@ -526,7 +527,7 @@ async def test_no_common_index(
 @pytest.mark.asyncio
 async def test_multiple_pages(
     session: aiohttp.ClientSession,
-    session_mock: aioresponses,
+    session_mock: aiointercept,
     stations: dict[str, Any],
 ) -> None:
     """Test that all pages are fetched when totalPages > 1."""
