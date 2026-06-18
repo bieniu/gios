@@ -5,7 +5,6 @@ from typing import Any
 
 import aiohttp
 import pytest
-from aioresponses import aioresponses
 from syrupy import SnapshotAssertion
 
 from gios import ApiError, Gios, InvalidSensorsDataError, NoStationError
