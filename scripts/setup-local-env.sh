@@ -11,5 +11,4 @@ fi
 
 python$PYTHON_VERSION -m pip install uv --upgrade
 uv sync --frozen --all-groups --python=$PYTHON_VERSION
-source .venv/bin/activate
-prek install
+uv run prek install
