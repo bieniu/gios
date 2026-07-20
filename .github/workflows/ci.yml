@@ -30,7 +30,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --group dev
+        run: uv sync --frozen --group dev
 
       - name: Lint
         run: uv run ruff check .
@@ -79,7 +79,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --group test
+        run: uv sync --frozen --group test
 
       - name: Run tests
         run: uv run pytest --timeout=30 --cov=gios --cov-report=xml --error-for-skips
