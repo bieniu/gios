@@ -6,6 +6,7 @@ from yarl import URL
 
 ATTR_AQI: Final[str] = "AQI"
 ATTR_ID: Final[str] = "id"
+ATTR_IDS: Final[str] = "ids"
 ATTR_INDEX: Final[str] = "index"
 ATTR_INDEX_LEVEL: Final[str] = "Nazwa kategorii indeksu dla wskażnika {}"
 ATTR_NAME: Final[str] = "name"

@@ -13,6 +13,7 @@ from yarl import URL
 from .const import (
     ATTR_AQI,
     ATTR_ID,
+    ATTR_IDS,
     ATTR_INDEX,
     ATTR_INDEX_LEVEL,
     ATTR_NAME,
@@ -102,14 +103,17 @@ class Gios:
             msg = "Invalid measuring station data from GIOS API"
             raise InvalidSensorsDataError(msg)
 
-        data = {
-            sensor["Wskaźnik - wzór"].lower(): {
-                ATTR_ID: sensor["Identyfikator stanowiska"],
-                ATTR_NAME: POLLUTANT_MAP[sensor["Wskaźnik"]],
-            }
-            for sensor in self._station_data
-            if sensor["Wskaźnik"] in POLLUTANT_MAP
-        }
+        data = {}
+        for sensor in self._station_data:
+            if sensor["Wskaźnik"] not in POLLUTANT_MAP:
+                continue
+            key = sensor["Wskaźnik - wzór"].lower()
+            if key not in data:
+                data[key] = {
+                    ATTR_IDS: [],
+                    ATTR_NAME: POLLUTANT_MAP[sensor["Wskaźnik"]],
+                }
+            data[key][ATTR_IDS].append(sensor["Identyfikator stanowiska"])
 
         sensors = await self._get_all_sensors(data)
 
@@ -192,9 +196,29 @@ class Gios:
 
     async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
         """Retrieve all sensors data."""
-        tasks = [self._get_sensor(sensors[sensor][ATTR_ID]) for sensor in sensors]
+        all_ids = set()
+        for sensor_data in sensors.values():
+            all_ids.update(sensor_data[ATTR_IDS])
+
+        tasks = [self._get_sensor(sensor_id) for sensor_id in all_ids]
         results = await asyncio.gather(*tasks)
-        return dict(zip(sensors, results, strict=True))
+        id_to_result = dict(zip(all_ids, results, strict=True))
+
+        result: dict[str, Any] = {}
+        for sensor, sensor_data in sensors.items():
+            for sensor_id in sensor_data[ATTR_IDS]:
+                sensor_result = id_to_result[sensor_id]
+                if (
+                    isinstance(sensor_result, dict)
+                    and "Lista danych pomiarowych" in sensor_result
+                ):
+                    result[sensor] = sensor_result
+                    sensor_data[ATTR_ID] = sensor_id
+                    break
+            if sensor not in result:
+                result[sensor] = {}
+
+        return result
 
     async def _get_sensor(self, sensor: int) -> Any:
         """Retrieve sensor data."""
