@@ -13,6 +13,7 @@ from yarl import URL
 from .const import (
     ATTR_AQI,
     ATTR_ID,
+    ATTR_IDS,
     ATTR_INDEX,
     ATTR_INDEX_LEVEL,
     ATTR_NAME,
@@ -102,35 +103,38 @@ class Gios:
             msg = "Invalid measuring station data from GIOS API"
             raise InvalidSensorsDataError(msg)
 
-        data = {
-            sensor["Wskaźnik - wzór"].lower(): {
-                ATTR_ID: sensor["Identyfikator stanowiska"],
-                ATTR_NAME: POLLUTANT_MAP[sensor["Wskaźnik"]],
-            }
-            for sensor in self._station_data
-            if sensor["Wskaźnik"] in POLLUTANT_MAP
-        }
+        data = {}
+        for sensor in self._station_data:
+            if sensor["Wskaźnik"] not in POLLUTANT_MAP:
+                continue
+            key = sensor["Wskaźnik - wzór"].lower()
+            if key not in data:
+                data[key] = {
+                    ATTR_IDS: [],
+                    ATTR_NAME: POLLUTANT_MAP[sensor["Wskaźnik"]],
+                }
+            data[key][ATTR_IDS].append(sensor["Identyfikator stanowiska"])
 
         sensors = await self._get_all_sensors(data)
 
         # The GIOS server sends null values for sensors several minutes before
         # adding new data from measuring station. If the newest value is null
         # we take the earlier value.
-        for sensor, sensor_data in data.items():
+        for pollutant, pollutant_data in data.items():
             try:
-                sensor_entry = sensors[sensor]["Lista danych pomiarowych"]
-                if (
-                    sensor_value := sensor_entry[0]["Wartość"]
-                    or sensor_entry[1]["Wartość"]
-                ):
-                    sensor_data[ATTR_VALUE] = sensor_value
+                sensor_entry = sensors[pollutant]["Lista danych pomiarowych"]
+                sensor_value = sensor_entry[0]["Wartość"]
+                if sensor_value is None:
+                    sensor_value = sensor_entry[1]["Wartość"]
+                if sensor_value is not None:
+                    pollutant_data[ATTR_VALUE] = sensor_value
                 else:
-                    invalid_sensors.append(sensor)
+                    invalid_sensors.append(pollutant)
             except (IndexError, KeyError, TypeError):
-                invalid_sensors.append(sensor)
+                invalid_sensors.append(pollutant)
 
-        for sensor in invalid_sensors:
-            data.pop(sensor)
+        for pollutant in invalid_sensors:
+            data.pop(pollutant)
 
         if not data:
             msg = "Invalid sensor data from GIOS API"
@@ -138,11 +142,11 @@ class Gios:
 
         indexes = await self._get_indexes()
 
-        for sensor, sensor_data in data.items():
+        for pollutant, pollutant_data in data.items():
             if index_value := indexes.get("AqIndex", {}).get(
-                ATTR_INDEX_LEVEL.format(sensor.upper())
+                ATTR_INDEX_LEVEL.format(pollutant.upper())
             ):
-                sensor_data[ATTR_INDEX] = STATE_MAP[index_value]
+                pollutant_data[ATTR_INDEX] = STATE_MAP[index_value]
 
         if (aq_index := indexes.get("AqIndex", {})).get(
             "Status indeksu ogólnego dla stacji pomiarowej"
@@ -190,16 +194,54 @@ class Gios:
         result = await self._async_get(url)
         return result.get("Lista stanowisk pomiarowych dla podanej stacji", [])
 
-    async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
+    async def _get_all_sensors(self, pollutants: dict[str, Any]) -> dict[str, Any]:
         """Retrieve all sensors data."""
-        tasks = [self._get_sensor(sensors[sensor][ATTR_ID]) for sensor in sensors]
+        all_ids = list(
+            dict.fromkeys(
+                sensor_id
+                for sensor_data in pollutants.values()
+                for sensor_id in sensor_data[ATTR_IDS]
+            )
+        )
+
+        tasks = [self._get_sensor(sensor_id) for sensor_id in all_ids]
         results = await asyncio.gather(*tasks)
-        return dict(zip(sensors, results, strict=True))
+        id_to_result = dict(zip(all_ids, results, strict=True))
+
+        result: dict[str, Any] = {}
+        for pollutant, pollutant_data in pollutants.items():
+            for sensor_id in pollutant_data[ATTR_IDS]:
+                sensor_result = id_to_result[sensor_id]
+                if not isinstance(sensor_result, dict):
+                    continue
+                if "Lista danych pomiarowych" not in sensor_result:
+                    continue
+                values = [
+                    entry.get("Wartość")
+                    for entry in sensor_result["Lista danych pomiarowych"]
+                ]
+                if not any(v is not None for v in values):
+                    continue
+                result[pollutant] = sensor_result
+                pollutant_data[ATTR_ID] = sensor_id
+                break
+            if pollutant not in result:
+                result[pollutant] = {}
+
+        return result
 
     async def _get_sensor(self, sensor: int) -> Any:
         """Retrieve sensor data."""
         url = URL_SENSOR / str(sensor)
-        return await self._async_get(url, do_not_raise=True)
+        result = await self._async_get(url, do_not_raise=True)
+
+        if isinstance(result, dict) and "error_code" in result:
+            _LOGGER.debug(
+                "No data for sensor %s: %s", sensor, result.get("error_result")
+            )
+            return {}
+
+        return result
 
     async def _get_indexes(self) -> Any:
         """Retrieve indexes data."""
