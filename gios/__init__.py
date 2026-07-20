@@ -120,21 +120,21 @@ class Gios:
         # The GIOS server sends null values for sensors several minutes before
         # adding new data from measuring station. If the newest value is null
         # we take the earlier value.
-        for sensor, sensor_data in data.items():
+        for pollutant, pollutant_data in data.items():
             try:
-                sensor_entry = sensors[sensor]["Lista danych pomiarowych"]
-                if (
-                    sensor_value := sensor_entry[0]["Wartość"]
-                    or sensor_entry[1]["Wartość"]
-                ):
-                    sensor_data[ATTR_VALUE] = sensor_value
+                sensor_entry = sensors[pollutant]["Lista danych pomiarowych"]
+                sensor_value = sensor_entry[0]["Wartość"]
+                if sensor_value is None:
+                    sensor_value = sensor_entry[1]["Wartość"]
+                if sensor_value is not None:
+                    pollutant_data[ATTR_VALUE] = sensor_value
                 else:
-                    invalid_sensors.append(sensor)
+                    invalid_sensors.append(pollutant)
             except (IndexError, KeyError, TypeError):
-                invalid_sensors.append(sensor)
+                invalid_sensors.append(pollutant)
 
-        for sensor in invalid_sensors:
-            data.pop(sensor)
+        for pollutant in invalid_sensors:
+            data.pop(pollutant)
 
         if not data:
             msg = "Invalid sensor data from GIOS API"
@@ -142,11 +142,11 @@ class Gios:
 
         indexes = await self._get_indexes()
 
-        for sensor, sensor_data in data.items():
+        for pollutant, pollutant_data in data.items():
             if index_value := indexes.get("AqIndex", {}).get(
-                ATTR_INDEX_LEVEL.format(sensor.upper())
+                ATTR_INDEX_LEVEL.format(pollutant.upper())
             ):
-                sensor_data[ATTR_INDEX] = STATE_MAP[index_value]
+                pollutant_data[ATTR_INDEX] = STATE_MAP[index_value]
 
         if (aq_index := indexes.get("AqIndex", {})).get(
             "Status indeksu ogólnego dla stacji pomiarowej"
@@ -194,29 +194,39 @@ class Gios:
         result = await self._async_get(url)
         return result.get("Lista stanowisk pomiarowych dla podanej stacji", [])
 
-    async def _get_all_sensors(self, sensors: dict[str, Any]) -> dict[str, Any]:
+    async def _get_all_sensors(self, pollutants: dict[str, Any]) -> dict[str, Any]:
         """Retrieve all sensors data."""
-        all_ids = set()
-        for sensor_data in sensors.values():
-            all_ids.update(sensor_data[ATTR_IDS])
+        all_ids = list(
+            dict.fromkeys(
+                sensor_id
+                for sensor_data in pollutants.values()
+                for sensor_id in sensor_data[ATTR_IDS]
+            )
+        )
 
         tasks = [self._get_sensor(sensor_id) for sensor_id in all_ids]
         results = await asyncio.gather(*tasks)
         id_to_result = dict(zip(all_ids, results, strict=True))
 
         result: dict[str, Any] = {}
-        for sensor, sensor_data in sensors.items():
-            for sensor_id in sensor_data[ATTR_IDS]:
+        for pollutant, pollutant_data in pollutants.items():
+            for sensor_id in pollutant_data[ATTR_IDS]:
                 sensor_result = id_to_result[sensor_id]
-                if (
-                    isinstance(sensor_result, dict)
-                    and "Lista danych pomiarowych" in sensor_result
-                ):
-                    result[sensor] = sensor_result
-                    sensor_data[ATTR_ID] = sensor_id
-                    break
-            if sensor not in result:
-                result[sensor] = {}
+                if not isinstance(sensor_result, dict):
+                    continue
+                if "Lista danych pomiarowych" not in sensor_result:
+                    continue
+                values = [
+                    entry.get("Wartość")
+                    for entry in sensor_result["Lista danych pomiarowych"]
+                ]
+                if not any(v is not None for v in values):
+                    continue
+                result[pollutant] = sensor_result
+                pollutant_data[ATTR_ID] = sensor_id
+                break
+            if pollutant not in result:
+                result[pollutant] = {}
 
         return result
 
