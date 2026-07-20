@@ -199,7 +199,15 @@ class Gios:
     async def _get_sensor(self, sensor: int) -> Any:
         """Retrieve sensor data."""
         url = URL_SENSOR / str(sensor)
-        return await self._async_get(url, do_not_raise=True)
+        result = await self._async_get(url, do_not_raise=True)
+
+        if isinstance(result, dict) and "error_code" in result:
+            _LOGGER.debug(
+                "No data for sensor %s: %s", sensor, result.get("error_result")
+            )
+            return {}
+
+        return result
 
     async def _get_indexes(self) -> Any:
         """Retrieve indexes data."""
