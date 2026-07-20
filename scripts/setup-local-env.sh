@@ -10,8 +10,6 @@ else
 fi
 
 python$PYTHON_VERSION -m pip install uv --upgrade
-python$PYTHON_VERSION -m uv venv .venv --clear --seed --python=$PYTHON_VERSION
+uv sync --frozen --all-groups --python=$PYTHON_VERSION
 source .venv/bin/activate
-pip install uv
-uv sync --all-groups
 prek install
