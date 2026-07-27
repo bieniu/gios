@@ -19,6 +19,7 @@ Python wrapper for getting air quality data from [GIOŚ (Główny Inspektorat Oc
 ## How to use package
 ```python
 """Example for GIOS."""
+
 import asyncio
 import logging
 
