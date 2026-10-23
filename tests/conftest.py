@@ -34,70 +34,70 @@ async def session_mock() -> AsyncGenerator[aiointercept]:
 @pytest.fixture
 def stations() -> list[dict[str, Any]]:
     """Return stations data from the fixture file."""
-    with Path.open(Path(f"{BASE}stations.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}stations.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def station() -> list[dict[str, Any]]:
     """Return the station data from the fixture file."""
-    with Path.open(Path(f"{BASE}station.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}station.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def indexes() -> dict[str, Any]:
     """Return indexes data from the fixture file."""
-    with Path.open(Path(f"{BASE}indexes.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}indexes.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def sensor_3759() -> dict[str, Any]:
     """Return sensor 3759 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_3759.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}sensor_3759.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def sensor_3760() -> dict[str, Any]:
     """Return sensor 3760 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_3760.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}sensor_3760.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def sensor_3761() -> dict[str, Any]:
     """Return sensor 3761 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_3761.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}sensor_3761.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def sensor_3762() -> dict[str, Any]:
     """Return sensor 3762 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_3762.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}sensor_3762.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def sensor_3764() -> dict[str, Any]:
     """Return sensor 3764 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_3764.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}sensor_3764.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def sensor_3765() -> dict[str, Any]:
     """Return sensor 3765 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_3765.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}sensor_3765.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
 @pytest.fixture
 def sensor_14688() -> dict[str, Any]:
     """Return sensor 14688 data from the fixture file."""
-    with Path.open(Path(f"{BASE}sensor_14688.json"), encoding="utf-8") as file:
+    with Path(f"{BASE}sensor_14688.json").open(encoding="utf-8") as file:
         return json.load(file)
 
 
