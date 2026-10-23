@@ -48,7 +48,7 @@ class Gios:
 
     @classmethod
     async def create(
-        cls: type[Self],
+        cls,
         session: ClientSession,
         station_id: int | None = None,
     ) -> Self:
@@ -103,7 +103,6 @@ class Gios:
             msg = "Invalid measuring station data from GIOS API"
             raise InvalidSensorsDataError(msg)
 
-        data = {}
         for sensor in self._station_data:
             if sensor["Wskaźnik"] not in POLLUTANT_MAP:
                 continue
@@ -252,7 +251,7 @@ class Gios:
         """Retrieve data from GIOS API."""
         async with self.session.get(url) as resp:
             _LOGGER.debug("Data retrieved from %s, status: %s", url, resp.status)
-            if resp.status != HTTPStatus.OK.value:
+            if resp.status != HTTPStatus.OK:
                 msg = f"Invalid response from GIOS API: {resp.status}"
 
                 if do_not_raise:

@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(slots=True)
 class Sensor:
     """Data class for sensor."""
 
@@ -13,7 +13,7 @@ class Sensor:
     value: float | str | None = None
 
 
-@dataclass
+@dataclass(slots=True)
 class GiosSensors:
     """Data class for polutants."""
 
@@ -29,7 +29,7 @@ class GiosSensors:
     so2: Sensor | None
 
 
-@dataclass
+@dataclass(slots=True)
 class GiosStation:
     """Data class for measeurement station."""
 
