@@ -130,7 +130,7 @@ class Gios:
                     pollutant_data[ATTR_VALUE] = sensor_value
                 else:
                     invalid_sensors.append(pollutant)
-            except (IndexError, KeyError, TypeError):
+            except IndexError, KeyError, TypeError:
                 invalid_sensors.append(pollutant)
 
         for pollutant in invalid_sensors:
