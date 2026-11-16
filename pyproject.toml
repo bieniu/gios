@@ -30,7 +30,7 @@ dependencies = [
 dev = [
   "prek==0.5.10",
   "ruff==0.17.5",
-  "ty==0.0.102",
+  "ty==0.0.103",
 ]
 test = [
   "aiointercept==1.0.0",
