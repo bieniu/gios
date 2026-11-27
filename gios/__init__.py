@@ -94,8 +94,6 @@ class Gios:
             raise NoStationError(msg)
 
         data: dict[str, dict[str, Any]] = {}
-        invalid_sensors: list[str] = []
-
         if not self._station_data:
             self._station_data = await self._get_station()
 
@@ -114,26 +112,7 @@ class Gios:
                 }
             data[key][ATTR_IDS].append(sensor["Identyfikator stanowiska"])
 
-        sensors = await self._get_all_sensors(data)
-
-        # The GIOS server sends null values for sensors several minutes before
-        # adding new data from measuring station. If the newest value is null
-        # we take the earlier value.
-        for pollutant, pollutant_data in data.items():
-            try:
-                sensor_entry = sensors[pollutant]["Lista danych pomiarowych"]
-                sensor_value = sensor_entry[0]["Wartość"]
-                if sensor_value is None:
-                    sensor_value = sensor_entry[1]["Wartość"]
-                if sensor_value is not None:
-                    pollutant_data[ATTR_VALUE] = sensor_value
-                else:
-                    invalid_sensors.append(pollutant)
-            except IndexError, KeyError, TypeError:
-                invalid_sensors.append(pollutant)
-
-        for pollutant in invalid_sensors:
-            data.pop(pollutant)
+        data = await self._get_all_sensors(data)
 
         if not data:
             msg = "Invalid sensor data from GIOS API"
@@ -193,8 +172,10 @@ class Gios:
         result = await self._async_get(url)
         return result.get("Lista stanowisk pomiarowych dla podanej stacji", [])
 
-    async def _get_all_sensors(self, pollutants: dict[str, Any]) -> dict[str, Any]:
-        """Retrieve all sensors data."""
+    async def _get_all_sensors(
+        self, pollutants: dict[str, dict[str, Any]]
+    ) -> dict[str, dict[str, Any]]:
+        """Retrieve the first sensor with a recent reading for each pollutant."""
         all_ids = list(
             dict.fromkeys(
                 sensor_id
@@ -207,25 +188,33 @@ class Gios:
         results = await asyncio.gather(*tasks)
         id_to_result = dict(zip(all_ids, results, strict=True))
 
-        result: dict[str, Any] = {}
+        result: dict[str, dict[str, Any]] = {}
         for pollutant, pollutant_data in pollutants.items():
             for sensor_id in pollutant_data[ATTR_IDS]:
                 sensor_result = id_to_result[sensor_id]
                 if not isinstance(sensor_result, dict):
                     continue
-                if "Lista danych pomiarowych" not in sensor_result:
+                measurements = sensor_result.get("Lista danych pomiarowych")
+                if not isinstance(measurements, list):
                     continue
-                values = [
-                    entry.get("Wartość")
-                    for entry in sensor_result["Lista danych pomiarowych"]
-                ]
-                if not any(v is not None for v in values):
+                # GIOS briefly publishes a null row before the next reading.
+                value = next(
+                    (
+                        value
+                        for row in measurements[:2]
+                        if isinstance(row, dict)
+                        and (value := row.get("Wartość")) is not None
+                    ),
+                    None,
+                )
+                if value is None:
                     continue
-                result[pollutant] = sensor_result
-                pollutant_data[ATTR_ID] = sensor_id
+                result[pollutant] = {
+                    ATTR_ID: sensor_id,
+                    ATTR_NAME: pollutant_data[ATTR_NAME],
+                    ATTR_VALUE: value,
+                }
                 break
-            if pollutant not in result:
-                result[pollutant] = {}
 
         return result
 
