@@ -639,7 +639,14 @@ async def test_manual_sensor_skipped_integration(
 
 
 @pytest.mark.asyncio
-async def test_null_only_sensor_skipped_fallback(
+@pytest.mark.parametrize(
+    "first_sensor_values",
+    [
+        pytest.param([None, None], id="only-null"),
+        pytest.param([None, None, 99.0], id="only-older-value"),
+    ],
+)
+async def test_sensor_without_recent_measurement_skipped(
     session: aiohttp.ClientSession,
     session_mock: aiointercept,
     stations: dict[str, Any],
@@ -651,12 +658,12 @@ async def test_null_only_sensor_skipped_fallback(
     sensor_3762: dict[str, Any],
     sensor_3764: dict[str, Any],
     sensor_14688: dict[str, Any],
+    first_sensor_values: list[float | None],
 ) -> None:
-    """Test that sensor with null-only data is skipped, next sensor is used."""
-    null_sensor: dict[str, Any] = {
+    """Test that the next sensor is used when both recent measurements are null."""
+    first_sensor: dict[str, Any] = {
         "Lista danych pomiarowych": [
-            {"Wartość": None},
-            {"Wartość": None},
+            {"Wartość": value} for value in first_sensor_values
         ],
     }
     session_mock.get(
@@ -689,7 +696,7 @@ async def test_null_only_sensor_skipped_fallback(
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/3765",
-        payload=null_sensor,
+        payload=first_sensor,
     )
     session_mock.get(
         "https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/14688",
